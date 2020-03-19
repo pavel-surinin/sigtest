@@ -1,6 +1,12 @@
 export namespace Signatures {
     export type MemberType = "function" | "class" | "constant"
 
+    export interface Paramter {
+        name: string
+        type: string
+        isOptional: boolean
+    }
+
     interface Signature {
         /**
          * path to file
@@ -21,7 +27,7 @@ export namespace Signatures {
     }
 
     interface FunctionDeclaration {
-        parameters: Record<string, string>
+        parameters: Paramter[]
         returnType: string
     }
 

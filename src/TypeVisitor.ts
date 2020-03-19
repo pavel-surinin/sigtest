@@ -74,16 +74,17 @@ export function generateSignatures(
     function serializeFunction(symbol: ts.Symbol): Signatures.FunctionSignature[] {
         return symbol.declarations
             .map(functionDeclaration => {
-                let parameters = {}
+                let parameters: Signatures.Paramter[] = []
                 if (ts.isFunctionDeclaration(functionDeclaration)) {
                     parameters = functionDeclaration.parameters
                         .map(param => {
                             const paramType = checker.getTypeAtLocation(param)
                             const type = checker.typeToString(paramType)
                             const name = param.name.getText()
-                            return { name, type }
+                            const isOptional = checker.isOptionalParameter(param);
+                            checker.isOptionalParameter(param)
+                            return { name, type, isOptional }
                         })
-                        .reduce(Reducer.toObject(x => x.name, x => x.type), {})
                 }
 
                 const returnType = checker.typeToString(checker.getTypeOfSymbolAtLocation(symbol, functionDeclaration)
