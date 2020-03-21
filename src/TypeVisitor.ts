@@ -1,6 +1,7 @@
 import * as ts from "typescript";
 import { Signatures } from './App.types';
 import { Reducer } from 'declarative-js'
+import { Serializer } from './Serializer';
 
 export function generateSignatures(
     fileNames: string[],
@@ -8,6 +9,8 @@ export function generateSignatures(
 ): Signatures.SignatureType[] {
     let program = ts.createProgram(fileNames, options);
     let checker = program.getTypeChecker();
+    let serializer = new Serializer(checker)
+
     let output: Signatures.SignatureType[] = [];
 
     for (const sourceFile of program.getSourceFiles()) {
@@ -24,10 +27,24 @@ export function generateSignatures(
         if (!isNodeExported(node)) {
             return;
         }
+
+        if (ts.isVariableStatement(node)) {
+            if (ts.isVariableDeclarationList(node.declarationList)) {
+                if (node.declarationList.declarations.length) {
+                    const varDeclaration = node.declarationList.declarations[0];
+                    if (varDeclaration.initializer && ts.isArrowFunction(varDeclaration.initializer)) {
+                        let symbol = checker.getSymbolAtLocation(varDeclaration.name)
+                        if (symbol) {
+                            output.push(serializer.doArrowFxDeclarations(symbol))
+                        }
+                    }
+                }
+            }
+        }
         if (ts.isFunctionDeclaration(node) && node.name && node.body) {
             let symbol = checker.getSymbolAtLocation(node.name);
             if (symbol) {
-                output = output.concat(serializeFunction(symbol))
+                output = output.concat(serializer.doFxDeclarations(symbol))
             }
         } else if (ts.isClassDeclaration(node) && node.name) {
             let symbol = checker.getSymbolAtLocation(node.name);
@@ -69,35 +86,6 @@ export function generateSignatures(
             returnType: checker.typeToString(signature.getReturnType()),
             documentation: ts.displayPartsToString(signature.getDocumentationComment(checker))
         };
-    }
-
-    function serializeFunction(symbol: ts.Symbol): Signatures.FunctionSignature[] {
-        return symbol.declarations
-            .map(functionDeclaration => {
-                let parameters: Signatures.Paramter[] = []
-                if (ts.isFunctionDeclaration(functionDeclaration)) {
-                    parameters = functionDeclaration.parameters
-                        .map(param => {
-                            const paramType = checker.getTypeAtLocation(param)
-                            const type = checker.typeToString(paramType)
-                            const name = param.name.getText()
-                            const isOptional = checker.isOptionalParameter(param);
-                            checker.isOptionalParameter(param)
-                            return { name, type, isOptional }
-                        })
-                }
-
-                const returnType = checker.typeToString(checker.getTypeOfSymbolAtLocation(symbol, functionDeclaration)
-                    .getCallSignatures()[0]
-                    .getReturnType());
-                return {
-                    memberName: symbol.getName(),
-                    memberType: 'function',
-                    path: functionDeclaration.getSourceFile().fileName,
-                    parameters,
-                    returnType
-                }
-            })
     }
 
     /** True if this is visible outside this file, false otherwise */
