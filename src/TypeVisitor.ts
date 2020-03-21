@@ -1,17 +1,17 @@
 import * as ts from "typescript";
 import { Signatures } from './App.types';
-import { Reducer } from 'declarative-js'
-import { Serializer } from './Serializer';
+import { Serializer, SerializationResult } from './Serializer';
+import { ErrorType } from './Errors';
 
 export function generateSignatures(
     fileNames: string[],
     options: ts.CompilerOptions
-): Signatures.SignatureType[] {
+): SerializationResult[] {
     let program = ts.createProgram(fileNames, options);
     let checker = program.getTypeChecker();
     let serializer = new Serializer(checker)
 
-    let output: Signatures.SignatureType[] = [];
+    let output: SerializationResult[] = [];
 
     for (const sourceFile of program.getSourceFiles()) {
         if (!sourceFile.isDeclarationFile) {
@@ -27,7 +27,6 @@ export function generateSignatures(
         if (!isNodeExported(node)) {
             return;
         }
-
         if (ts.isVariableStatement(node)) {
             if (ts.isVariableDeclarationList(node.declarationList)) {
                 if (node.declarationList.declarations.length) {
@@ -37,11 +36,19 @@ export function generateSignatures(
                         if (symbol) {
                             output.push(serializer.doArrowFxDeclarations(symbol))
                         }
+                    } else {
+                        let symbol = checker.getSymbolAtLocation(varDeclaration.name)
+                        ts.SyntaxKind.StringLiteral
+                        if (symbol) {
+                            const constSignature = serializer.doConstant(symbol)
+                            if (constSignature) {
+                                output.push(constSignature)
+                            }
+                        }
                     }
                 }
             }
-        }
-        if (ts.isFunctionDeclaration(node) && node.name && node.body) {
+        } else if (ts.isFunctionDeclaration(node) && node.name && node.body) {
             let symbol = checker.getSymbolAtLocation(node.name);
             if (symbol) {
                 output = output.concat(serializer.doFxDeclarations(symbol))
@@ -58,6 +65,7 @@ export function generateSignatures(
     }
 
     function serializeSymbol(symbol: ts.Symbol): any {
+
         return {
             name: symbol.getName(),
             documentation: ts.displayPartsToString(symbol.getDocumentationComment(checker)),

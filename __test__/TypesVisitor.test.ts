@@ -4,7 +4,7 @@ import { Signatures } from '../src/App.types';
 
 describe('TypesVisitor', () => {
     describe('function', () => {
-        it('should visit function  with optional paramter', () => {
+        it('should visit function with optional paramter', () => {
             const output = generateSignatures(
                 ['./__test__/__testFiles__/functionWithOptParam.data.ts'],
                 {
@@ -12,7 +12,7 @@ describe('TypesVisitor', () => {
                     module: ModuleKind.CommonJS
                 });
             expect(output).toHaveLength(1)
-            expect(output[0]).toMatchObject({
+            expect(output[0].signature).toMatchObject({
                 path: '__test__/__testFiles__/functionWithOptParam.data.ts',
                 memberType: 'function',
                 memberName: 'danceWith',
@@ -32,7 +32,7 @@ describe('TypesVisitor', () => {
                     module: ModuleKind.CommonJS
                 });
             expect(output).toHaveLength(1)
-            expect(output[0]).toMatchObject({
+            expect(output[0].signature).toMatchObject({
                 path: '__test__/__testFiles__/function.data.ts',
                 memberType: 'function',
                 memberName: 'namedFunction',
@@ -60,7 +60,7 @@ describe('TypesVisitor', () => {
                 });
             expect(output).toHaveLength(3)
 
-            expect(output[0]).toMatchObject({
+            expect(output[0].signature).toMatchObject({
                 path: '__test__/__testFiles__/overloadFunctions.data.ts',
                 memberType: 'function',
                 memberName: 'sum',
@@ -79,7 +79,7 @@ describe('TypesVisitor', () => {
                 ]
             } as Signatures.FunctionSignature)
 
-            expect(output[1]).toMatchObject({
+            expect(output[1].signature).toMatchObject({
                 path: '__test__/__testFiles__/overloadFunctions.data.ts',
                 memberType: 'function',
                 memberName: 'sum',
@@ -98,7 +98,7 @@ describe('TypesVisitor', () => {
                 ]
             } as Signatures.FunctionSignature)
 
-            expect(output[2]).toMatchObject({
+            expect(output[2].signature).toMatchObject({
                 path: '__test__/__testFiles__/overloadFunctions.data.ts',
                 memberType: 'function',
                 memberName: 'sum',
@@ -125,7 +125,7 @@ describe('TypesVisitor', () => {
                     module: ModuleKind.CommonJS
                 });
             expect(output).toHaveLength(1)
-            expect(output[0]).toMatchObject({
+            expect(output[0].signature).toMatchObject({
                 path: '__test__/__testFiles__/arrowFunction.data.ts',
                 memberType: 'function',
                 memberName: 'divide',
@@ -144,5 +144,40 @@ describe('TypesVisitor', () => {
                 ]
             } as Signatures.FunctionSignature)
         })
+    });
+    describe('constant', () => {
+        it('should visit constant primitives', () => {
+            const output = generateSignatures(
+                ['./__test__/__testFiles__/constantPrimitives.data.ts'],
+                {
+                    target: ScriptTarget.ES5,
+                    module: ModuleKind.CommonJS
+                });
+            expect(output).toHaveLength(4)
+            expect(output[0].signature).toMatchObject({
+                path: '__test__/__testFiles__/constantPrimitives.data.ts',
+                memberType: 'constant',
+                memberName: 'date',
+                type: 'number'
+            } as Signatures.ConstantSignature)
+            expect(output[1].signature).toMatchObject({
+                path: '__test__/__testFiles__/constantPrimitives.data.ts',
+                memberType: 'constant',
+                memberName: 'amber',
+                type: 'string'
+            } as Signatures.ConstantSignature)
+            expect(
+                output.map(s => (s.signature as Signatures.ConstantSignature).type)
+            ).toMatchObject(['number', 'string', 'Fish', 'boolean'])
+        });
+        it('should visit unsupported const and return error S001', () => {
+            const result = generateSignatures(['./__test__/__testFiles__/error/S001.data.ts'], {
+                target: ScriptTarget.ES5,
+                module: ModuleKind.CommonJS
+            });
+            expect(result).toHaveLength(1)
+            expect(result[0].error).toBeDefined()
+            expect(result[0].error!.message).toContain('S001')
+        });
     });
 });
