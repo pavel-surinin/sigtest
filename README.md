@@ -12,8 +12,12 @@ This repository is WIP
    - primitive string `const fish = 'gold'`
    - primitive number `const count = 1`
    - primitive boolean `const isGold = true`
+   - primitive string array 
+   - primitive number array
+   - primitive boolean array
+   - primitive union array `const fishes = ['gold', 1]`
 
-# Implemented
+# Implementation status
 
 |          | Generation | Comparing | Reports |
 | -------- | ---------- | --------- | ------- |
@@ -30,3 +34,6 @@ const pc = 'Dell'
 // use instead explicit type annotation
 export computer: string = pc
 ```
+
+# Docs
+ Error code definitions: [link](./docs/error-code-table.md)

@@ -45,9 +45,24 @@ export class Serializer {
                         this.serializeConst(
                             symbol,
                             variableDeclaration,
-                            type
+                            type!
                         )
                     )
+                } else if (ts.isArrayLiteralExpression(variableDeclaration.initializer)) {
+                    const primitiveTypes = variableDeclaration.initializer.elements.map(el => this.serializePrimitiveType(el))
+                    if (primitiveTypes.includes(undefined)) {
+                        return SerializationResult.fromError(
+                            SerializationError.fromDeclaration('S002', variableDeclaration)
+                        )
+                    } else {
+                        return SerializationResult.fromSignature(
+                            this.serializeConst(
+                                symbol,
+                                variableDeclaration,
+                                `Array<${primitiveTypes.join(' | ')}>`
+                            )
+                        )
+                    }
                 }
                 return SerializationResult.fromError(
                     SerializationError.fromDeclaration("S001", variableDeclaration)
@@ -115,7 +130,7 @@ export class Serializer {
         return { name, type, isOptional }
     }
 
-    private serializePrimitiveType(declaration: ts.Expression): string {
+    private serializePrimitiveType(declaration: ts.Expression): string | undefined {
         return PRIMITIVE_KIND_NAME_REGISTRY[declaration.kind]
     }
 

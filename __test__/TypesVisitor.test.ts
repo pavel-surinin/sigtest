@@ -179,5 +179,35 @@ describe('TypesVisitor', () => {
             expect(result[0].error).toBeDefined()
             expect(result[0].error!.message).toContain('S001')
         });
+        it('should visit unsupported const and return error S002', () => {
+            const result = generateSignatures(['./__test__/__testFiles__/error/S002.data.ts'], {
+                target: ScriptTarget.ES5,
+                module: ModuleKind.CommonJS
+            });
+            expect(result).toHaveLength(1)
+            expect(result[0].error).toBeDefined()
+            expect(result[0].error!.message).toContain('S002')
+        });
+        it('should visit array constants', () => {
+            const output = generateSignatures(
+                ['./__test__/__testFiles__/constantArray.data.ts'],
+                {
+                    target: ScriptTarget.ES5,
+                    module: ModuleKind.CommonJS
+                });
+            expect(output).toHaveLength(2)
+            expect(output[0].signature).toMatchObject({
+                path: '__test__/__testFiles__/constantArray.data.ts',
+                memberType: 'constant',
+                memberName: 'numbers',
+                type: 'Array<number>'
+            } as Signatures.ConstantSignature)
+            expect(output[1].signature).toMatchObject({
+                path: '__test__/__testFiles__/constantArray.data.ts',
+                memberType: 'constant',
+                memberName: 'strings',
+                type: 'Array<string | number>'
+            } as Signatures.ConstantSignature)
+        });
     });
 });

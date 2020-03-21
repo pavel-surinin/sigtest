@@ -1,6 +1,6 @@
 import ts from 'typescript';
 
-export type SerializationErrorCode = 'S001'
+export type SerializationErrorCode = 'S001' | 'S002'
 export type SerializationErrorInput = Omit<SerializationErrorData, 'definition'> & { code: SerializationErrorCode }
 
 interface SerializationErrorDefinition {
@@ -8,12 +8,18 @@ interface SerializationErrorDefinition {
     code: SerializationErrorCode
 }
 
-const ERROR_CODE_REGISTRY: Record<SerializationErrorCode, SerializationErrorDefinition> = {
+export const ERROR_CODE_REGISTRY: Record<SerializationErrorCode, SerializationErrorDefinition> = {
     S001: {
         code: 'S001',
         description: 'Not supported exported constant initializer. '
             + 'Only primitive initializers are supported. '
             + 'Try using primitive initializer or define explicit type.'
+    },
+    S002: {
+        code: 'S002',
+        description: 'Not supported exported constant initializer. '
+            + 'Only primitive array initializers are supported. '
+            + 'Try using primitive array initializer or define explicit type.'
     }
 }
 

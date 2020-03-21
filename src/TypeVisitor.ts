@@ -38,12 +38,8 @@ export function generateSignatures(
                         }
                     } else {
                         let symbol = checker.getSymbolAtLocation(varDeclaration.name)
-                        ts.SyntaxKind.StringLiteral
                         if (symbol) {
-                            const constSignature = serializer.doConstant(symbol)
-                            if (constSignature) {
-                                output.push(constSignature)
-                            }
+                            output.push(serializer.doConstant(symbol))
                         }
                     }
                 }
