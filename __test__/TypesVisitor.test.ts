@@ -258,5 +258,79 @@ describe('TypesVisitor', () => {
                 path: '__test__/__testFiles__/classFields.data.ts',
             })
         })
+        it('should visit class methods', () => {
+            const path = '__test__/__testFiles__/classMethods.data.ts'
+            const output = generate(path)
+            expect(output).toHaveLength(1)
+            expect(output[0].signature).toBeDefined()
+            expect(output[0].signature!).toMatchObject({
+                constructors: [
+                    {
+                        parameters: [],
+                        returnType: 'typeof Calc',
+                    },
+                ],
+                generics: [] as any[],
+                properties: [] as any[],
+                methods: [
+                    {
+                        name: 'sum',
+                        modifier: 'public',
+                        parameters: [
+                            {
+                                name: 'n1',
+                                type: 'number',
+                                isOptional: false,
+                            },
+                            {
+                                name: 'n2',
+                                type: 'number',
+                                isOptional: false,
+                            },
+                            {
+                                name: 'n3',
+                                type: 'number',
+                                isOptional: true,
+                            },
+                        ],
+                    },
+                    {
+                        name: 'div',
+                        modifier: 'protected',
+                        parameters: [
+                            {
+                                name: 'n1',
+                                type: 'number',
+                                isOptional: false,
+                            },
+                            {
+                                name: 'n2',
+                                type: 'number',
+                                isOptional: false,
+                            },
+                        ],
+                    },
+                    {
+                        name: 'mul',
+                        modifier: 'private',
+                        parameters: [
+                            {
+                                name: 'n1',
+                                type: 'number',
+                                isOptional: false,
+                            },
+                            {
+                                name: 'n2',
+                                type: 'number',
+                                isOptional: false,
+                            },
+                        ],
+                    },
+                ],
+                memberName: 'Calc',
+                memberType: 'class',
+                path,
+            } as Signatures.ClassSignature)
+        })
     })
 })

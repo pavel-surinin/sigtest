@@ -27,6 +27,7 @@ export class Serializer {
         this.doFxDeclarations = this.doFxDeclarations.bind(this)
         this.serializeParameter = this.serializeParameter.bind(this)
         this.serializeClassProperty = this.serializeClassProperty.bind(this)
+        this.serializeMethod = this.serializeMethod.bind(this)
     }
 
     doClass(symbol: ts.Symbol): SerializationResult | SerializationResult[] {
@@ -39,6 +40,9 @@ export class Serializer {
                 .filter(ts.isPropertyDeclaration)
                 .map(this.serializeClassProperty)
                 .concat(constructor.classPropDefinitions)
+            const methods = classDeclaration.members
+                .filter(member => ts.isMethodDeclaration(member))
+                .map(member => this.serializeMethod(member as ts.MethodDeclaration))
             return SerializationResult.fromSignature({
                 memberType: 'class',
                 memberName: symbol.name,
@@ -46,6 +50,7 @@ export class Serializer {
                 constructors: constructor.constructorDefinitions,
                 path,
                 properties,
+                methods,
             } as Signatures.ClassSignature)
         }
         return EMPTY_RESULT
@@ -105,6 +110,14 @@ export class Serializer {
                 return this.serializeFunction(symbol, fxDeclaration, parameters)
             })
             .map(SerializationResult.fromSignature)
+    }
+
+    private serializeMethod(method: ts.MethodDeclaration): Signatures.MethodDefinition {
+        return {
+            name: method.name.getText(),
+            modifier: method.modifiers ? (method.modifiers[0].getText() as Signatures.AccessModifier) : 'public',
+            parameters: method.parameters.map(this.serializeParameter),
+        }
     }
 
     private serializeClassProperty(prop: ts.PropertyDeclaration): Signatures.ClassProperty {

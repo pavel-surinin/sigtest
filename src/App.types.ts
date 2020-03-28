@@ -53,10 +53,17 @@ export namespace Signatures {
         modifiers: Modifier[]
     }
 
+    export interface MethodDefinition {
+        modifier: AccessModifier
+        name: string
+        parameters: Paramter[]
+    }
+
     interface ClassDeclaration {
         generics: GenericDefinition[]
         constructors: ConstructorDefinition[]
         properties: ClassProperty[]
+        methods: MethodDefinition[]
     }
 
     export interface FunctionSignature extends FunctionDeclaration, Signature {
