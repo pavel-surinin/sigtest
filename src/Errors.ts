@@ -1,3 +1,3 @@
-import { SerializationError } from './SerializerError';
+import { SerializationError } from './SerializerError'
 
 export type ErrorType = SerializationError

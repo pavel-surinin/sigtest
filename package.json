@@ -6,7 +6,8 @@
   "scripts": {
     "compile": "tsc",
     "test": "jest",
-    "docs": "node ./scripts/generate-error-code-info"
+    "docs": "node ./scripts/generate-error-code-info",
+    "format": "prettier --write src __test__ scripts"
   },
   "author": "",
   "license": "MIT",
@@ -14,6 +15,7 @@
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.1",
     "jest": "^25.1.0",
+    "prettier": "^2.0.1",
     "ts-jest": "^25.2.1"
   },
   "dependencies": {

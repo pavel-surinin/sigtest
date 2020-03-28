@@ -1,39 +1,40 @@
 import { generateSignatures } from '../src/TypeVisitor'
 import { ModuleKind, ScriptTarget } from 'typescript'
-import { Signatures } from '../src/App.types';
+import { Signatures } from '../src/App.types'
+import { SerializationResult } from '../src/Serializer'
 
 describe('TypesVisitor', () => {
+    function generate(path: string): SerializationResult[] {
+        return generateSignatures([path], {
+            target: ScriptTarget.ES5,
+            module: ModuleKind.CommonJS,
+        })
+    }
     describe('function', () => {
         it('should visit function with optional paramter', () => {
-            const output = generateSignatures(
-                ['./__test__/__testFiles__/functionWithOptParam.data.ts'],
-                {
-                    target: ScriptTarget.ES5,
-                    module: ModuleKind.CommonJS
-                });
+            const path = '__test__/__testFiles__/functionWithOptParam.data.ts'
+            const output = generate(path)
             expect(output).toHaveLength(1)
             expect(output[0].signature).toMatchObject({
-                path: '__test__/__testFiles__/functionWithOptParam.data.ts',
+                path,
                 memberType: 'function',
                 memberName: 'danceWith',
                 returnType: 'string',
-                parameters: [{
-                    isOptional: true,
-                    name: 'name',
-                    type: 'string'
-                }]
-            } as Signatures.FunctionSignature)
-        });
+                parameters: [
+                    {
+                        isOptional: true,
+                        name: 'name',
+                        type: 'string',
+                    },
+                ],
+            })
+        })
         it('should visit function', () => {
-            const output = generateSignatures(
-                ['./__test__/__testFiles__/function.data.ts'],
-                {
-                    target: ScriptTarget.ES5,
-                    module: ModuleKind.CommonJS
-                });
+            const path = '__test__/__testFiles__/function.data.ts'
+            const output = generate(path)
             expect(output).toHaveLength(1)
             expect(output[0].signature).toMatchObject({
-                path: '__test__/__testFiles__/function.data.ts',
+                path,
                 memberType: 'function',
                 memberName: 'namedFunction',
                 returnType: 'boolean',
@@ -41,27 +42,22 @@ describe('TypesVisitor', () => {
                     {
                         name: 'param',
                         type: 'number',
-                        isOptional: false
+                        isOptional: false,
                     },
                     {
                         name: 'b',
                         type: 'Blob',
-                        isOptional: false
-                    }
-                ]
+                        isOptional: false,
+                    },
+                ],
             } as Signatures.FunctionSignature)
-        });
+        })
         it('should visit overloaded functions', () => {
-            const output = generateSignatures(
-                ['./__test__/__testFiles__/overloadFunctions.data.ts'],
-                {
-                    target: ScriptTarget.ES5,
-                    module: ModuleKind.CommonJS
-                });
+            const path = '__test__/__testFiles__/overloadFunctions.data.ts'
+            const output = generate(path)
             expect(output).toHaveLength(3)
-
             expect(output[0].signature).toMatchObject({
-                path: '__test__/__testFiles__/overloadFunctions.data.ts',
+                path,
                 memberType: 'function',
                 memberName: 'sum',
                 returnType: 'Blob',
@@ -69,18 +65,18 @@ describe('TypesVisitor', () => {
                     {
                         name: 'n1',
                         type: 'string',
-                        isOptional: false
+                        isOptional: false,
                     },
                     {
                         name: 'n2',
                         type: 'string',
-                        isOptional: false
-                    }
-                ]
+                        isOptional: false,
+                    },
+                ],
             } as Signatures.FunctionSignature)
 
             expect(output[1].signature).toMatchObject({
-                path: '__test__/__testFiles__/overloadFunctions.data.ts',
+                path,
                 memberType: 'function',
                 memberName: 'sum',
                 returnType: 'Blob',
@@ -88,18 +84,18 @@ describe('TypesVisitor', () => {
                     {
                         name: 'n1',
                         type: 'number',
-                        isOptional: false
+                        isOptional: false,
                     },
                     {
                         name: 'n2',
                         type: 'number',
-                        isOptional: false
-                    }
-                ]
+                        isOptional: false,
+                    },
+                ],
             } as Signatures.FunctionSignature)
 
             expect(output[2].signature).toMatchObject({
-                path: '__test__/__testFiles__/overloadFunctions.data.ts',
+                path,
                 memberType: 'function',
                 memberName: 'sum',
                 returnType: 'Blob',
@@ -107,26 +103,22 @@ describe('TypesVisitor', () => {
                     {
                         name: 'n1',
                         type: 'string | number',
-                        isOptional: false
+                        isOptional: false,
                     },
                     {
                         name: 'n2',
                         type: 'string | number',
-                        isOptional: false
-                    }
-                ]
+                        isOptional: false,
+                    },
+                ],
             } as Signatures.FunctionSignature)
-        });
+        })
         it('should visit arrow function', () => {
-            const output = generateSignatures(
-                ['./__test__/__testFiles__/arrowFunction.data.ts'],
-                {
-                    target: ScriptTarget.ES5,
-                    module: ModuleKind.CommonJS
-                });
+            const path = '__test__/__testFiles__/arrowFunction.data.ts'
+            const output = generate(path)
             expect(output).toHaveLength(1)
             expect(output[0].signature).toMatchObject({
-                path: '__test__/__testFiles__/arrowFunction.data.ts',
+                path,
                 memberType: 'function',
                 memberName: 'divide',
                 returnType: 'number',
@@ -134,80 +126,137 @@ describe('TypesVisitor', () => {
                     {
                         name: 'n1',
                         type: 'number',
-                        isOptional: false
+                        isOptional: false,
                     },
                     {
                         name: 'n2',
                         type: 'number',
-                        isOptional: false
-                    }
-                ]
+                        isOptional: false,
+                    },
+                ],
             } as Signatures.FunctionSignature)
         })
-    });
+    })
     describe('constant', () => {
         it('should visit constant primitives', () => {
-            const output = generateSignatures(
-                ['./__test__/__testFiles__/constantPrimitives.data.ts'],
-                {
-                    target: ScriptTarget.ES5,
-                    module: ModuleKind.CommonJS
-                });
+            const path = '__test__/__testFiles__/constantPrimitives.data.ts'
+            const output = generate(path)
             expect(output).toHaveLength(4)
             expect(output[0].signature).toMatchObject({
-                path: '__test__/__testFiles__/constantPrimitives.data.ts',
+                path,
                 memberType: 'constant',
                 memberName: 'date',
-                type: 'number'
+                type: 'number',
             } as Signatures.ConstantSignature)
             expect(output[1].signature).toMatchObject({
-                path: '__test__/__testFiles__/constantPrimitives.data.ts',
+                path,
                 memberType: 'constant',
                 memberName: 'amber',
-                type: 'string'
+                type: 'string',
             } as Signatures.ConstantSignature)
-            expect(
-                output.map(s => (s.signature as Signatures.ConstantSignature).type)
-            ).toMatchObject(['number', 'string', 'Fish', 'boolean'])
-        });
+            expect(output.map(s => (s.signature as Signatures.ConstantSignature).type)).toMatchObject([
+                'number',
+                'string',
+                'Fish',
+                'boolean',
+            ])
+        })
         it('should visit unsupported const and return error S001', () => {
-            const result = generateSignatures(['./__test__/__testFiles__/error/S001.data.ts'], {
-                target: ScriptTarget.ES5,
-                module: ModuleKind.CommonJS
-            });
+            const path = './__test__/__testFiles__/error/S001.data.ts'
+            const result = generate(path)
             expect(result).toHaveLength(1)
             expect(result[0].error).toBeDefined()
             expect(result[0].error!.message).toContain('S001')
-        });
+        })
         it('should visit unsupported const and return error S002', () => {
-            const result = generateSignatures(['./__test__/__testFiles__/error/S002.data.ts'], {
-                target: ScriptTarget.ES5,
-                module: ModuleKind.CommonJS
-            });
+            const path = './__test__/__testFiles__/error/S002.data.ts'
+            const result = generate(path)
             expect(result).toHaveLength(1)
             expect(result[0].error).toBeDefined()
             expect(result[0].error!.message).toContain('S002')
-        });
+        })
         it('should visit array constants', () => {
-            const output = generateSignatures(
-                ['./__test__/__testFiles__/constantArray.data.ts'],
-                {
-                    target: ScriptTarget.ES5,
-                    module: ModuleKind.CommonJS
-                });
+            const path = '__test__/__testFiles__/constantArray.data.ts'
+            const output = generate(path)
             expect(output).toHaveLength(2)
             expect(output[0].signature).toMatchObject({
-                path: '__test__/__testFiles__/constantArray.data.ts',
+                path,
                 memberType: 'constant',
                 memberName: 'numbers',
-                type: 'Array<number>'
+                type: 'Array<number>',
             } as Signatures.ConstantSignature)
             expect(output[1].signature).toMatchObject({
-                path: '__test__/__testFiles__/constantArray.data.ts',
+                path,
                 memberType: 'constant',
                 memberName: 'strings',
-                type: 'Array<string | number>'
+                type: 'Array<string | number>',
             } as Signatures.ConstantSignature)
-        });
-    });
-});
+        })
+    })
+    describe('class', () => {
+        it('should visit class fields', () => {
+            const path = './__test__/__testFiles__/classFields.data.ts'
+            const output = generate(path)
+            expect(output).toHaveLength(1)
+            expect(output[0].signature).toBeDefined()
+            expect(output[0].signature!).toMatchObject({
+                constructors: [
+                    {
+                        parameters: [
+                            {
+                                isOptional: false,
+                                name: 'fields',
+                                type: 'string',
+                            },
+                            {
+                                isOptional: true,
+                                name: 'optional',
+                                type: 'Blob',
+                            },
+                        ],
+                        returnType: 'typeof TestMap',
+                    },
+                ],
+                generics: [
+                    {
+                        default: undefined,
+                        name: 'V',
+                    },
+                    {
+                        default: 'string',
+                        name: 'D',
+                    },
+                    {
+                        default: 'any',
+                        name: 'A',
+                    },
+                ],
+                properties: [
+                    {
+                        name: 'publicData',
+                        modifiers: ['public', 'readonly'],
+                        type: 'Map<string, V>',
+                    },
+                    {
+                        name: 'data',
+                        modifiers: ['private', 'readonly'],
+                        type: 'Map<string, V>',
+                    },
+                    {
+                        name: 'protectedData',
+                        modifiers: ['protected'],
+                        type: 'Map<string, V>',
+                    },
+                    {
+                        name: 'fields',
+                        modifiers: ['private'],
+                        type: 'string',
+                    },
+                ],
+                memberName: 'TestMap',
+                memberType: 'class',
+                path: '__test__/__testFiles__/classFields.data.ts',
+            })
+        })
+    })
+})

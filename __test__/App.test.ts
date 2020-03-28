@@ -1,5 +1,3 @@
 describe('Application', () => {
-    it('should ', () => {
-
-    });
-});
+    it('should ', () => {})
+})

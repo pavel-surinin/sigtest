@@ -1,5 +1,5 @@
 export namespace Signatures {
-    export type MemberType = "function" | "class" | "constant"
+    export type MemberType = 'function' | 'class' | 'constant'
 
     export interface Paramter {
         name: string
@@ -35,14 +35,41 @@ export namespace Signatures {
         type: string
     }
 
+    export interface GenericDefinition {
+        name: string
+        default?: string
+    }
+
+    export interface ConstructorDefinition extends FunctionDeclaration {}
+
+    export type AccessModifier = 'public' | 'protected' | 'private'
+    export type WriteModifier = 'readonly'
+    export type UsageModifier = 'instance' | 'static'
+    export type Modifier = AccessModifier | WriteModifier | UsageModifier
+
+    export interface ClassProperty {
+        name: string
+        type: string
+        modifiers: Modifier[]
+    }
+
+    interface ClassDeclaration {
+        generics: GenericDefinition[]
+        constructors: ConstructorDefinition[]
+        properties: ClassProperty[]
+    }
+
     export interface FunctionSignature extends FunctionDeclaration, Signature {
-        memberType: "function"
+        memberType: 'function'
     }
 
     export interface ConstantSignature extends ConstantDeclaration, Signature {
-        memberType: "constant"
+        memberType: 'constant'
     }
 
-    export type SignatureType = FunctionSignature | ConstantSignature
+    export interface ClassSignature extends ClassDeclaration, Signature {
+        memberType: 'class'
+    }
 
+    export type SignatureType = FunctionSignature | ConstantSignature | ClassSignature
 }

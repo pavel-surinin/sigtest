@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
-import { Signatures } from './App.types';
-import { SerializationError } from './SerializerError';
+import { Signatures } from './App.types'
+import { SerializationError } from './SerializerError'
 
 const EMPTY_RESULT = {}
 
@@ -18,15 +18,37 @@ export class SerializationResult {
     static fromSignature(signature: Signatures.SignatureType) {
         return new SerializationResult(signature)
     }
-    constructor(readonly signature?: Signatures.SignatureType, readonly error?: SerializationError) { }
+    constructor(readonly signature?: Signatures.SignatureType, readonly error?: SerializationError) {}
 }
 
 export class Serializer {
-
     constructor(private readonly checker: ts.TypeChecker) {
         this.serializeFunction = this.serializeFunction.bind(this)
         this.doFxDeclarations = this.doFxDeclarations.bind(this)
         this.serializeParameter = this.serializeParameter.bind(this)
+        this.serializeClassProperty = this.serializeClassProperty.bind(this)
+    }
+
+    doClass(symbol: ts.Symbol): SerializationResult | SerializationResult[] {
+        const classDeclaration = symbol.declarations[0]
+        if (ts.isClassDeclaration(classDeclaration)) {
+            const generics = classDeclaration.typeParameters?.map(this.serializeTypeParameter) ?? []
+            const constructor = this.serializeClassConstructors(symbol)
+            const path = classDeclaration.getSourceFile().fileName
+            const properties = classDeclaration.members
+                .filter(ts.isPropertyDeclaration)
+                .map(this.serializeClassProperty)
+                .concat(constructor.classPropDefinitions)
+            return SerializationResult.fromSignature({
+                memberType: 'class',
+                memberName: symbol.name,
+                generics,
+                constructors: constructor.constructorDefinitions,
+                path,
+                properties,
+            } as Signatures.ClassSignature)
+        }
+        return EMPTY_RESULT
     }
 
     doConstant(symbol: ts.Symbol): SerializationResult {
@@ -41,32 +63,22 @@ export class Serializer {
                     } else {
                         type = this.serializePrimitiveType(variableDeclaration.initializer)
                     }
-                    return SerializationResult.fromSignature(
-                        this.serializeConst(
-                            symbol,
-                            variableDeclaration,
-                            type!
-                        )
-                    )
+                    return SerializationResult.fromSignature(this.serializeConst(symbol, variableDeclaration, type!))
                 } else if (ts.isArrayLiteralExpression(variableDeclaration.initializer)) {
-                    const primitiveTypes = variableDeclaration.initializer.elements.map(el => this.serializePrimitiveType(el))
+                    const primitiveTypes = variableDeclaration.initializer.elements.map(el =>
+                        this.serializePrimitiveType(el)
+                    )
                     if (primitiveTypes.includes(undefined)) {
                         return SerializationResult.fromError(
                             SerializationError.fromDeclaration('S002', variableDeclaration)
                         )
                     } else {
                         return SerializationResult.fromSignature(
-                            this.serializeConst(
-                                symbol,
-                                variableDeclaration,
-                                `Array<${primitiveTypes.join(' | ')}>`
-                            )
+                            this.serializeConst(symbol, variableDeclaration, `Array<${primitiveTypes.join(' | ')}>`)
                         )
                     }
                 }
-                return SerializationResult.fromError(
-                    SerializationError.fromDeclaration("S001", variableDeclaration)
-                )
+                return SerializationResult.fromError(SerializationError.fromDeclaration('S001', variableDeclaration))
             }
         }
         return EMPTY_RESULT
@@ -80,9 +92,7 @@ export class Serializer {
                 parameters = variableDeclaration.initializer.parameters.map(this.serializeParameter)
             }
         }
-        return SerializationResult.fromSignature(
-            this.serializeFunction(symbol, symbol.valueDeclaration, parameters)
-        )
+        return SerializationResult.fromSignature(this.serializeFunction(symbol, symbol.valueDeclaration, parameters))
     }
 
     doFxDeclarations(symbol: ts.Symbol): SerializationResult[] {
@@ -90,34 +100,76 @@ export class Serializer {
             .map(fxDeclaration => {
                 let parameters: Signatures.Paramter[] = []
                 if (ts.isFunctionDeclaration(fxDeclaration)) {
-                    parameters = fxDeclaration
-                        .parameters
-                        .map(this.serializeParameter)
+                    parameters = fxDeclaration.parameters.map(this.serializeParameter)
                 }
-                return this.serializeFunction(symbol, fxDeclaration, parameters);
+                return this.serializeFunction(symbol, fxDeclaration, parameters)
             })
             .map(SerializationResult.fromSignature)
     }
 
-    private serializeConst(symbol: ts.Symbol, varDeclaration: ts.Declaration, type: string): Signatures.ConstantSignature {
+    private serializeClassProperty(prop: ts.PropertyDeclaration): Signatures.ClassProperty {
+        return {
+            name: this.checker.getSymbolAtLocation(prop.name)?.name!,
+            modifiers: prop.modifiers?.map(m => m.getText() as Signatures.Modifier) ?? [],
+            type: this.checker.typeToString(this.checker.getTypeAtLocation(prop)),
+        }
+    }
+
+    private serializeClassConstructors(
+        symbol: ts.Symbol
+    ): {
+        constructorDefinitions: Signatures.ConstructorDefinition[]
+        classPropDefinitions: Signatures.ClassProperty[]
+    } {
+        const constructorSignatures = this.checker
+            .getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration!)
+            .getConstructSignatures()
+        const constructorDefinitions = constructorSignatures.map(cs => {
+            return {
+                parameters: cs.parameters.map(p =>
+                    this.serializeParameter(p.declarations[0] as ts.ParameterDeclaration)
+                ),
+                returnType: this.checker.typeToString(
+                    this.checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration!)
+                ),
+            }
+        })
+        const classPropDefinitions = (constructorSignatures[0]?.parameters ?? [])
+            .filter(pp => Boolean(pp.valueDeclaration.modifiers))
+            .map(pp => this.serializeClassProperty(pp.valueDeclaration as any))
+        return { constructorDefinitions, classPropDefinitions }
+    }
+
+    private serializeTypeParameter(tpd: ts.TypeParameterDeclaration): Signatures.GenericDefinition {
+        return {
+            name: tpd.name.getText(),
+            default: tpd.default?.getText(),
+        }
+    }
+
+    private serializeConst(
+        symbol: ts.Symbol,
+        varDeclaration: ts.Declaration,
+        type: string
+    ): Signatures.ConstantSignature {
         return {
             memberName: symbol.getName(),
             memberType: 'constant',
             path: varDeclaration.getSourceFile().fileName,
-            type
+            type,
         }
     }
 
     private serializeFunction(symbol: ts.Symbol, fxDeclaration: ts.Declaration, parameters: Signatures.Paramter[]) {
-        const returnType = this.checker.typeToString(this.checker.getTypeOfSymbolAtLocation(symbol, fxDeclaration)
-            .getCallSignatures()[0]
-            .getReturnType());
+        const returnType = this.checker.typeToString(
+            this.checker.getTypeOfSymbolAtLocation(symbol, fxDeclaration).getCallSignatures()[0].getReturnType()
+        )
         return {
             memberName: symbol.getName(),
             memberType: 'function',
             path: fxDeclaration.getSourceFile().fileName,
             parameters,
-            returnType
+            returnType,
         } as Signatures.FunctionSignature
     }
 
@@ -125,7 +177,7 @@ export class Serializer {
         const paramType = this.checker.getTypeAtLocation(param)
         const type = this.checker.typeToString(paramType)
         const name = param.name.getText()
-        const isOptional = this.checker.isOptionalParameter(param);
+        const isOptional = this.checker.isOptionalParameter(param)
         this.checker.isOptionalParameter(param)
         return { name, type, isOptional }
     }
