@@ -40,6 +40,7 @@ This repository is WIP
 | function | ✔️         |           |         |
 | constant | ✔️         |           |         |
 | class    | ✔️         |           |         |
+| enum     | ✔️         |           |         |
 
 # Not Supported
 
