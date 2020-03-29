@@ -32,6 +32,7 @@ This repository is WIP
             -   modifiers
         -   return type
         -   modifiers
+-   exported enums
 
 # Implementation status
 
