@@ -333,4 +333,75 @@ describe('TypesVisitor', () => {
             } as Signatures.ClassSignature)
         })
     })
+    describe('enum', () => {
+        it('should visit enum', () => {
+            const path = '__test__/__testFiles__/enum.data.ts'
+            const output = generate(path)
+            expect(output).toHaveLength(3)
+            expect(output[0].signature).toBeDefined()
+            expect(output[0].signature).toMatchObject({
+                memberName: 'DirectionWithDefinedStart',
+                memberType: 'enum',
+                path,
+                values: [
+                    {
+                        name: 'Up',
+                        type: 'number',
+                        value: 1,
+                    },
+                    {
+                        name: 'Down',
+                        type: 'number',
+                        value: 2,
+                    },
+                ],
+            } as Signatures.EnumSignature)
+            expect(output[1].signature).toMatchObject({
+                memberName: 'Direction',
+                memberType: 'enum',
+                path,
+                values: [
+                    {
+                        name: 'Up',
+                        type: 'number',
+                        value: 0,
+                    },
+                    {
+                        name: 'Down',
+                        type: 'number',
+                        value: 1,
+                    },
+                ],
+            } as Signatures.EnumSignature)
+            expect(output[2].signature).toMatchObject({
+                memberName: 'DirectionString',
+                memberType: 'enum',
+                path,
+                values: [
+                    {
+                        name: 'Up',
+                        type: 'string',
+                        value: 'Up!',
+                    },
+                    {
+                        name: 'Down',
+                        type: 'string',
+                        value: 'Down!',
+                    },
+                    {
+                        name: 'Left',
+                        type: 'string',
+                        value: 'Down!90d',
+                    },
+                ],
+            } as Signatures.EnumSignature)
+        })
+        it('should throw on computed value number', () => {
+            const path = '__test__/__testFiles__/error/S003.data.ts'
+            const output = generate(path)
+            expect(output).toHaveLength(1)
+            expect(output[0].error).toBeDefined()
+            expect(output[0].error?.message).toContain('S003')
+        })
+    })
 })

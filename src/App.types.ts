@@ -1,5 +1,5 @@
 export namespace Signatures {
-    export type MemberType = 'function' | 'class' | 'constant'
+    export type MemberType = 'function' | 'class' | 'constant' | 'enum'
 
     export interface Paramter {
         name: string
@@ -66,6 +66,16 @@ export namespace Signatures {
         methods: MethodDefinition[]
     }
 
+    export interface EnumValueDefinition {
+        name: string
+        type: string
+        value: any
+    }
+
+    export interface EnumDeclaration {
+        values: EnumValueDefinition[]
+    }
+
     export interface FunctionSignature extends FunctionDeclaration, Signature {
         memberType: 'function'
     }
@@ -78,5 +88,9 @@ export namespace Signatures {
         memberType: 'class'
     }
 
-    export type SignatureType = FunctionSignature | ConstantSignature | ClassSignature
+    export interface EnumSignature extends EnumDeclaration, Signature {
+        memberType: 'enum'
+    }
+
+    export type SignatureType = FunctionSignature | ConstantSignature | ClassSignature | EnumSignature
 }

@@ -37,6 +37,8 @@ export function generateSignatures(fileNames: string[], options: ts.CompilerOpti
             add(serialize(node.name, s => serializer.doFxDeclarations(s)))
         } else if (ts.isClassDeclaration(node) && node.name) {
             add(serialize(node.name, s => serializer.doClass(s)))
+        } else if (ts.isEnumDeclaration(node)) {
+            add(serialize(node.name, s => serializer.doEnum(s)))
         } else if (ts.isModuleDeclaration(node) || ts.isModuleBlock(node)) {
             ts.forEachChild(node, visit)
         }

@@ -1,6 +1,6 @@
 import ts from 'typescript'
 
-export type SerializationErrorCode = 'S001' | 'S002'
+export type SerializationErrorCode = 'S001' | 'S002' | 'S003'
 export type SerializationErrorInput = Omit<SerializationErrorData, 'definition'> & { code: SerializationErrorCode }
 
 interface SerializationErrorDefinition {
@@ -22,6 +22,12 @@ export const ERROR_CODE_REGISTRY: Record<SerializationErrorCode, SerializationEr
             'Not supported exported constant initializer. ' +
             'Only primitive array initializers are supported. ' +
             'Try using primitive array initializer or define explicit type.',
+    },
+    S003: {
+        code: 'S003',
+        description:
+            'Enum initialization cannot contain expressions with variables. ' +
+            'Only inline expressions with primitives are supported.',
     },
 }
 

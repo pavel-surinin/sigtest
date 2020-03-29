@@ -3,7 +3,5 @@ module.exports = {
     testEnvironment: 'node',
     testMatch: ['**.test.ts'],
     coverageDirectory: 'out/.coverage',
-    modulePathIgnorePatterns: [
-        'node_modules'
-    ]
+    modulePathIgnorePatterns: ['node_modules'],
 }

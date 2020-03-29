@@ -30,6 +30,64 @@ export class Serializer {
         this.serializeMethod = this.serializeMethod.bind(this)
     }
 
+    doEnum(symbol: ts.Symbol): SerializationResult | SerializationResult[] {
+        const enumDeclaration = symbol.declarations[0]
+        function serializeValue(expression: ts.Expression): { value: string | number; type: string } {
+            if (ts.isNumericLiteral(expression)) {
+                return { value: eval(expression.getText()), type: 'number' }
+            } else {
+                return { value: eval(expression.getText()), type: 'string' }
+            }
+        }
+        if (ts.isEnumDeclaration(enumDeclaration)) {
+            const path = enumDeclaration.getSourceFile().fileName
+            const values: Signatures.EnumValueDefinition[] = []
+
+            for (const member of enumDeclaration.members) {
+                if (ts.isEnumMember(member)) {
+                    // string or number
+                    if (member.initializer) {
+                        let valueType
+                        try {
+                            valueType = serializeValue(member.initializer)
+                        } catch {
+                            return SerializationResult.fromError(
+                                SerializationError.fromDeclaration('S003', enumDeclaration)
+                            )
+                        }
+                        values.push({
+                            name: member.name.getText(),
+                            type: valueType.type,
+                            value: valueType.value,
+                        })
+                        // not first enum value definition
+                        // without initializer, number
+                    } else if (values.length) {
+                        values.push({
+                            name: member.name.getText(),
+                            type: 'number',
+                            value: (values[0].value as number) + 1,
+                        })
+                    } else {
+                        // first enum value definition without initializer
+                        values.push({
+                            name: member.name.getText(),
+                            type: 'number',
+                            value: 0,
+                        })
+                    }
+                }
+            }
+            return SerializationResult.fromSignature({
+                memberType: 'enum',
+                path,
+                memberName: symbol.name,
+                values,
+            } as Signatures.EnumSignature)
+        }
+        return {}
+    }
+
     doClass(symbol: ts.Symbol): SerializationResult | SerializationResult[] {
         const classDeclaration = symbol.declarations[0]
         if (ts.isClassDeclaration(classDeclaration)) {
