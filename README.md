@@ -33,7 +33,7 @@ This repository is WIP
         -   return type
         -   modifiers
 -   exported enums
--   exported inter
+-   exported interfaces
 
 # Implementation status
 
