@@ -33,15 +33,18 @@ This repository is WIP
         -   return type
         -   modifiers
 -   exported enums
+-   exported inter
 
 # Implementation status
 
-|          | Generation | Comparing | Reports |
-| -------- | ---------- | --------- | ------- |
-| function | ✔️         |           |         |
-| constant | ✔️         |           |         |
-| class    | ✔️         |           |         |
-| enum     | ✔️         |           |         |
+|           | Generation | Comparing | Reports |
+| --------- | ---------- | --------- | ------- |
+| function  | ✔️         |           |         |
+| constant  | ✔️         |           |         |
+| class     | ✔️         |           |         |
+| enum      | ✔️         |           |         |
+| interface | ✔️         |           |         |
+| type      |            |           |         |
 
 # Not Supported
 

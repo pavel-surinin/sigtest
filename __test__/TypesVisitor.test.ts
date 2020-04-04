@@ -154,12 +154,9 @@ describe('TypesVisitor', () => {
                 memberName: 'amber',
                 type: 'string',
             } as Signatures.ConstantSignature)
-            expect(output.map(s => (s.signature as Signatures.ConstantSignature).type)).toMatchObject([
-                'number',
-                'string',
-                'Fish',
-                'boolean',
-            ])
+            expect(
+                output.map(s => (s.signature as Signatures.ConstantSignature).type)
+            ).toMatchObject(['number', 'string', 'Fish', 'boolean'])
         })
         it('should visit unsupported const and return error S001', () => {
             const path = './__test__/__testFiles__/error/S001.data.ts'
@@ -266,6 +263,7 @@ describe('TypesVisitor', () => {
             expect(output[0].signature!).toMatchObject({
                 constructors: [
                     {
+                        generics: [],
                         parameters: [],
                         returnType: 'typeof Calc',
                     },
@@ -402,6 +400,130 @@ describe('TypesVisitor', () => {
             expect(output).toHaveLength(1)
             expect(output[0].error).toBeDefined()
             expect(output[0].error?.message).toContain('S003')
+        })
+    })
+    describe('interface', () => {
+        it('should visit interface', () => {
+            const path = '__test__/__testFiles__/interface.data.ts'
+            const output = generate(path)
+            expect(output).toHaveLength(2)
+            expect(output[0].signature).toBeDefined()
+            expect(output[0].signature).toMatchObject({
+                memberName: 'FunctionHolder',
+                memberType: 'interface',
+                path: '__test__/__testFiles__/interface.data.ts',
+                generics: [],
+                properties: {
+                    arrowFx: {
+                        isOptional: false,
+                        isReadonly: true,
+                        type: '() => string',
+                    },
+                    arrowFxWithParam: {
+                        isOptional: false,
+                        isReadonly: false,
+                        type: '(p: string) => string',
+                    },
+                    fx: {
+                        isOptional: false,
+                        isReadonly: false,
+                        type: '() => string',
+                    },
+                    fxWithParam: {
+                        isOptional: false,
+                        isReadonly: false,
+                        type: '(p: string) => string',
+                    },
+                },
+            })
+            expect(output[1].signature).toMatchObject({
+                memberName: 'Basic',
+                memberType: 'interface',
+                path: '__test__/__testFiles__/interface.data.ts',
+                generics: [
+                    {
+                        name: 'T1',
+                    },
+                    {
+                        name: 'T3',
+                        extends: 'Function',
+                    },
+                    {
+                        name: 'K',
+                        extends: 'keyof any',
+                    },
+                    {
+                        name: 'T2',
+                        default: 'string',
+                    },
+                ] as Signatures.GenericDefinition[],
+                properties: {
+                    blob: {
+                        isOptional: false,
+                        isReadonly: false,
+                        type: 'Blob',
+                    },
+                    opt: {
+                        isOptional: true,
+                        isReadonly: false,
+                        type: 'string',
+                    },
+                    prop1: {
+                        isOptional: false,
+                        isReadonly: false,
+                        type: 'T1',
+                    },
+                    tBlob: {
+                        isOptional: false,
+                        isReadonly: false,
+                        type:
+                            '{ new (blobParts?: BlobPart[], options?: BlobPropertyBag): Blob; prototype: Blob; }',
+                    },
+                },
+            })
+        })
+        it('should visit interface with callable types', () => {
+            const path = '__test__/__testFiles__/interfaceCallable.data.ts'
+            const output = generate(path)
+            expect(output).toHaveLength(1)
+            expect(output[0].signature).toBeDefined()
+            expect(output[0].signature).toMatchObject({
+                memberName: 'ClassInterface',
+                memberType: 'interface',
+                path,
+                generics: [],
+                properties: {
+                    isArray: {
+                        type: '(arg: any) => arg is any[]',
+                        isOptional: false,
+                        isReadonly: false,
+                    },
+                },
+                callableTypes: [
+                    {
+                        generics: [{ name: 'T' }],
+                        parameters: [{ isOptional: false, type: 'T[]', name: 'items' }],
+                        returnType: 'T[]',
+                    },
+                    {
+                        generics: [],
+                        parameters: [{ isOptional: false, type: 'number', name: 'n' }],
+                        returnType: 'number[]',
+                    },
+                ],
+                constructorTypes: [
+                    {
+                        generics: [],
+                        parameters: [{ isOptional: true, name: 'arrayLength', type: 'number' }],
+                        returnType: 'any[]',
+                    },
+                    {
+                        generics: [],
+                        parameters: [],
+                        returnType: 'any[]',
+                    },
+                ],
+            } as Signatures.InterfaceSignature)
         })
     })
 })

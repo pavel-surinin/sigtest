@@ -1,5 +1,5 @@
 export namespace Signatures {
-    export type MemberType = 'function' | 'class' | 'constant' | 'enum'
+    export type MemberType = 'function' | 'class' | 'constant' | 'enum' | 'interface'
 
     export interface Paramter {
         name: string
@@ -26,18 +26,20 @@ export namespace Signatures {
         memberName: string
     }
 
-    interface FunctionDeclaration {
+    export interface FunctionDeclaration {
+        generics: GenericDefinition[]
         parameters: Paramter[]
         returnType: string
     }
 
-    interface ConstantDeclaration {
+    export interface ConstantDeclaration {
         type: string
     }
 
     export interface GenericDefinition {
         name: string
         default?: string
+        extends?: string
     }
 
     export interface ConstructorDefinition extends FunctionDeclaration {}
@@ -76,6 +78,20 @@ export namespace Signatures {
         values: EnumValueDefinition[]
     }
 
+    export interface InterfaceProperty {
+        type: string
+        isOptional: boolean
+        isReadonly: boolean
+    }
+
+    export interface InterfaceDeclaration {
+        properties: Record<string, InterfaceProperty>
+        generics: GenericDefinition[]
+        indexed?: { index: string; type: string }
+        callableTypes: FunctionDeclaration[]
+        constructorTypes: ConstructorDefinition[]
+    }
+
     export interface FunctionSignature extends FunctionDeclaration, Signature {
         memberType: 'function'
     }
@@ -92,5 +108,14 @@ export namespace Signatures {
         memberType: 'enum'
     }
 
-    export type SignatureType = FunctionSignature | ConstantSignature | ClassSignature | EnumSignature
+    export interface InterfaceSignature extends InterfaceDeclaration, Signature {
+        memberType: 'interface'
+    }
+
+    export type SignatureType =
+        | FunctionSignature
+        | ConstantSignature
+        | ClassSignature
+        | EnumSignature
+        | InterfaceSignature
 }
