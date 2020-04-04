@@ -1,7 +1,10 @@
 import * as ts from 'typescript'
 import { Serializer, SerializationResult } from './Serializer'
 
-export function generateSignatures(fileNames: string[], options: ts.CompilerOptions): SerializationResult[] {
+export function generateSignatures(
+    fileNames: string[],
+    options: ts.CompilerOptions
+): SerializationResult[] {
     let program = ts.createProgram(fileNames, options)
     let checker = program.getTypeChecker()
     let serializer = new Serializer(checker)
@@ -26,8 +29,13 @@ export function generateSignatures(fileNames: string[], options: ts.CompilerOpti
             if (ts.isVariableDeclarationList(node.declarationList)) {
                 if (node.declarationList.declarations.length) {
                     const varDeclaration = node.declarationList.declarations[0]
-                    if (varDeclaration.initializer && ts.isArrowFunction(varDeclaration.initializer)) {
-                        add(serialize(varDeclaration.name, s => serializer.doArrowFxDeclarations(s)))
+                    if (
+                        varDeclaration.initializer &&
+                        ts.isArrowFunction(varDeclaration.initializer)
+                    ) {
+                        add(
+                            serialize(varDeclaration.name, s => serializer.doArrowFxDeclarations(s))
+                        )
                     } else {
                         add(serialize(varDeclaration.name, s => serializer.doConstant(s)))
                     }
@@ -41,12 +49,17 @@ export function generateSignatures(fileNames: string[], options: ts.CompilerOpti
             add(serialize(node.name, s => serializer.doEnum(s)))
         } else if (ts.isInterfaceDeclaration(node)) {
             add(serialize(node.name, s => serializer.doInterface(s)))
+        } else if (ts.isTypeAliasDeclaration(node)) {
+            add(serialize(node.name, s => serializer.doType(s)))
         } else if (ts.isModuleDeclaration(node) || ts.isModuleBlock(node)) {
             ts.forEachChild(node, visit)
         }
     }
 
-    function serialize(node: ts.Node, serialize: (symbol: ts.Symbol) => SerializationResult | SerializationResult[]) {
+    function serialize(
+        node: ts.Node,
+        serialize: (symbol: ts.Symbol) => SerializationResult | SerializationResult[]
+    ) {
         let symbol = checker.getSymbolAtLocation(node)
         if (symbol) {
             let result = serialize(symbol)

@@ -1,5 +1,5 @@
 export namespace Signatures {
-    export type MemberType = 'function' | 'class' | 'constant' | 'enum' | 'interface'
+    export type MemberType = 'function' | 'class' | 'constant' | 'enum' | 'interface' | 'type'
 
     export interface Paramter {
         name: string
@@ -92,6 +92,11 @@ export namespace Signatures {
         constructorTypes: ConstructorDefinition[]
     }
 
+    export interface TypeDeclaration {
+        generics: GenericDefinition[]
+        type: string
+    }
+
     export interface FunctionSignature extends FunctionDeclaration, Signature {
         memberType: 'function'
     }
@@ -112,10 +117,15 @@ export namespace Signatures {
         memberType: 'interface'
     }
 
+    export interface TypeAliasSignature extends TypeDeclaration, Signature {
+        memberType: 'type'
+    }
+
     export type SignatureType =
         | FunctionSignature
         | ConstantSignature
         | ClassSignature
         | EnumSignature
         | InterfaceSignature
+        | TypeAliasSignature
 }

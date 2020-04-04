@@ -526,4 +526,40 @@ describe('TypesVisitor', () => {
             } as Signatures.InterfaceSignature)
         })
     })
+    describe('type', () => {
+        it('should visit type', () => {
+            const path = '__test__/__testFiles__/type.data.ts'
+            const output = generate(path)
+            expect(output).toHaveLength(2)
+            expect(output[0].signature).toBeDefined()
+            expect(output[0].signature).toMatchObject({
+                generics: [{ name: 'T' }],
+                memberName: 'Data',
+                memberType: 'type',
+                path: '__test__/__testFiles__/type.data.ts',
+            })
+            expect(output[1].signature).toBeDefined()
+            expect(output[1].signature).toMatchObject({
+                generics: [],
+                memberName: 'InterfaceLike',
+                memberType: 'type',
+                path: '__test__/__testFiles__/type.data.ts',
+            })
+        })
+    })
+    describe('type', () => {
+        it('should visit type', () => {
+            const path = '__test__/__testFiles__/type.data.ts'
+            const output = generate(path)
+            expect(output).toHaveLength(2)
+            expect(output[0].signature).toBeDefined()
+            expect(output[0].signature).toBeDefined()
+            expect(output[0].signature).toMatchObject({
+                generics: [],
+                memberName: 'InterfaceLike',
+                memberType: 'type',
+                path,
+            })
+        })
+    })
 })

@@ -34,17 +34,21 @@ This repository is WIP
         -   modifiers
 -   exported enums
 -   exported interfaces
+-   exported types
+    -   type parameters for type aliases
+    -   type name
 
 # Implementation status
 
-|           | Generation | Comparing | Reports |
-| --------- | ---------- | --------- | ------- |
-| function  | ✔️         |           |         |
-| constant  | ✔️         |           |         |
-| class     | ✔️         |           |         |
-| enum      | ✔️         |           |         |
-| interface | ✔️         |           |         |
-| type      |            |           |         |
+|               | Generation | Comparing | Reports |
+| ------------- | ---------- | --------- | ------- |
+| **function**  | ✔️         |           |         |
+| **constant**  | ✔️         |           |         |
+| **class**     | ✔️         |           |         |
+| **enum**      | ✔️         |           |         |
+| **interface** | ✔️         |           |         |
+| **type**      | partially  |           |         |
+| **namespace** |            |           |         |
 
 # Not Supported
 

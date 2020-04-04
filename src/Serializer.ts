@@ -25,6 +25,20 @@ export class SerializationResult {
 }
 
 export class Serializer {
+    doType(symbol: ts.Symbol): SerializationResult | SerializationResult[] {
+        const typeDeclaration = symbol.declarations[0]
+        if (ts.isTypeAliasDeclaration(typeDeclaration)) {
+            const path = typeDeclaration.getSourceFile().fileName
+            const generics = typeDeclaration.typeParameters?.map(this.serializeTypeParameter) ?? []
+            return SerializationResult.fromSignature({
+                path,
+                generics,
+                memberName: typeDeclaration.name.getText(),
+                memberType: 'type',
+            } as Signatures.TypeAliasSignature)
+        }
+        return {}
+    }
     constructor(private readonly checker: ts.TypeChecker) {
         this.serializeFunction = this.serializeFunction.bind(this)
         this.doFxDeclarations = this.doFxDeclarations.bind(this)
@@ -51,24 +65,15 @@ export class Serializer {
                             ts.ModifierFlags.Readonly & ts.getCombinedModifierFlags(member)
                         ),
                     }
-                } else if (ts.isConstructSignatureDeclaration(member)) {
-                    const returnType = member.type
-                        ? this.checker.typeToString(this.checker.getTypeFromTypeNode(member.type))
-                        : 'any'
+                } else if (
+                    ts.isConstructSignatureDeclaration(member) ||
+                    ts.isCallSignatureDeclaration(member)
+                ) {
+                    const returnType = this.serializeType(member.type)
                     constructorTypes.push({
                         generics: member.typeParameters?.map(this.serializeTypeParameter) ?? [],
                         parameters: member.parameters?.map(this.serializeParameter) ?? [],
                         returnType,
-                    })
-                } else if (ts.isCallSignatureDeclaration(member)) {
-                    callableTypes.push({
-                        generics: member.typeParameters?.map(this.serializeTypeParameter) ?? [],
-                        parameters: member.parameters?.map(this.serializeParameter) ?? [],
-                        returnType: member.type
-                            ? this.checker.typeToString(
-                                  this.checker.getTypeFromTypeNode(member.type)
-                              )
-                            : 'any',
                     })
                 }
             }
@@ -240,6 +245,10 @@ export class Serializer {
                 return this.serializeFunction(symbol, fxDeclaration, parameters)
             })
             .map(SerializationResult.fromSignature)
+    }
+
+    private serializeType(node?: ts.TypeNode) {
+        return node ? this.checker.typeToString(this.checker.getTypeFromTypeNode(node)) : 'any'
     }
 
     private serializeMethod(method: ts.MethodDeclaration): Signatures.MethodDefinition {
