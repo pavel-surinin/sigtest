@@ -25,16 +25,20 @@ export function generateSignatures(
     }
 
     return output.filter(s => {
+        // signature
         if (s.signature) {
             const sPath = path.normalize(s.signature.path)
+            // find signature export object
             const exportObject = exportObjects.find(e => ~sPath.indexOf(e.modulePath))
             if (exportObject) {
+                // does signature member name is in export object members
                 if (exportObject.members) {
                     return exportObject.members.includes(s.signature.memberName)
                 }
                 return true
             }
         }
+        // serialization error
         return true
     })
 
@@ -44,6 +48,7 @@ export function generateSignatures(
             const folder = path.join(...pathElements.slice(0, pathElements.length - 1))
             exportObjects.push({
                 modulePath: path.normalize(
+                    // regexp to remove single or double quotes
                     path.join(folder, node.moduleSpecifier?.getText().replace(/['"]+/g, '')!) ?? ''
                 ),
                 members:
