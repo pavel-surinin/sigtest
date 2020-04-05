@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
-import { Signatures } from './App.types'
-import { SerializationError } from './SerializerError'
+import { Signatures } from '../App.types'
+import { SerializationError } from '../SerializerError'
 
 const EMPTY_RESULT = {}
 
@@ -25,7 +25,18 @@ export class SerializationResult {
 }
 
 export class Serializer {
-    doType(symbol: ts.Symbol): SerializationResult | SerializationResult[] {
+    constructor(private readonly checker: ts.TypeChecker) {
+        this.serializeFunction = this.serializeFunction.bind(this)
+        this.doFxDeclarations = this.doFxDeclarations.bind(this)
+        this.serializeParameter = this.serializeParameter.bind(this)
+        this.serializeClassProperty = this.serializeClassProperty.bind(this)
+        this.serializeMethod = this.serializeMethod.bind(this)
+    }
+
+    doType(
+        symbol: ts.Symbol,
+        namespace: string | undefined
+    ): SerializationResult | SerializationResult[] {
         const typeDeclaration = symbol.declarations[0]
         if (ts.isTypeAliasDeclaration(typeDeclaration)) {
             const path = typeDeclaration.getSourceFile().fileName
@@ -35,19 +46,16 @@ export class Serializer {
                 generics,
                 memberName: typeDeclaration.name.getText(),
                 memberType: 'type',
+                namespace,
             } as Signatures.TypeAliasSignature)
         }
         return {}
     }
-    constructor(private readonly checker: ts.TypeChecker) {
-        this.serializeFunction = this.serializeFunction.bind(this)
-        this.doFxDeclarations = this.doFxDeclarations.bind(this)
-        this.serializeParameter = this.serializeParameter.bind(this)
-        this.serializeClassProperty = this.serializeClassProperty.bind(this)
-        this.serializeMethod = this.serializeMethod.bind(this)
-    }
 
-    doInterface(symbol: ts.Symbol): SerializationResult | SerializationResult[] {
+    doInterface(
+        symbol: ts.Symbol,
+        namespace: string | undefined
+    ): SerializationResult | SerializationResult[] {
         const interfaceDeclaration = symbol.declarations[0]
 
         if (ts.isInterfaceDeclaration(interfaceDeclaration)) {
@@ -55,7 +63,7 @@ export class Serializer {
             const properties: Record<string, Signatures.InterfaceProperty> = {}
             const callableTypes: Signatures.FunctionDeclaration[] = []
             const constructorTypes: Signatures.ConstructorDefinition[] = []
-
+            let indexed
             for (const member of interfaceDeclaration.members) {
                 if (member.name) {
                     properties[member.name.getText()] = {
@@ -65,21 +73,34 @@ export class Serializer {
                             ts.ModifierFlags.Readonly & ts.getCombinedModifierFlags(member)
                         ),
                     }
-                } else if (
-                    ts.isConstructSignatureDeclaration(member) ||
-                    ts.isCallSignatureDeclaration(member)
-                ) {
+                } else if (ts.isConstructSignatureDeclaration(member)) {
                     const returnType = this.serializeType(member.type)
                     constructorTypes.push({
                         generics: member.typeParameters?.map(this.serializeTypeParameter) ?? [],
                         parameters: member.parameters?.map(this.serializeParameter) ?? [],
                         returnType,
                     })
+                } else if (ts.isCallSignatureDeclaration(member)) {
+                    const returnType = this.serializeType(member.type)
+                    callableTypes.push({
+                        generics: member.typeParameters?.map(this.serializeTypeParameter) ?? [],
+                        parameters: member.parameters?.map(this.serializeParameter) ?? [],
+                        returnType,
+                    })
+                } else if (ts.isIndexSignatureDeclaration(member)) {
+                    indexed = {
+                        index: this.serializeType(member.parameters[0].type),
+                        type: this.serializeType(member.type),
+                        isReadonly: Boolean(
+                            ts.ModifierFlags.Readonly & ts.getCombinedModifierFlags(member)
+                        ),
+                    }
                 }
             }
             const generics =
                 interfaceDeclaration.typeParameters?.map(this.serializeTypeParameter) ?? []
             return SerializationResult.fromSignature({
+                indexed,
                 callableTypes,
                 constructorTypes,
                 generics,
@@ -87,12 +108,16 @@ export class Serializer {
                 memberType: 'interface',
                 memberName: symbol.name,
                 path,
+                namespace,
             } as Signatures.InterfaceSignature)
         }
         return {}
     }
 
-    doEnum(symbol: ts.Symbol): SerializationResult | SerializationResult[] {
+    doEnum(
+        symbol: ts.Symbol,
+        namespace: string | undefined
+    ): SerializationResult | SerializationResult[] {
         const enumDeclaration = symbol.declarations[0]
         function serializeValue(
             expression: ts.Expression
@@ -147,12 +172,16 @@ export class Serializer {
                 path,
                 memberName: symbol.name,
                 values,
+                namespace,
             } as Signatures.EnumSignature)
         }
         return {}
     }
 
-    doClass(symbol: ts.Symbol): SerializationResult | SerializationResult[] {
+    doClass(
+        symbol: ts.Symbol,
+        namespace: string | undefined
+    ): SerializationResult | SerializationResult[] {
         const classDeclaration = symbol.declarations[0]
         if (ts.isClassDeclaration(classDeclaration)) {
             const generics = classDeclaration.typeParameters?.map(this.serializeTypeParameter) ?? []
@@ -173,12 +202,13 @@ export class Serializer {
                 path,
                 properties,
                 methods,
+                namespace,
             } as Signatures.ClassSignature)
         }
         return EMPTY_RESULT
     }
 
-    doConstant(symbol: ts.Symbol): SerializationResult {
+    doConstant(symbol: ts.Symbol, namespace: string | undefined): SerializationResult {
         if (symbol.declarations.length && symbol.declarations[0]) {
             const variableDeclaration = symbol.declarations[0]
             if (ts.isVariableDeclaration(variableDeclaration) && variableDeclaration.initializer) {
@@ -191,7 +221,7 @@ export class Serializer {
                         type = this.serializePrimitiveType(variableDeclaration.initializer)
                     }
                     return SerializationResult.fromSignature(
-                        this.serializeConst(symbol, variableDeclaration, type!)
+                        this.serializeConst(symbol, variableDeclaration, type!, namespace)
                     )
                 } else if (ts.isArrayLiteralExpression(variableDeclaration.initializer)) {
                     const primitiveTypes = variableDeclaration.initializer.elements.map(el =>
@@ -206,7 +236,8 @@ export class Serializer {
                             this.serializeConst(
                                 symbol,
                                 variableDeclaration,
-                                `Array<${primitiveTypes.join(' | ')}>`
+                                `Array<${primitiveTypes.join(' | ')}>`,
+                                namespace
                             )
                         )
                     }
@@ -219,7 +250,7 @@ export class Serializer {
         return EMPTY_RESULT
     }
 
-    doArrowFxDeclarations(symbol: ts.Symbol): SerializationResult {
+    doArrowFxDeclarations(symbol: ts.Symbol, namespace: string | undefined): SerializationResult {
         let parameters: Signatures.Paramter[] = []
         const variableDeclaration = symbol.declarations[0]
         if (ts.isVariableDeclaration(variableDeclaration)) {
@@ -231,18 +262,18 @@ export class Serializer {
             }
         }
         return SerializationResult.fromSignature(
-            this.serializeFunction(symbol, symbol.valueDeclaration, parameters)
+            this.serializeFunction(symbol, symbol.valueDeclaration, parameters, namespace)
         )
     }
 
-    doFxDeclarations(symbol: ts.Symbol): SerializationResult[] {
+    doFxDeclarations(symbol: ts.Symbol, namespace: string | undefined): SerializationResult[] {
         return symbol.declarations
             .map(fxDeclaration => {
                 let parameters: Signatures.Paramter[] = []
                 if (ts.isFunctionDeclaration(fxDeclaration)) {
                     parameters = fxDeclaration.parameters.map(this.serializeParameter)
                 }
-                return this.serializeFunction(symbol, fxDeclaration, parameters)
+                return this.serializeFunction(symbol, fxDeclaration, parameters, namespace)
             })
             .map(SerializationResult.fromSignature)
     }
@@ -313,20 +344,23 @@ export class Serializer {
     private serializeConst(
         symbol: ts.Symbol,
         varDeclaration: ts.Declaration,
-        type: string
+        type: string,
+        namespace: string | undefined
     ): Signatures.ConstantSignature {
         return {
             memberName: symbol.getName(),
             memberType: 'constant',
             path: varDeclaration.getSourceFile().fileName,
             type,
+            namespace,
         }
     }
 
     private serializeFunction(
         symbol: ts.Symbol,
         fxDeclaration: ts.Declaration,
-        parameters: Signatures.Paramter[]
+        parameters: Signatures.Paramter[],
+        namespace: string | undefined
     ) {
         const returnType = this.checker.typeToString(
             this.checker
@@ -340,6 +374,7 @@ export class Serializer {
             path: fxDeclaration.getSourceFile().fileName,
             parameters,
             returnType,
+            namespace,
         } as Signatures.FunctionSignature
     }
 

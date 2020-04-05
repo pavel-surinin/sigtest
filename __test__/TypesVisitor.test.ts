@@ -1,7 +1,7 @@
 import { generateSignatures } from '../src/TypeVisitor'
 import { ModuleKind, ScriptTarget } from 'typescript'
 import { Signatures } from '../src/App.types'
-import { SerializationResult } from '../src/Serializer'
+import { SerializationResult } from '../src/serializer/Serializer'
 
 describe('TypesVisitor', () => {
     function generate(path: string): SerializationResult[] {
@@ -525,6 +525,33 @@ describe('TypesVisitor', () => {
                 ],
             } as Signatures.InterfaceSignature)
         })
+        it('should visit interface with indexed types', () => {
+            const path = '__test__/__testFiles__/interfaceIndex.data.ts'
+            const output = generate(path)
+            expect(output).toHaveLength(1)
+            expect(output[0].signature).toBeDefined()
+            expect(output[0].signature).toMatchObject({
+                indexed: { index: 'number', type: 'T', isReadonly: true },
+                callableTypes: [],
+                constructorTypes: [],
+                generics: [
+                    {
+                        name: 'T',
+                    },
+                ],
+                memberName: 'ArrayLike',
+                memberType: 'interface',
+                namespace: 'A',
+                path: '__test__/__testFiles__/interfaceIndex.data.ts',
+                properties: {
+                    length: {
+                        isOptional: true,
+                        isReadonly: true,
+                        type: 'number',
+                    },
+                },
+            })
+        })
     })
     describe('type', () => {
         it('should visit type', () => {
@@ -547,18 +574,19 @@ describe('TypesVisitor', () => {
             })
         })
     })
-    describe('type', () => {
-        it('should visit type', () => {
-            const path = '__test__/__testFiles__/type.data.ts'
+    describe('namespace', () => {
+        it('should visit type in namespace', () => {
+            const path = '__test__/__testFiles__/namespace.data.ts'
             const output = generate(path)
-            expect(output).toHaveLength(2)
+            expect(output).toHaveLength(1)
             expect(output[0].signature).toBeDefined()
             expect(output[0].signature).toBeDefined()
             expect(output[0].signature).toMatchObject({
                 generics: [],
-                memberName: 'InterfaceLike',
+                memberName: 'Dog',
                 memberType: 'type',
                 path,
+                namespace: 'A.B.C',
             })
         })
     })

@@ -1,3 +1,5 @@
+![CI](https://github.com/pavel-surinin/sigtest/workflows/CI/badge.svg?branch=master)
+
 # Signature Testing for TypeScript modules
 
 This repository is WIP
@@ -48,7 +50,7 @@ This repository is WIP
 | **enum**      | ✔️         |           |         |
 | **interface** | ✔️         |           |         |
 | **type**      | partially  |           |         |
-| **namespace** |            |           |         |
+| **namespace** | ✔️         |           |         |
 
 # Not Supported
 

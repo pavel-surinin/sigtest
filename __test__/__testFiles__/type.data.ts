@@ -2,6 +2,6 @@
 export type Data<T> = T & number
 
 // must be interface like type
-export type InterfaceLike<T> = {
+export type InterfaceLike = {
     a: boolean
 }

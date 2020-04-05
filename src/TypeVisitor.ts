@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { Serializer, SerializationResult } from './Serializer'
+import { Serializer, SerializationResult } from './serializer/Serializer'
 
 export function generateSignatures(
     fileNames: string[],
@@ -19,11 +19,15 @@ export function generateSignatures(
 
     return output
 
-    function visit(node: ts.Node) {
-        // for namespaces
-        // !ts.isModuleBlock(node) &&
+    function visit(node: ts.Node, namespace?: string) {
         if (!isNodeExported(node)) {
             return
+        }
+        if (ts.isModuleDeclaration(node)) {
+            if (node.body && ts.isModuleBlock(node.body)) {
+                const ns = namespace ? namespace + '.' + node.name.getText() : node.name.getText()
+                node.body.statements.map(statement => visit(statement, ns))
+            }
         }
         if (ts.isVariableStatement(node)) {
             if (ts.isVariableDeclarationList(node.declarationList)) {
@@ -34,23 +38,27 @@ export function generateSignatures(
                         ts.isArrowFunction(varDeclaration.initializer)
                     ) {
                         add(
-                            serialize(varDeclaration.name, s => serializer.doArrowFxDeclarations(s))
+                            serialize(varDeclaration.name, s =>
+                                serializer.doArrowFxDeclarations(s, namespace)
+                            )
                         )
                     } else {
-                        add(serialize(varDeclaration.name, s => serializer.doConstant(s)))
+                        add(
+                            serialize(varDeclaration.name, s => serializer.doConstant(s, namespace))
+                        )
                     }
                 }
             }
         } else if (ts.isFunctionDeclaration(node) && node.name && node.body) {
-            add(serialize(node.name, s => serializer.doFxDeclarations(s)))
+            add(serialize(node.name, s => serializer.doFxDeclarations(s, namespace)))
         } else if (ts.isClassDeclaration(node) && node.name) {
-            add(serialize(node.name, s => serializer.doClass(s)))
+            add(serialize(node.name, s => serializer.doClass(s, namespace)))
         } else if (ts.isEnumDeclaration(node)) {
-            add(serialize(node.name, s => serializer.doEnum(s)))
+            add(serialize(node.name, s => serializer.doEnum(s, namespace)))
         } else if (ts.isInterfaceDeclaration(node)) {
-            add(serialize(node.name, s => serializer.doInterface(s)))
+            add(serialize(node.name, s => serializer.doInterface(s, namespace)))
         } else if (ts.isTypeAliasDeclaration(node)) {
-            add(serialize(node.name, s => serializer.doType(s)))
+            add(serialize(node.name, s => serializer.doType(s, namespace)))
         } else if (ts.isModuleDeclaration(node) || ts.isModuleBlock(node)) {
             ts.forEachChild(node, visit)
         }
@@ -77,10 +85,6 @@ export function generateSignatures(
 
     /** True if this is visible outside this file, false otherwise */
     function isNodeExported(node: ts.Node): boolean {
-        return (
-            (ts.getCombinedModifierFlags(node as ts.Declaration) & ts.ModifierFlags.Export) !== 0
-            // not working with namespaces
-            // || (!!node.parent && node.parent.kind === ts.SyntaxKind.SourceFile)
-        )
+        return (ts.getCombinedModifierFlags(node as ts.Declaration) & ts.ModifierFlags.Export) !== 0
     }
 }
