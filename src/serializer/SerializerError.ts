@@ -1,6 +1,6 @@
 import ts from 'typescript'
 
-export type SerializationErrorCode = 'S001' | 'S002' | 'S003' | 'S004'
+export type SerializationErrorCode = 'S001' | 'S002' | 'S003'
 export type SerializationErrorInput = Omit<SerializationErrorData, 'definition'> & {
     code: SerializationErrorCode
 }
@@ -27,12 +27,6 @@ export const ERROR_CODE_REGISTRY: Record<SerializationErrorCode, SerializationEr
     },
     S003: {
         code: 'S003',
-        description:
-            'Enum initialization cannot contain expressions with variables. ' +
-            'Only inline expressions with primitives are supported.',
-    },
-    S004: {
-        code: 'S004',
         description:
             'Enum initialization cannot contain expressions with variables. ' +
             'Only inline expressions with primitives are supported.',
