@@ -590,4 +590,24 @@ describe('TypesVisitor', () => {
             })
         })
     })
+    describe('index', () => {
+        it('should filter not exported in index and add signature from index', () => {
+            const path = '__test__/__testFiles__/index.ts'
+            const output = generate(path)
+            const members = output.filter(o => o.signature).map(o => o.signature?.memberName)
+            expect(output).toHaveLength(3)
+            expect(members).toContain('Basic')
+            expect(members).toContain('divide')
+            expect(members).toContain('test')
+        })
+        it('should collect nested exports', () => {
+            const path = '__test__/__testFiles__/entrypoint/nestedExports.data.ts'
+            const output = generate(path)
+            const members = output.filter(o => o.signature).map(o => o.signature?.memberName)
+            expect(output).toHaveLength(3)
+            expect(members).toContain('one')
+            expect(members).toContain('two')
+            expect(members).toContain('three')
+        })
+    })
 })

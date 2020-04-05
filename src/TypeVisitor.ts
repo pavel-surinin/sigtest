@@ -1,5 +1,11 @@
 import * as ts from 'typescript'
+import * as path from 'path'
 import { Serializer, SerializationResult } from './serializer/Serializer'
+
+interface Export {
+    modulePath: string
+    members?: string[]
+}
 
 export function generateSignatures(
     fileNames: string[],
@@ -10,6 +16,7 @@ export function generateSignatures(
     let serializer = new Serializer(checker)
 
     let output: SerializationResult[] = []
+    const exportObjects: Export[] = []
 
     for (const sourceFile of program.getSourceFiles()) {
         if (!sourceFile.isDeclarationFile) {
@@ -17,9 +24,34 @@ export function generateSignatures(
         }
     }
 
-    return output
+    return output.filter(s => {
+        if (s.signature) {
+            const sPath = path.normalize(s.signature.path)
+            const exportObject = exportObjects.find(e => ~sPath.indexOf(e.modulePath))
+            if (exportObject) {
+                if (exportObject.members) {
+                    return exportObject.members.includes(s.signature.memberName)
+                }
+                return true
+            }
+        }
+        return true
+    })
 
     function visit(node: ts.Node, namespace?: string) {
+        if (ts.isExportDeclaration(node)) {
+            const pathElements = node.getSourceFile().fileName.split('/')
+            const folder = path.join(...pathElements.slice(0, pathElements.length - 1))
+            exportObjects.push({
+                modulePath: path.normalize(
+                    path.join(folder, node.moduleSpecifier?.getText().replace(/['"]+/g, '')!) ?? ''
+                ),
+                members:
+                    node.exportClause && ts.isNamedExports(node.exportClause)
+                        ? node.exportClause.elements.map(e => e.name.getText())
+                        : undefined,
+            })
+        }
         if (!isNodeExported(node)) {
             return
         }
