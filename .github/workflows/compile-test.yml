@@ -23,7 +23,9 @@ jobs:
     - uses: actions/setup-node@v1.1.0
     
     - name: ls
+      shell: bash
       run: ls
+      
     
     - name: Install Dependencies
       run: npm install
