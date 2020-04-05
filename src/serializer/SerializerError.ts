@@ -1,7 +1,9 @@
 import ts from 'typescript'
 
-export type SerializationErrorCode = 'S001' | 'S002' | 'S003'
-export type SerializationErrorInput = Omit<SerializationErrorData, 'definition'> & { code: SerializationErrorCode }
+export type SerializationErrorCode = 'S001' | 'S002' | 'S003' | 'S004'
+export type SerializationErrorInput = Omit<SerializationErrorData, 'definition'> & {
+    code: SerializationErrorCode
+}
 
 interface SerializationErrorDefinition {
     description: string
@@ -29,6 +31,12 @@ export const ERROR_CODE_REGISTRY: Record<SerializationErrorCode, SerializationEr
             'Enum initialization cannot contain expressions with variables. ' +
             'Only inline expressions with primitives are supported.',
     },
+    S004: {
+        code: 'S004',
+        description:
+            'Enum initialization cannot contain expressions with variables. ' +
+            'Only inline expressions with primitives are supported.',
+    },
 }
 
 interface SerializationErrorData {
@@ -40,8 +48,14 @@ interface SerializationErrorData {
 }
 
 export class SerializationError extends Error {
-    static fromDeclaration(code: SerializationErrorCode, declaration: ts.Declaration): SerializationError {
-        const position = ts.getLineAndCharacterOfPosition(declaration.getSourceFile(), declaration.getStart())
+    static fromDeclaration(
+        code: SerializationErrorCode,
+        declaration: ts.Declaration
+    ): SerializationError {
+        const position = ts.getLineAndCharacterOfPosition(
+            declaration.getSourceFile(),
+            declaration.getStart()
+        )
         return new SerializationError({
             code,
             file: declaration.getSourceFile().fileName,
