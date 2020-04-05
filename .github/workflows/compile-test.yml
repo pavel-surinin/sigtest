@@ -19,19 +19,11 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/setup-node@v1.1.0
-    
-    - name: ls
-      shell: bash
-      run: ls
-      
-    
-    - name: Install Dependencies
-      run: npm install
-    
-    - name: Compile
-      run: npm run compile
-
-    - name: Test
-      run: npm t -- --coverage
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it  
+    - name: CI
+      uses: actions/setup-node@v1
+    - run: npm install
+    - run: npm run compile
+    - run: npm test -- --coverage
+      env:
+        CI: true
