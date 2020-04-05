@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
 import { Signatures } from '../App.types'
-import { SerializationError } from '../SerializerError'
+import { SerializationError } from './SerializerError'
 
 const EMPTY_RESULT = {}
 

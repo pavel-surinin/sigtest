@@ -1,4 +1,4 @@
-import { SerializationError } from '../src/SerializerError'
+import { SerializationError } from '../src/serializer/SerializerError'
 
 describe('SerializerError', () => {
     it('should construct error message', () => {
