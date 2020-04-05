@@ -25,13 +25,14 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
-    - uses: coverallsapp/github-action@v1.0.1
+    - run: npm install
+    - run: npm run compile
+    - run: npm test -- --coverage
+      
+    - name: Coveralls
+      uses: coverallsapp/github-action@v1.0.1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ./out/coverage/lcov.info
-      
-    - run: npm install
-    - run: npm run compile
-    - run: npm test
       env:
         CI: true
