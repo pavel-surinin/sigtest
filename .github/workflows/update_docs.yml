@@ -1,4 +1,4 @@
-name: Update documentation
+name: CI
 on: push
 
 jobs: 
@@ -18,10 +18,8 @@ jobs:
       run: npm install
     
     - name: Compile code
-      run: npm run compile
-
-    - name: Update documentation
-      run: npm run docs
+    - run: npm run compile
+    - run: npm run docs
 
     - name: Commit changes
       uses: EndBug/add-and-commit@v4
