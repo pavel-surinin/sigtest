@@ -129,3 +129,40 @@ export namespace Signatures {
         | InterfaceSignature
         | TypeAliasSignature
 }
+
+export namespace Snapshot {
+    /**
+     * Result of generated signatures
+     */
+    export interface Snapshot {
+        signatures: Signatures.SignatureType[]
+        version: string
+    }
+}
+
+export namespace Comparator {
+    export type Action = 'removed' | 'added' | 'changed' | 'none'
+    export type Status = 'compatible' | 'breaking'
+    export type Compare<T> = { before: T; after: T }
+    export type CompareOpt<T> = { before: T; after?: T }
+
+    export interface Change {
+        signatures: CompareOpt<Signatures.SignatureType>
+        info: ChangeInfo
+        message?: string
+    }
+
+    export interface ComparisonResult {
+        versions: Compare<string>
+        changes: Change[]
+    }
+    export type SignatureComparator = (comparison: Compare<Signatures.SignatureType>) => Change
+
+    export type ChangeCode = 'C001' | 'C000'
+    export interface ChangeInfo {
+        status: Status
+        action: Action
+        code: ChangeCode
+        description: string
+    }
+}
