@@ -101,12 +101,30 @@ function toFailComparison(
     }
 }
 
+function toPassComparison(
+    this: jest.MatcherContext,
+    received: {
+        v1: string
+        v2: string
+        code: Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>
+    }
+): jest.CustomMatcherResult {
+    const result = new SignatureProvider('test/src/__testFiles__/').compare(received)
+    if (result.changes.length !== 1) {
+        throw new Error('One comparison result must be present in "toFailComparison" matcher')
+    }
+
+    return {
+        pass: CHANGE_REGISTRY.C000.code === result.changes[0].info.code,
+        message: () =>
+            this.utils.matcherHint('toFailComparison', undefined, undefined, undefined) +
+            '\n\n' +
+            `Expected: ${this.utils.printExpected(CHANGE_REGISTRY.C000.code)}\n` +
+            `Received: ${this.utils.printReceived(result.changes[0].info.code)}`,
+    }
+}
+
 expect.extend({
     toFailComparison,
-    toPassComparison() {
-        return {
-            pass: true,
-            message: () => '',
-        }
-    },
+    toPassComparison,
 })

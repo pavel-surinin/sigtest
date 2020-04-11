@@ -12,7 +12,7 @@ describe('TypesVisitor', () => {
     }
     describe('function', () => {
         it('should visit function with optional paramter', () => {
-            const path = '__test__/__testFiles__/functionWithOptParam.data.ts'
+            const path = 'test/src/__testFiles__/functionWithOptParam.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(1)
             expect(output[0].signature).toMatchObject({
@@ -30,7 +30,7 @@ describe('TypesVisitor', () => {
             })
         })
         it('should visit function', () => {
-            const path = '__test__/__testFiles__/function.data.ts'
+            const path = 'test/src/__testFiles__/function.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(1)
             expect(output[0].signature).toMatchObject({
@@ -53,7 +53,7 @@ describe('TypesVisitor', () => {
             } as Signatures.FunctionSignature)
         })
         it('should visit overloaded functions', () => {
-            const path = '__test__/__testFiles__/overloadFunctions.data.ts'
+            const path = 'test/src/__testFiles__/overloadFunctions.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(3)
             expect(output[0].signature).toMatchObject({
@@ -114,7 +114,7 @@ describe('TypesVisitor', () => {
             } as Signatures.FunctionSignature)
         })
         it('should visit arrow function', () => {
-            const path = '__test__/__testFiles__/arrowFunction.data.ts'
+            const path = 'test/src/__testFiles__/arrowFunction.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(1)
             expect(output[0].signature).toMatchObject({
@@ -139,7 +139,7 @@ describe('TypesVisitor', () => {
     })
     describe('constant', () => {
         it('should visit constant primitives', () => {
-            const path = '__test__/__testFiles__/constantPrimitives.data.ts'
+            const path = 'test/src/__testFiles__/constantPrimitives.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(4)
             expect(output[0].signature).toMatchObject({
@@ -159,21 +159,21 @@ describe('TypesVisitor', () => {
             ).toMatchObject(['number', 'string', 'Fish', 'boolean'])
         })
         it('should visit unsupported const and return error S001', () => {
-            const path = './__test__/__testFiles__/error/S001.data.ts'
+            const path = './test/src/__testFiles__/error/S001.data.ts'
             const result = generate(path)
             expect(result).toHaveLength(1)
             expect(result[0].error).toBeDefined()
             expect(result[0].error!.message).toContain('S001')
         })
         it('should visit unsupported const and return error S002', () => {
-            const path = './__test__/__testFiles__/error/S002.data.ts'
+            const path = './test/src/__testFiles__/error/S002.data.ts'
             const result = generate(path)
             expect(result).toHaveLength(1)
             expect(result[0].error).toBeDefined()
             expect(result[0].error!.message).toContain('S002')
         })
         it('should visit array constants', () => {
-            const path = '__test__/__testFiles__/constantArray.data.ts'
+            const path = 'test/src/__testFiles__/constantArray.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(2)
             expect(output[0].signature).toMatchObject({
@@ -192,7 +192,7 @@ describe('TypesVisitor', () => {
     })
     describe('class', () => {
         it('should visit class fields', () => {
-            const path = './__test__/__testFiles__/classFields.data.ts'
+            const path = './test/src/__testFiles__/classFields.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(1)
             expect(output[0].signature).toBeDefined()
@@ -252,11 +252,11 @@ describe('TypesVisitor', () => {
                 ],
                 memberName: 'TestMap',
                 memberType: 'class',
-                path: '__test__/__testFiles__/classFields.data.ts',
+                path: 'test/src/__testFiles__/classFields.data.ts',
             })
         })
         it('should visit class methods', () => {
-            const path = '__test__/__testFiles__/classMethods.data.ts'
+            const path = 'test/src/__testFiles__/classMethods.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(1)
             expect(output[0].signature).toBeDefined()
@@ -333,7 +333,7 @@ describe('TypesVisitor', () => {
     })
     describe('enum', () => {
         it('should visit enum', () => {
-            const path = '__test__/__testFiles__/enum.data.ts'
+            const path = 'test/src/__testFiles__/enum.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(3)
             expect(output[0].signature).toBeDefined()
@@ -395,7 +395,7 @@ describe('TypesVisitor', () => {
             } as Signatures.EnumSignature)
         })
         it('should throw on computed value number', () => {
-            const path = '__test__/__testFiles__/error/S003.data.ts'
+            const path = 'test/src/__testFiles__/error/S003.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(1)
             expect(output[0].error).toBeDefined()
@@ -404,14 +404,14 @@ describe('TypesVisitor', () => {
     })
     describe('interface', () => {
         it('should visit interface', () => {
-            const path = '__test__/__testFiles__/interface.data.ts'
+            const path = 'test/src/__testFiles__/interface.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(2)
             expect(output[0].signature).toBeDefined()
             expect(output[0].signature).toMatchObject({
                 memberName: 'FunctionHolder',
                 memberType: 'interface',
-                path: '__test__/__testFiles__/interface.data.ts',
+                path: 'test/src/__testFiles__/interface.data.ts',
                 generics: [],
                 properties: {
                     arrowFx: {
@@ -439,7 +439,7 @@ describe('TypesVisitor', () => {
             expect(output[1].signature).toMatchObject({
                 memberName: 'Basic',
                 memberType: 'interface',
-                path: '__test__/__testFiles__/interface.data.ts',
+                path: 'test/src/__testFiles__/interface.data.ts',
                 generics: [
                     {
                         name: 'T1',
@@ -483,7 +483,7 @@ describe('TypesVisitor', () => {
             })
         })
         it('should visit interface with callable types', () => {
-            const path = '__test__/__testFiles__/interfaceCallable.data.ts'
+            const path = 'test/src/__testFiles__/interfaceCallable.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(1)
             expect(output[0].signature).toBeDefined()
@@ -526,7 +526,7 @@ describe('TypesVisitor', () => {
             } as Signatures.InterfaceSignature)
         })
         it('should visit interface with indexed types', () => {
-            const path = '__test__/__testFiles__/interfaceIndex.data.ts'
+            const path = 'test/src/__testFiles__/interfaceIndex.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(1)
             expect(output[0].signature).toBeDefined()
@@ -542,7 +542,7 @@ describe('TypesVisitor', () => {
                 memberName: 'ArrayLike',
                 memberType: 'interface',
                 namespace: 'A',
-                path: '__test__/__testFiles__/interfaceIndex.data.ts',
+                path: 'test/src/__testFiles__/interfaceIndex.data.ts',
                 properties: {
                     length: {
                         isOptional: true,
@@ -555,7 +555,7 @@ describe('TypesVisitor', () => {
     })
     describe('type', () => {
         it('should visit type', () => {
-            const path = '__test__/__testFiles__/type.data.ts'
+            const path = 'test/src/__testFiles__/type.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(2)
             expect(output[0].signature).toBeDefined()
@@ -563,20 +563,20 @@ describe('TypesVisitor', () => {
                 generics: [{ name: 'T' }],
                 memberName: 'Data',
                 memberType: 'type',
-                path: '__test__/__testFiles__/type.data.ts',
+                path: 'test/src/__testFiles__/type.data.ts',
             })
             expect(output[1].signature).toBeDefined()
             expect(output[1].signature).toMatchObject({
                 generics: [],
                 memberName: 'InterfaceLike',
                 memberType: 'type',
-                path: '__test__/__testFiles__/type.data.ts',
+                path: 'test/src/__testFiles__/type.data.ts',
             })
         })
     })
     describe('namespace', () => {
         it('should visit type in namespace', () => {
-            const path = '__test__/__testFiles__/namespace.data.ts'
+            const path = 'test/src/__testFiles__/namespace.data.ts'
             const output = generate(path)
             expect(output).toHaveLength(1)
             expect(output[0].signature).toBeDefined()
@@ -592,7 +592,7 @@ describe('TypesVisitor', () => {
     })
     describe('index', () => {
         it('should filter not exported in index and add signature from index', () => {
-            const path = '__test__/__testFiles__/index.ts'
+            const path = 'test/src/__testFiles__/index.ts'
             const output = generate(path)
             const members = output.filter(o => o.signature).map(o => o.signature?.memberName)
             expect(output).toHaveLength(3)
@@ -601,7 +601,7 @@ describe('TypesVisitor', () => {
             expect(members).toContain('test')
         })
         it('should collect nested exports', () => {
-            const path = '__test__/__testFiles__/entrypoint/nestedExports.data.ts'
+            const path = 'test/src/__testFiles__/entrypoint/nestedExports.data.ts'
             const output = generate(path)
             const members = output.filter(o => o.signature).map(o => o.signature?.memberName)
             expect(output).toHaveLength(3)

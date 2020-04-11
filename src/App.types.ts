@@ -148,7 +148,7 @@ export namespace Comparator {
 
     export interface Change<C extends ChangeCode> {
         signatures: CompareOpt<Signatures.SignatureType>
-        info: ChangeInfo<C | 'C000'>
+        info: ChangeInfo<C | NothingChangedCode>
         message?: string
     }
 

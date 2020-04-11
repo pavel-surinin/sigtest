@@ -2,7 +2,7 @@ import { Comparator } from '../App.types'
 import { C001 } from './C001'
 
 export type ComparatorRegistry = Record<
-    Exclude<Comparator.ChangeCode, 'C000'>,
+    Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>,
     Comparator.Comparator<Comparator.ChangeCode>
 >
 
