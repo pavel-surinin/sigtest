@@ -160,7 +160,8 @@ export namespace Comparator {
         comparison: Compare<Signatures.SignatureType>
     ) => Change<C>
 
-    export type ChangeCode = 'C001' | 'C000'
+    export type NothingChangedCode = 'C000'
+    export type ChangeCode = 'C001' | NothingChangedCode
 
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status

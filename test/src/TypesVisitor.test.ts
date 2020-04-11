@@ -1,7 +1,7 @@
-import { generateSignatures } from '../src/TypeVisitor'
+import { generateSignatures } from '../../src/TypeVisitor'
 import { ModuleKind, ScriptTarget } from 'typescript'
-import { Signatures } from '../src/App.types'
-import { SerializationResult } from '../src/serializer/Serializer'
+import { Signatures } from '../../src/App.types'
+import { SerializationResult } from '../../src/serializer/Serializer'
 
 describe('TypesVisitor', () => {
     function generate(path: string): SerializationResult[] {
