@@ -9,9 +9,10 @@ export function member_removal({
         return {
             info: CHANGE_REGISTRY.member_removal,
             signatures: { before, after },
-            message: `Member '${
-                before.namespace ? before.namespace + '.' + before.memberName : before.memberName
-            }' removed from package`,
+            message: `Member '${Signatures.toFulName(
+                before.namespace,
+                before.memberName
+            )}' removed from package`,
         }
     }
     return {

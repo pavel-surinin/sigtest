@@ -304,7 +304,7 @@ describe('TypesVisitor', () => {
                             {
                                 name: 'n2',
                                 type: 'number',
-                                isOptional: false,
+                                isOptional: true,
                             },
                         ],
                     },

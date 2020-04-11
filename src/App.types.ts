@@ -128,6 +128,10 @@ export namespace Signatures {
         | EnumSignature
         | InterfaceSignature
         | TypeAliasSignature
+
+    export function toFulName(namespace: string | undefined, memberName: string): string {
+        return namespace ? namespace + '.' + memberName : memberName
+    }
 }
 
 export namespace Snapshot {
@@ -140,6 +144,7 @@ export namespace Snapshot {
 export namespace Comparator {
     export type Action = 'removed' | 'added' | 'changed' | 'none'
     export type Status = 'compatible' | 'breaking'
+    export type MemberType = Signatures.MemberType | 'common'
     export type Compare<T> = { before: T; after: T }
     export type CompareOpt<T> = { before: T; after?: T }
 
@@ -158,11 +163,19 @@ export namespace Comparator {
     ) => Change<C>
 
     export type NothingChangedCode = 'no_change'
-    export type ChangeCode = 'changed_member_type' | 'member_removal' | NothingChangedCode
+    export type ChangeCode =
+        // generic
+        | 'changed_member_type'
+        | 'member_removal'
+        | NothingChangedCode
+        // class
+        | 'changed_required_constructor_parameters_count'
+
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
         action: Action
         code: C
         description: string
+        memberType: MemberType
     }
 }

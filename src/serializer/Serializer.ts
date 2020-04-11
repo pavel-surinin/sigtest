@@ -383,7 +383,6 @@ export class Serializer {
         const type = this.checker.typeToString(paramType)
         const name = param.name.getText()
         const isOptional = this.checker.isOptionalParameter(param)
-        this.checker.isOptionalParameter(param)
         return { name, type, isOptional }
     }
 

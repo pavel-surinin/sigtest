@@ -1,4 +1,4 @@
-import { Snapshot, Comparator } from './App.types'
+import { Snapshot, Comparator, Signatures } from './App.types'
 import { Reducer } from 'declarative-js'
 import toObject = Reducer.toObject
 import flat = Reducer.flat
@@ -20,12 +20,15 @@ export function compareSnapshots(
     }
 
     const afterGrouped = snapshots.after.signatures.reduce(
-        toObject(x => x.memberName),
+        toObject(x => Signatures.toFulName(x.namespace, x.memberName)),
         {}
     )
 
     const changes = snapshots.before.signatures
-        .map(before => ({ before, after: afterGrouped[before.memberName] }))
+        .map(before => ({
+            before,
+            after: afterGrouped[Signatures.toFulName(before.namespace, before.memberName)],
+        }))
         .map(comparison => comparators.map(compare => compare(comparison)))
         .reduce(flat, [])
 
