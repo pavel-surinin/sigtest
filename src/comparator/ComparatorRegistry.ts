@@ -1,5 +1,6 @@
 import { Comparator } from '../App.types'
-import { C001 } from './C001'
+import { changed_member_type } from './changed-member-type'
+import { member_removal } from './member_removal'
 
 export type ComparatorRegistry = Record<
     Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>,
@@ -7,5 +8,6 @@ export type ComparatorRegistry = Record<
 >
 
 export const COMPARATOR_REGISTRY: ComparatorRegistry = {
-    C001,
+    changed_member_type,
+    member_removal,
 }

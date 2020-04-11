@@ -1,26 +1,26 @@
 import { Comparator, Signatures } from '../App.types'
 import { CHANGE_REGISTRY } from '../ComparatorChangeRegistry'
 
-export function C001({
+export function changed_member_type({
     before,
     after,
-}: Comparator.CompareOpt<Signatures.SignatureType>): Comparator.Change<'C001'> {
+}: Comparator.CompareOpt<Signatures.SignatureType>): Comparator.Change<'changed_member_type'> {
     if (after) {
         if (before.memberType != after.memberType) {
             return {
-                info: CHANGE_REGISTRY.C001,
+                info: CHANGE_REGISTRY.changed_member_type,
                 signatures: { before, after },
                 message: `Member type changed from '${before.memberType}' to '${after.memberType}'`,
             }
         } else {
             return {
-                info: CHANGE_REGISTRY.C000,
+                info: CHANGE_REGISTRY.no_change,
                 signatures: { before, after },
             }
         }
     }
     return {
-        info: CHANGE_REGISTRY.C000,
+        info: CHANGE_REGISTRY.no_change,
         signatures: { before, after },
     }
 }

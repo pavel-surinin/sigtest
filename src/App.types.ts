@@ -131,9 +131,6 @@ export namespace Signatures {
 }
 
 export namespace Snapshot {
-    /**
-     * Result of generated signatures
-     */
     export interface Snapshot {
         signatures: Signatures.SignatureType[]
         version: string
@@ -148,7 +145,7 @@ export namespace Comparator {
 
     export interface Change<C extends ChangeCode> {
         signatures: CompareOpt<Signatures.SignatureType>
-        info: ChangeInfo<C | NothingChangedCode>
+        info: ChangeInfo<ChangeCode>
         message?: string
     }
 
@@ -160,9 +157,8 @@ export namespace Comparator {
         comparison: Compare<Signatures.SignatureType>
     ) => Change<C>
 
-    export type NothingChangedCode = 'C000'
-    export type ChangeCode = 'C001' | NothingChangedCode
-
+    export type NothingChangedCode = 'no_change'
+    export type ChangeCode = 'changed_member_type' | 'member_removal' | NothingChangedCode
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
         action: Action

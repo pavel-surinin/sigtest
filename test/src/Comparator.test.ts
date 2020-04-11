@@ -1,19 +1,46 @@
 describe('Comparator', () => {
-    it('C001', () => {
+    it('changed_member_type', () => {
         expect({
             v1: `export const a = 1`,
             v2: `export function a() {}`,
-            code: 'C001',
+            code: 'changed_member_type',
         }).toFailComparison("Member type changed from 'constant' to 'function'")
         expect({
             v1: `export const a = 1`,
             v2: `export const a = 'string'`,
-            code: 'C001',
+            code: 'changed_member_type',
         }).toPassComparison()
         expect({
             v1: `export const a = 1`,
             v2: ``,
-            code: 'C001',
+            code: 'changed_member_type',
+        }).toPassComparison()
+    })
+    it('member_removal', () => {
+        expect({
+            v1: `export const a = 1`,
+            v2: ``,
+            code: 'member_removal',
+        }).toFailComparison("Member 'a' removed from package")
+
+        expect({
+            v1: `
+                export namespace Test {
+                    export const a = 1
+                } 
+            `,
+            v2: `
+                export namespace Test {
+                    const a = 1
+                }
+            `,
+            code: 'member_removal',
+        }).toFailComparison("Member 'Test.a' removed from package")
+
+        expect({
+            v1: `export const a = 1`,
+            v2: `export const a = 'string'`,
+            code: 'member_removal',
         }).toPassComparison()
     })
 })

@@ -115,11 +115,11 @@ function toPassComparison(
     }
 
     return {
-        pass: CHANGE_REGISTRY.C000.code === result.changes[0].info.code,
+        pass: CHANGE_REGISTRY.no_change.code === result.changes[0].info.code,
         message: () =>
-            this.utils.matcherHint('toFailComparison', undefined, undefined, undefined) +
+            this.utils.matcherHint('toPassComparison', undefined, undefined, undefined) +
             '\n\n' +
-            `Expected: ${this.utils.printExpected(CHANGE_REGISTRY.C000.code)}\n` +
+            `Expected: ${this.utils.printExpected(CHANGE_REGISTRY.no_change.code)}\n` +
             `Received: ${this.utils.printReceived(result.changes[0].info.code)}`,
     }
 }
