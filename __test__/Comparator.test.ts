@@ -3,8 +3,39 @@ import { compareSnapshots } from '../src/SnapshotComparator'
 import { generateSignatures } from '../src/TypeVisitor'
 import { writeFileSync, unlinkSync } from 'fs'
 import { join } from 'path'
-import { comparators } from '../src/SignatureComparator'
-import { CHANGE_REGISTRY } from '../src/ComparatorChangeMessage'
+import { CHANGE_REGISTRY } from '../src/ComparatorChangeRegistry'
+import { COMPARATOR_REGISTRY } from '../src/comparator/ComparatorRegistry'
+import { Comparator } from '../src/App.types'
+
+describe('Comparator', () => {
+    describe('C001', () => {
+        it('should compare by member type and fail', () => {
+            expectCompare({
+                v1: `export const a = 1`,
+                v2: `export function a() {}`,
+                code: 'C001',
+                fails: true,
+                message: "Member type changed from 'constant' to 'function'",
+            })
+        })
+        it('should compare by member type and succeed', () => {
+            expectCompare({
+                v1: `export const a = 1`,
+                v2: `export const a = 'string'`,
+                code: 'C001',
+                fails: false,
+            })
+        })
+        it('should compare by member type and succeed when no after is present', () => {
+            expectCompare({
+                v1: `export const a = 1`,
+                v2: ``,
+                code: 'C001',
+                fails: false,
+            })
+        })
+    })
+})
 
 class SignatureProvider {
     constructor(private folder: string) {}
@@ -27,42 +58,26 @@ class SignatureProvider {
 
 const provider = new SignatureProvider('__test__/__testFiles__/')
 
-describe('Comparator', () => {
-    it('should compare by member type ad fail', () => {
-        const [v1, v2] = provider.provide(`export const a = 1`, `export function a() {}`)
-        const result = compareSnapshots(
-            {
-                before: { version: '0.0.1', signatures: v1 },
-                after: { version: '0.0.2', signatures: v2 },
-            },
-            comparators
-        )
-        expect(result.changes).toHaveLength(1)
-        expect(result.changes[0].info).toMatchObject(CHANGE_REGISTRY.C001)
-        expect(result.changes[0].message).toBe("Member type changed from 'constant' to 'function'")
-    })
-    it('should compare by member type and succeed', () => {
-        const [v1, v2] = provider.provide(`export const a = 1`, `export const a = 'string'`)
-        const result = compareSnapshots(
-            {
-                before: { version: '0.0.1', signatures: v1 },
-                after: { version: '0.0.2', signatures: v2 },
-            },
-            comparators
-        )
-        expect(result.changes).toHaveLength(1)
-        expect(result.changes[0].info).toMatchObject(CHANGE_REGISTRY.C000)
-    })
-    it('should compare by member type and succeed when no after is present', () => {
-        const [v1, v2] = provider.provide(`export const a = 1`, ``)
-        const result = compareSnapshots(
-            {
-                before: { version: '0.0.1', signatures: v1 },
-                after: { version: '0.0.2', signatures: v2 },
-            },
-            comparators
-        )
-        expect(result.changes).toHaveLength(1)
-        expect(result.changes[0].info).toMatchObject(CHANGE_REGISTRY.C000)
-    })
-})
+function expectCompare(opts: {
+    v1: string
+    v2: string
+    code: Exclude<Comparator.ChangeCode, 'C000'>
+    fails: boolean
+    message?: string
+}) {
+    const [v1meta, v2meta] = provider.provide(opts.v1, opts.v2)
+    const result = compareSnapshots(
+        {
+            before: { version: '0.0.1', signatures: v1meta },
+            after: { version: '0.0.2', signatures: v2meta },
+        },
+        [COMPARATOR_REGISTRY[opts.code]]
+    )
+    expect(result.changes).toHaveLength(1)
+    expect(result.changes[0].info).toMatchObject(
+        opts.fails ? CHANGE_REGISTRY[opts.code] : CHANGE_REGISTRY.C000
+    )
+    if (opts.message) {
+        expect(result.changes[0].message).toBe(opts.message)
+    }
+}

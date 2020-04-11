@@ -1,10 +1,10 @@
-import { Comparator, Signatures } from './App.types'
-import { CHANGE_REGISTRY } from './ComparatorChangeMessage'
+import { Comparator, Signatures } from '../App.types'
+import { CHANGE_REGISTRY } from '../ComparatorChangeRegistry'
 
-function compareByType({
+export function C001({
     before,
     after,
-}: Comparator.CompareOpt<Signatures.SignatureType>): Comparator.Change {
+}: Comparator.CompareOpt<Signatures.SignatureType>): Comparator.Change<'C001'> {
     if (after) {
         if (before.memberType != after.memberType) {
             return {
@@ -24,5 +24,3 @@ function compareByType({
         signatures: { before, after },
     }
 }
-
-export const comparators: Comparator.SignatureComparator[] = [compareByType]

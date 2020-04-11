@@ -1,6 +1,9 @@
 import { Comparator } from './App.types'
 
-export const CHANGE_REGISTRY: Record<Comparator.ChangeCode, Comparator.ChangeInfo> = {
+export const CHANGE_REGISTRY: Record<
+    Comparator.ChangeCode,
+    Comparator.ChangeInfo<Comparator.ChangeCode>
+> = {
     C000: {
         code: 'C000',
         description: 'Nothing is changed',

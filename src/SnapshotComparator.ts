@@ -5,7 +5,6 @@ import flat = Reducer.flat
 
 import Compare = Comparator.Compare
 import ComparisonResult = Comparator.ComparisonResult
-import SignatureComparator = Comparator.SignatureComparator
 
 // prev version or explicit, current version
 // snapshot v1, snapshot current
@@ -13,7 +12,7 @@ import SignatureComparator = Comparator.SignatureComparator
 // report
 export function compareSnapshots(
     snapshots: Compare<Snapshot.Snapshot>,
-    comparators: SignatureComparator[]
+    comparators: Comparator.Comparator<Comparator.ChangeCode>[]
 ): ComparisonResult {
     const versions: ComparisonResult['versions'] = {
         before: snapshots.before.version,

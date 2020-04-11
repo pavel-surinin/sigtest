@@ -146,23 +146,26 @@ export namespace Comparator {
     export type Compare<T> = { before: T; after: T }
     export type CompareOpt<T> = { before: T; after?: T }
 
-    export interface Change {
+    export interface Change<C extends ChangeCode> {
         signatures: CompareOpt<Signatures.SignatureType>
-        info: ChangeInfo
+        info: ChangeInfo<C | 'C000'>
         message?: string
     }
 
     export interface ComparisonResult {
         versions: Compare<string>
-        changes: Change[]
+        changes: Change<ChangeCode>[]
     }
-    export type SignatureComparator = (comparison: Compare<Signatures.SignatureType>) => Change
+    export type Comparator<C extends ChangeCode> = (
+        comparison: Compare<Signatures.SignatureType>
+    ) => Change<C>
 
     export type ChangeCode = 'C001' | 'C000'
-    export interface ChangeInfo {
+
+    export interface ChangeInfo<C extends ChangeCode> {
         status: Status
         action: Action
-        code: ChangeCode
+        code: C
         description: string
     }
 }
