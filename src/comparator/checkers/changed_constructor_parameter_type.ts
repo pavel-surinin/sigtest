@@ -17,12 +17,9 @@ export function changed_constructor_parameter_type({
         const changedTypeParams = before.constructors[0].parameters
             .filter(p => Boolean(afterObj[p.name]))
             .map(beforeParam => ({ beforeParam, afterParam: afterObj[beforeParam.name] }))
-            .filter(p => {
-                const bUnionTypes = p.beforeParam.type.split('|').map(s => s.trim())
-                const aUnionTypes = p.afterParam.type.split('|').map(s => s.trim())
-                const isAllIncluded = bUnionTypes.every(ut => aUnionTypes.includes(ut))
-                return !isAllIncluded
-            })
+            .filter(
+                p => !Comparator.Utils.Types.areCompatible(p.beforeParam.type, p.afterParam.type)
+            )
 
         if (changedTypeParams.length) {
             return {

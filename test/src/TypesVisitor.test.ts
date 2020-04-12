@@ -274,6 +274,7 @@ describe('TypesVisitor', () => {
                     {
                         name: 'sum',
                         modifier: 'public',
+                        returnType: 'number',
                         parameters: [
                             {
                                 name: 'n1',
@@ -295,6 +296,7 @@ describe('TypesVisitor', () => {
                     {
                         name: 'div',
                         modifier: 'protected',
+                        returnType: 'number',
                         parameters: [
                             {
                                 name: 'n1',
@@ -311,6 +313,7 @@ describe('TypesVisitor', () => {
                     {
                         name: 'mul',
                         modifier: 'private',
+                        returnType: 'number',
                         parameters: [
                             {
                                 name: 'n1',

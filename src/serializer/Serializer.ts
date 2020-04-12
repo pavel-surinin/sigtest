@@ -284,6 +284,9 @@ export class Serializer {
 
     private serializeMethod(method: ts.MethodDeclaration): Signatures.MethodDefinition {
         return {
+            returnType: method.type
+                ? this.checker.typeToString(this.checker.getTypeFromTypeNode(method.type))
+                : 'any',
             name: method.name.getText(),
             modifier: method.modifiers
                 ? (method.modifiers[0].getText() as Signatures.AccessModifier)

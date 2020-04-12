@@ -8,3 +8,4 @@
 | class | changed_constructor_parameter_modifier_to_required | changed | breaking | Constructor paramter became required
 | class | changed_constructor_parameter_type | changed | breaking | Constructor parameter type changed
 | class | changed_constructor_parameter_type_union | changed | compatible | Constructor parameter type changed to union type
+| class | changed_method_return_type | changed | breaking | Method return type changed

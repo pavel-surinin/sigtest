@@ -59,6 +59,7 @@ export namespace Signatures {
         modifier: AccessModifier
         name: string
         parameters: Paramter[]
+        returnType: string
     }
 
     interface ClassDeclaration {

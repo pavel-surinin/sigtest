@@ -1,4 +1,4 @@
-import { Comparator } from '../../src/comparator/Comparators'
+import { Comparator } from '../../../../src/comparator/Comparators'
 
 describe('Comparator', () => {
     describe('changed_member_type', () => {
@@ -255,6 +255,57 @@ describe('Comparator', () => {
                         } 
                     `,
                 code: 'changed_constructor_parameter_type_union' as Comparator.ChangeCode,
+            }).toPassComparison()
+        })
+    })
+    describe('changed_method_return_type', () => {
+        it('should find changed incompatible method return type', () => {
+            expect({
+                v1: `
+                    export class Test {
+                        a(): boolean | number {
+                        }
+                        b(): boolean {
+                        }
+                        c(): any {
+                        }
+                    } 
+                `,
+                v2: `
+                    export class Test {
+                        a(): boolean {
+                        }
+                        b(): number {
+                        }
+                        c(): string {
+                        }
+                    } 
+                `,
+                code: 'changed_method_return_type' as Comparator.ChangeCode,
+            }).toFailComparison(`Method: 'a', 'b', 'c' changed return types:
+    method 'a' before - 'number | boolean', current - 'boolean'
+    method 'b' before - 'boolean', current - 'number'
+    method 'c' before - 'any', current - 'string'`)
+        })
+        it('should not find changed incompatible method return type', () => {
+            expect({
+                v1: `
+                    export class Test {
+                        a(): boolean {
+                        }
+                        c(): number {
+                        }
+                    } 
+                `,
+                v2: `
+                    export class Test {
+                        a(): boolean | string {
+                        }
+                        c(): any {
+                        }
+                    } 
+                `,
+                code: 'changed_method_return_type' as Comparator.ChangeCode,
             }).toPassComparison()
         })
     })

@@ -44,4 +44,22 @@ export namespace Comparator {
         description: string
         memberType: MemberType
     }
+
+    export namespace Utils {
+        export namespace Types {
+            export function areCompatible(v0: string, v1: string): boolean {
+                const v0any = v0 === 'any'
+                const v1any = v1 === 'any'
+                if (v1any) {
+                    return true
+                }
+                if (v0any && !v1any) {
+                    return false
+                }
+                const v0Types = v0.split('|').map(s => s.trim())
+                const v1Types = v1.split('|').map(s => s.trim())
+                return v0Types.every(ut => v1Types.includes(ut))
+            }
+        }
+    }
 }

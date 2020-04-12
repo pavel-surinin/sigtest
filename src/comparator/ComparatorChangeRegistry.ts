@@ -60,4 +60,11 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'class',
         status: 'compatible',
     },
+    changed_method_return_type: {
+        action: 'changed',
+        code: 'changed_method_return_type',
+        description: 'Method return type changed',
+        memberType: 'class',
+        status: 'breaking',
+    },
 }
