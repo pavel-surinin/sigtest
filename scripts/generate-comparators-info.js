@@ -1,4 +1,4 @@
-const changes = require('../out/src/ComparatorChangeRegistry').CHANGE_REGISTRY
+const changes = require('../out/src/comparator/ComparatorChangeRegistry').CHANGE_REGISTRY
 const fs = require('fs')
 const by = require('declarative-js').Sort.by
 

@@ -1,4 +1,5 @@
-import { Comparator, Signatures } from '../App.types'
+import { Signatures } from '../../App.types'
+import { Comparator } from '../Comparators'
 import { CHANGE_REGISTRY } from '../ComparatorChangeRegistry'
 
 export function changed_required_constructor_parameters_count({

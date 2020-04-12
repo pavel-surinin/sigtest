@@ -1,4 +1,4 @@
-import { Comparator } from '../../src/App.types'
+import { Comparator } from '../../src/comparator/Comparators'
 
 describe('Comparator', () => {
     describe('changed_member_type', () => {
@@ -217,6 +217,44 @@ describe('Comparator', () => {
                     } 
                 `,
                 code: 'changed_constructor_parameter_type' as Comparator.ChangeCode,
+            }).toPassComparison()
+        })
+    })
+    describe('changed_constructor_parameter_type_union', () => {
+        it('should find changes to union type', () => {
+            expect({
+                v1: `
+                        export class Test {
+                            constructor(a: string, b: string | boolean) {
+                            }
+                        } 
+                    `,
+                v2: `
+                        export class Test {
+                            constructor(a: string | number, b: boolean | number | string) {
+                            }
+                        } 
+                    `,
+                code: 'changed_constructor_parameter_type_union' as Comparator.ChangeCode,
+            }).toFailComparison(`Constructor parameters: 'a', 'b' changed types:
+    parameter 'a' before - 'string', current - 'string | number'
+    parameter 'b' before - 'string | boolean', current - 'string | number | boolean'`)
+        })
+        it('should not find changes to union type', () => {
+            expect({
+                v1: `
+                        export class Test {
+                            constructor(a: string, b: string | boolean) {
+                            }
+                        } 
+                    `,
+                v2: `
+                        export class Test {
+                            constructor(a: boolean | number, b: Date | number | string) {
+                            }
+                        } 
+                    `,
+                code: 'changed_constructor_parameter_type_union' as Comparator.ChangeCode,
             }).toPassComparison()
         })
     })

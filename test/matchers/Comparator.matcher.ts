@@ -1,12 +1,12 @@
-import { ScriptTarget, ModuleKind, isExportDeclaration } from 'typescript'
+import { ScriptTarget, ModuleKind } from 'typescript'
 import { compareSnapshots } from '../../src/SnapshotComparator'
 import { generateSignatures } from '../../src/TypeVisitor'
 import { writeFileSync, unlinkSync } from 'fs'
 import { join } from 'path'
-import { CHANGE_REGISTRY } from '../../src/ComparatorChangeRegistry'
+import { CHANGE_REGISTRY } from '../../src/comparator/ComparatorChangeRegistry'
 import { COMPARATOR_REGISTRY } from '../../src/comparator/ComparatorRegistry'
-import { Comparator } from '../../src/App.types'
 import { CreateOnce, CallOnceBy } from 'auto-memoize'
+import { Comparator } from '../../src/comparator/Comparators'
 
 @CreateOnce
 class SignatureProvider {

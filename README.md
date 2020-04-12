@@ -56,4 +56,5 @@ This repository is WIP
 # Docs
 
 Error code definitions: [link](./docs/error-code-table.md)
+
 Compatibility checkers definitions: [link](./docs/comparators-table.md)

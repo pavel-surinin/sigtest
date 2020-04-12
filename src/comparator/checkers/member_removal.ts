@@ -1,5 +1,6 @@
-import { Comparator, Signatures } from '../App.types'
+import { Signatures } from '../../App.types'
 import { CHANGE_REGISTRY } from '../ComparatorChangeRegistry'
+import { Comparator } from '../Comparators'
 
 export function member_removal({
     before,

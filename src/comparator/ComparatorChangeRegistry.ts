@@ -1,4 +1,4 @@
-import { Comparator } from './App.types'
+import { Comparator } from './Comparators'
 
 export const CHANGE_REGISTRY: Record<
     Comparator.ChangeCode,
@@ -52,5 +52,12 @@ export const CHANGE_REGISTRY: Record<
         description: 'Constructor parameter type changed',
         memberType: 'class',
         status: 'breaking',
+    },
+    changed_constructor_parameter_type_union: {
+        action: 'changed',
+        code: 'changed_constructor_parameter_type_union',
+        description: 'Constructor parameter type changed to union type',
+        memberType: 'class',
+        status: 'compatible',
     },
 }

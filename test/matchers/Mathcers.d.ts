@@ -1,4 +1,4 @@
-import { Comparator } from '../../src/App.types'
+import { Comparator } from '../../src/comparator/Comparators'
 
 declare global {
     namespace jest {

@@ -1,6 +1,7 @@
-import { Comparator, Signatures } from '../App.types'
-import { CHANGE_REGISTRY } from '../ComparatorChangeRegistry'
 import { Reducer } from 'declarative-js'
+import { Signatures } from '../../App.types'
+import { CHANGE_REGISTRY } from '../ComparatorChangeRegistry'
+import { Comparator } from '../Comparators'
 
 export function changed_constructor_parameter_type({
     before,

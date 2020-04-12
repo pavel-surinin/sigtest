@@ -1,10 +1,12 @@
-import { Snapshot, Comparator, Signatures } from './App.types'
 import { Reducer } from 'declarative-js'
 import toObject = Reducer.toObject
 import flat = Reducer.flat
+import { Snapshot, Signatures } from './App.types'
 
+import { Comparator } from './comparator/Comparators'
 import Compare = Comparator.Compare
 import ComparisonResult = Comparator.ComparisonResult
+import ChangeCode = Comparator.ChangeCode
 
 // prev version or explicit, current version
 // snapshot v1, snapshot current
@@ -12,7 +14,7 @@ import ComparisonResult = Comparator.ComparisonResult
 // report
 export function compareSnapshots(
     snapshots: Compare<Snapshot.Snapshot>,
-    comparators: Comparator.Comparator<Comparator.ChangeCode>[]
+    comparators: Comparator.Comparator<ChangeCode>[]
 ): ComparisonResult {
     const versions: ComparisonResult['versions'] = {
         before: snapshots.before.version,
