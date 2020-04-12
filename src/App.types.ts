@@ -170,6 +170,9 @@ export namespace Comparator {
         | NothingChangedCode
         // class
         | 'changed_required_constructor_parameters_count'
+        | 'changed_constructor_parameter_modifier_to_optional'
+        | 'changed_constructor_parameter_modifier_to_required'
+        | 'changed_constructor_parameter_type'
 
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status

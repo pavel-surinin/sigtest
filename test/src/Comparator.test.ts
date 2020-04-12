@@ -108,4 +108,116 @@ describe('Comparator', () => {
             }).toPassComparison()
         })
     })
+    describe('changed_constructor_parameter_modifier_to_optional', () => {
+        it('changed to optional and default ', () => {
+            expect({
+                v1: `
+                    export class Test {
+                        constructor(a: string, b: string) {
+                        }
+                    } 
+                `,
+                v2: `
+                    export class Test {
+                        constructor(a?: string, b: string = 'foo') {
+                        }
+                    } 
+                `,
+                code: 'changed_constructor_parameter_modifier_to_optional' as Comparator.ChangeCode,
+            }).toFailComparison(`Constructor parameters: 'a' and 'b' became optional`)
+        })
+        it('changed from optional and default ', () => {
+            expect({
+                v1: `
+                    export class Test {
+                        constructor(a: string, b?: string) {
+                        }
+                    } 
+                `,
+                v2: `
+                    export class Test {
+                        constructor(a: string, b: string) {
+                        }
+                    } 
+                `,
+                code: 'changed_constructor_parameter_modifier_to_optional' as Comparator.ChangeCode,
+            }).toPassComparison()
+        })
+    })
+    describe('changed_constructor_parameter_modifier_to_required', () => {
+        it('should find changes to required parameters', () => {
+            expect({
+                v1: `
+                    export class Test {
+                        constructor(a?: string, b: string = '42') {
+                        }
+                    } 
+                `,
+                v2: `
+                    export class Test {
+                        constructor(a: string, b: string) {
+                        }
+                    } 
+                `,
+                code: 'changed_constructor_parameter_modifier_to_required' as Comparator.ChangeCode,
+            }).toFailComparison(`Constructor parameters: 'a' and 'b' became required`)
+        })
+        it('should not find changes to required parameters', () => {
+            expect({
+                v1: `
+                    export class Test {
+                        constructor(a: string) {
+                        }
+                    } 
+                `,
+                v2: `
+                    export class Test {
+                        constructor(a?: string) {
+                        }
+                    } 
+                `,
+                code: 'changed_constructor_parameter_modifier_to_required' as Comparator.ChangeCode,
+            }).toPassComparison()
+        })
+    })
+    describe('changed_constructor_parameter_type', () => {
+        it('should find changes in parameter types', () => {
+            expect({
+                v1: `
+                    export class Test {
+                        constructor(a: string, b: string | boolean, c: string, d: {a: 1} | {b: 2}) {
+                        }
+                    } 
+                `,
+                v2: `
+                    export class Test {
+                        constructor(a: Date, b: boolean, c: number | boolean, d: {a: 1} & {b: 2}) {
+                        }
+                    } 
+                `,
+                code: 'changed_constructor_parameter_type' as Comparator.ChangeCode,
+            }).toFailComparison(`Constructor parameters: 'a', 'b', 'c', 'd' changed types:
+    parameter 'a' before - 'string', current - 'Date'
+    parameter 'b' before - 'string | boolean', current - 'boolean'
+    parameter 'c' before - 'string', current - 'number | boolean'
+    parameter 'd' before - '{ a: 1; } | { b: 2; }', current - '{ a: 1; } & { b: 2; }'`)
+        })
+        it('should not find changes in parameter types', () => {
+            expect({
+                v1: `
+                    export class Test {
+                        constructor(a: string, b: string | boolean) {
+                        }
+                    } 
+                `,
+                v2: `
+                    export class Test {
+                        constructor(a: string | number, b: boolean | number | string) {
+                        }
+                    } 
+                `,
+                code: 'changed_constructor_parameter_type' as Comparator.ChangeCode,
+            }).toPassComparison()
+        })
+    })
 })

@@ -53,18 +53,7 @@ This repository is WIP
 | **type**      | partially  |           |         |
 | **namespace** | ✔️         |           |         |
 
-# Not Supported
-
-## Variable Declaration and Export in different places
-
-```TypeScript
-const pc = 'Dell'
-// not supported
-// export computer = pc
-// use instead explicit type annotation
-export computer: string = pc
-```
-
 # Docs
 
 Error code definitions: [link](./docs/error-code-table.md)
+Compatibility checkers definitions: [link](./docs/comparators-table.md)

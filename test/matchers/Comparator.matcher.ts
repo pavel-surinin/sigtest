@@ -69,7 +69,9 @@ function toFailComparison(
         return {
             pass: false,
             message: () =>
-                this.utils.matcherHint('toFailComparison', undefined, undefined, undefined) +
+                this.utils.matcherHint('toFailComparison', undefined, undefined, {
+                    comment: 'change code',
+                }) +
                 '\n\n' +
                 `Expected: not ${this.utils.printExpected(expected.info.code)}\n` +
                 `Received: ${this.utils.printReceived(result.changes[0].info.code)}`,
@@ -79,17 +81,21 @@ function toFailComparison(
         return {
             pass: false,
             message: () =>
-                this.utils.matcherHint('toFailComparison', undefined, undefined, undefined) +
+                this.utils.matcherHint('toFailComparison', undefined, undefined, {
+                    comment: 'change info',
+                }) +
                 '\n\n' +
                 `Expected: not ${this.utils.printExpected(expected.info)}\n` +
                 `Received: ${this.utils.printReceived(result.changes[0].info)}`,
         }
     }
-    if (!this.equals(expected.message, result.changes[0].message)) {
+    if (expected.message !== result.changes[0].message) {
         return {
             pass: false,
             message: () =>
-                this.utils.matcherHint('toFailComparison', undefined, undefined, undefined) +
+                this.utils.matcherHint('toFailComparison', undefined, undefined, {
+                    comment: 'message',
+                }) +
                 '\n\n' +
                 `Expected: ${this.utils.printExpected(expected.message)}\n` +
                 `Received: ${this.utils.printReceived(result.changes[0].message)}`,

@@ -32,4 +32,25 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'class',
         status: 'breaking',
     },
+    changed_constructor_parameter_modifier_to_optional: {
+        action: 'changed',
+        code: 'changed_constructor_parameter_modifier_to_optional',
+        description: 'Constructor parameter became optional',
+        memberType: 'class',
+        status: 'compatible',
+    },
+    changed_constructor_parameter_modifier_to_required: {
+        action: 'changed',
+        code: 'changed_constructor_parameter_modifier_to_required',
+        description: 'Constructor paramter became required',
+        memberType: 'class',
+        status: 'breaking',
+    },
+    changed_constructor_parameter_type: {
+        action: 'changed',
+        code: 'changed_constructor_parameter_type',
+        description: 'Constructor parameter type changed',
+        memberType: 'class',
+        status: 'breaking',
+    },
 }

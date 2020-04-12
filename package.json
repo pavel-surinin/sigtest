@@ -7,7 +7,7 @@
         "compile": "tsc",
         "test": "jest",
         "docs": "node ./scripts/generate-error-code-info && node ./scripts/generate-comparators-info",
-        "format": "prettier --write src __test__ scripts"
+        "format": "prettier --write src test scripts"
     },
     "author": "",
     "license": "MIT",
