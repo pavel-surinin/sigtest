@@ -7,6 +7,7 @@ import { CHANGE_REGISTRY } from '../../src/comparator/ComparatorChangeRegistry'
 import { COMPARATOR_REGISTRY } from '../../src/comparator/ComparatorRegistry'
 import { CreateOnce, CallOnceBy } from 'auto-memoize'
 import { Comparator } from '../../src/comparator/Comparators'
+import { format } from 'prettier'
 
 @CreateOnce
 class SignatureProvider {
@@ -15,14 +16,18 @@ class SignatureProvider {
     @CallOnceBy('string')
     private provide(v1: string, v2: string) {
         const doProvide = (code: string, version: string) => {
-            const path = join(this.folder, `temp${version}.ts`)
-            writeFileSync(path, code)
-
+            const { currentTestName } = expect.getState()
+            const path = join(
+                this.folder,
+                'checkers',
+                `${currentTestName}-${version}.checker.data.ts`
+            )
+            writeFileSync(path, format(code, { parser: 'typescript' }))
             const s = generateSignatures([path], {
                 target: ScriptTarget.ES5,
                 module: ModuleKind.CommonJS,
             })
-            unlinkSync(path)
+            // unlinkSync(path)
             return s.map(s => s.signature!)
         }
         return [doProvide(v1, 'V1'), doProvide(v2, 'V2')]

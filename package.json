@@ -7,13 +7,15 @@
         "compile": "tsc",
         "test": "jest",
         "docs": "node ./scripts/generate-error-code-info && node ./scripts/generate-comparators-info",
-        "format": "prettier --write src test scripts"
+        "format": "prettier --write src test scripts",
+        "ci": "npm run test -- --coverage && npm run compile"
     },
     "author": "pavel.surinin@gmail.com",
     "license": "MIT",
     "devDependencies": {
         "@types/jest": "^25.1.4",
         "@types/node": "^13.9.1",
+        "@types/prettier": "^2.0.0",
         "auto-memoize": "^1.0.14",
         "jest": "^25.1.0",
         "prettier": "^2.0.1",

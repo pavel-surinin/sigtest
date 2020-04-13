@@ -81,4 +81,11 @@ export const CHANGE_REGISTRY: Record<
         status: 'compatible',
         memberType: 'class',
     },
+    changed_method_parameter_modifier_to_required: {
+        code: 'changed_method_parameter_modifier_to_required',
+        action: 'changed',
+        description: 'Method parameter changed from optional to required',
+        memberType: 'class',
+        status: 'breaking',
+    },
 }

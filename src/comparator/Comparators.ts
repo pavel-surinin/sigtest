@@ -40,6 +40,7 @@ export namespace Comparator {
         | 'changed_method_return_type'
         | 'changed_method_return_type_union'
         | 'changed_method_parameter_modifier_to_optional'
+        | 'changed_method_parameter_modifier_to_required'
 
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
@@ -102,6 +103,42 @@ export namespace Comparator {
                 return v0Params
                     .filter(g => !g.isOptional)
                     .filter(p => Boolean(afterOptsObj[p.name]))
+            }
+            export function getChangedToRequired(
+                v0Params: Signatures.Paramter[],
+                v1Params: Signatures.Paramter[]
+            ): Signatures.Paramter[] {
+                const afterOptsObj = v1Params
+                    .filter(g => !g.isOptional)
+                    .reduce(
+                        Reducer.toObject(p => p.name),
+                        {}
+                    )
+                return v0Params.filter(g => g.isOptional).filter(p => Boolean(afterOptsObj[p.name]))
+            }
+        }
+        export namespace Methods {
+            export function getCommonMethods(
+                v0Methods: Signatures.MethodDefinition[],
+                v1Methods: Signatures.MethodDefinition[]
+            ): {
+                beforeMethod: Signatures.MethodDefinition
+                afterMethod: Signatures.MethodDefinition
+            }[] {
+                function methodKey(method: Signatures.MethodDefinition): string {
+                    return `${method.name}:${method.parameters.map(p => p.name).join(',')}`
+                }
+                const afterMethods = v1Methods
+                    .filter(method => method.modifier !== 'private')
+                    .reduce(Reducer.toObject(methodKey), {})
+                return v0Methods
+                    .filter(method => method.modifier !== 'private')
+                    .map(beforeMethod => ({
+                        beforeMethod,
+                        afterMethod: afterMethods[methodKey(beforeMethod)],
+                    }))
+                    .filter(p => Boolean(p.afterMethod))
+                    .filter(p => p.beforeMethod.modifier === p.afterMethod.modifier)
             }
         }
     }
