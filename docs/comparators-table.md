@@ -10,3 +10,4 @@
 | class | changed_constructor_parameter_type_union | changed | compatible | Constructor parameter type changed to union type
 | class | changed_method_return_type | changed | breaking | Method return type changed
 | class | changed_method_return_type_union | changed | compatible | Method return type changed to union type
+| class | changed_method_parameter_modifier_to_optional | changed | compatible | Method parameter changed from required to optional

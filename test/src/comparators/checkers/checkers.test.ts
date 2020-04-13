@@ -293,7 +293,7 @@ describe('Comparator', () => {
                     export class Test {
                         a(): boolean {
                         }
-                        c(): number {
+                        c(): any {
                         }
                     } 
                 `,
@@ -301,7 +301,7 @@ describe('Comparator', () => {
                     export class Test {
                         a(): boolean | string {
                         }
-                        c(): any {
+                        private c(): number {
                         }
                     } 
                 `,
@@ -339,7 +339,7 @@ describe('Comparator', () => {
                     export class Test {
                         a(): any {
                         }
-                        c(): any {
+                        c(): boolean {
                         }
                     } 
                 `,
@@ -347,11 +347,63 @@ describe('Comparator', () => {
                     export class Test {
                         a(): boolean | string {
                         }
-                        c(): any {
+                        private c(): any {
                         }
                     } 
                 `,
                 code: 'changed_method_return_type_union' as Comparator.ChangeCode,
+            }).toPassComparison()
+        })
+    })
+    describe('changed_method_parameter_modifier_to_optional', () => {
+        it('should find changed parameters', () => {
+            expect({
+                v1: `
+                    export class Test {
+                        public a(p1: string, p2: Date, p3: boolean): boolean {
+                        }
+                        private b(p1: string): string {
+                        }
+                        protected c(p1: string): boolean {
+                        }
+                    } 
+                    `,
+                v2: `
+                    export class Test {
+                        public a(p1: string, p2?: Date, p3: boolean = true): boolean {
+                        }
+                        private b(p1?: string): string {
+                        }
+                        protected c(p1?: string): boolean {
+                        }
+                    } 
+                `,
+                code: 'changed_method_parameter_modifier_to_optional' as Comparator.ChangeCode,
+            }).toFailComparison(`Method parameters changed from required to optional:
+    method 'a' parameters: 'p2', 'p3'
+    method 'c' parameters: 'p1'`)
+        })
+        it('should not find changed parameters', () => {
+            expect({
+                v1: `
+                    export class Test {
+                        public a(p1: string, p2: Date, p3: boolean): boolean {
+                        }
+                        private b(p1: string): string {
+                        }
+                        protected c(p1: string): boolean {
+                        }
+                    } 
+                    `,
+                v2: `
+                    export class Test {
+                        public a(p1: string, p2: boolean): boolean {
+                        }
+                        private b(p1?: string): string {
+                        }
+                    } 
+                `,
+                code: 'changed_method_parameter_modifier_to_optional' as Comparator.ChangeCode,
             }).toPassComparison()
         })
     })

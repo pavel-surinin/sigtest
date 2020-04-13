@@ -1,4 +1,6 @@
 import { Signatures } from '../App.types'
+import { Reducer } from 'declarative-js'
+import toObject = Reducer.toObject
 
 export namespace Comparator {
     export type Action = 'removed' | 'added' | 'changed' | 'none'
@@ -28,15 +30,16 @@ export namespace Comparator {
         | 'member_removal'
         | NothingChangedCode
         // class
-        //  constructor
+        //    constructor
         | 'changed_required_constructor_parameters_count'
         | 'changed_constructor_parameter_modifier_to_optional'
         | 'changed_constructor_parameter_modifier_to_required'
         | 'changed_constructor_parameter_type'
         | 'changed_constructor_parameter_type_union'
-        //  method
+        //    method
         | 'changed_method_return_type'
         | 'changed_method_return_type_union'
+        | 'changed_method_parameter_modifier_to_optional'
 
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
@@ -80,6 +83,25 @@ export namespace Comparator {
                 const aUnionTypes = v1.split('|').map(s => s.trim())
                 const isAllIncluded = bUnionTypes.every(ut => aUnionTypes.includes(ut))
                 return isAllIncluded && bUnionTypes.length < aUnionTypes.length
+            }
+        }
+        export namespace Parameters {
+            export function getChangedToOptional(
+                v0Params: Signatures.Paramter[],
+                v1Params: Signatures.Paramter[]
+            ): Signatures.Paramter[] {
+                if (!v0Params.length || !v1Params.length) {
+                    return []
+                }
+                const afterOptsObj = v1Params
+                    .filter(g => g.isOptional)
+                    .reduce(
+                        toObject(p => p.name),
+                        {}
+                    )
+                return v0Params
+                    .filter(g => !g.isOptional)
+                    .filter(p => Boolean(afterOptsObj[p.name]))
             }
         }
     }

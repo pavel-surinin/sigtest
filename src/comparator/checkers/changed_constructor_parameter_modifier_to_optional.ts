@@ -1,6 +1,5 @@
 import { Signatures } from '../../App.types'
 import { CHANGE_REGISTRY } from '../ComparatorChangeRegistry'
-import { Reducer } from 'declarative-js'
 import { Comparator } from '../Comparators'
 
 export function changed_constructor_parameter_modifier_to_optional({
@@ -10,17 +9,10 @@ export function changed_constructor_parameter_modifier_to_optional({
     'changed_constructor_parameter_modifier_to_optional'
 > {
     if (after && after.memberType === 'class' && before.memberType === 'class') {
-        // find optional params after
-        const afterOptsObj = after.constructors[0].parameters
-            .filter(g => g.isOptional)
-            .reduce(
-                Reducer.toObject(p => p.name),
-                {}
-            )
-        // find changed parameters
-        const changedParameters = before.constructors[0].parameters
-            .filter(g => !g.isOptional)
-            .filter(p => Boolean(afterOptsObj[p.name]))
+        const changedParameters = Comparator.Utils.Parameters.getChangedToOptional(
+            before.constructors[0].parameters,
+            after.constructors[0].parameters
+        )
 
         if (changedParameters.length) {
             return {

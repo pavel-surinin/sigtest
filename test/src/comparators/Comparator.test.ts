@@ -53,4 +53,48 @@ describe('Comparator.Utils', () => {
             })
         })
     })
+    describe('Parameters', () => {
+        describe('getChangedToOptional', () => {
+            const getChangedToOptional = Comparator.Utils.Parameters.getChangedToOptional
+            it('should find changed to optional parameters', () => {
+                expect(
+                    getChangedToOptional(
+                        [
+                            { name: 'a', isOptional: false, type: 'any' },
+                            { name: 'b', isOptional: false, type: 'any' },
+                        ],
+                        [
+                            { name: 'a', isOptional: true, type: 'any' },
+                            { name: 'a', isOptional: false, type: 'any' },
+                        ]
+                    )
+                ).toHaveLength(1)
+            })
+            it('should find 2 changed to optional parameters', () => {
+                expect(
+                    getChangedToOptional(
+                        [
+                            { name: 'a', isOptional: false, type: 'any' },
+                            { name: 'b', isOptional: false, type: 'any' },
+                        ],
+                        [
+                            { name: 'a', isOptional: true, type: 'any' },
+                            { name: 'b', isOptional: true, type: 'any' },
+                        ]
+                    )
+                ).toHaveLength(2)
+            })
+            it('should find 0 changed to optional parameters', () => {
+                expect(
+                    getChangedToOptional(
+                        [
+                            { name: 'a', isOptional: false, type: 'any' },
+                            { name: 'b', isOptional: false, type: 'any' },
+                        ],
+                        []
+                    )
+                ).toHaveLength(0)
+            })
+        })
+    })
 })

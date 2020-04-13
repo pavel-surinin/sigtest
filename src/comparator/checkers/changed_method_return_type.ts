@@ -10,11 +10,14 @@ export function changed_method_return_type({
     'changed_method_return_type'
 > {
     if (after && after.memberType === 'class' && before.memberType === 'class') {
-        const afterObj = after.methods.reduce(
-            Reducer.toObject(method => method.name),
-            {}
-        )
+        const afterObj = after.methods
+            .filter(method => method.modifier !== 'private')
+            .reduce(
+                Reducer.toObject(method => method.name),
+                {}
+            )
         const methodReturnTypes = before.methods
+            .filter(method => method.modifier !== 'private')
             .filter(method => Boolean(afterObj[method.name]))
             .map(beforeMethod => ({ beforeMethod, afterMethod: afterObj[beforeMethod.name] }))
             .filter(

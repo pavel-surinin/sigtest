@@ -9,6 +9,7 @@ import { changed_constructor_parameter_type } from './checkers/changed_construct
 import { changed_constructor_parameter_type_union } from './checkers/changed_constructor_parameter_type_union'
 import { changed_method_return_type } from './checkers/changed_method_return_type'
 import { changed_method_return_type_union } from './checkers/changed_method_return_type_union'
+import { changed_method_parameter_modifier_to_optional } from './checkers/changed_method_parameter_modifier_to_optional'
 
 export type ComparatorRegistry = Record<
     Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>,
@@ -25,4 +26,5 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
     changed_constructor_parameter_type_union,
     changed_method_return_type,
     changed_method_return_type_union,
+    changed_method_parameter_modifier_to_optional,
 }
