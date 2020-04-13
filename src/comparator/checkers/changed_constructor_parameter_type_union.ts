@@ -1,7 +1,7 @@
-import { Signatures } from '../../App.types'
-import { Comparator } from '../Comparators'
-import { CHANGE_REGISTRY } from '../ComparatorChangeRegistry'
 import { Reducer } from 'declarative-js'
+import { Signatures } from '../../App.types'
+import { CHANGE_REGISTRY } from '../ComparatorChangeRegistry'
+import { Comparator } from '../Comparators'
 
 export function changed_constructor_parameter_type_union({
     before,
@@ -17,12 +17,9 @@ export function changed_constructor_parameter_type_union({
         const changedTypeParams = before.constructors[0].parameters
             .filter(p => Boolean(afterObj[p.name]))
             .map(beforeParam => ({ beforeParam, afterParam: afterObj[beforeParam.name] }))
-            .filter(p => {
-                const bUnionTypes = p.beforeParam.type.split('|').map(s => s.trim())
-                const aUnionTypes = p.afterParam.type.split('|').map(s => s.trim())
-                const isAllIncluded = bUnionTypes.every(ut => aUnionTypes.includes(ut))
-                return isAllIncluded && bUnionTypes.length < aUnionTypes.length
-            })
+            .filter(p =>
+                Comparator.Utils.Types.isMoreApplicable(p.beforeParam.type, p.afterParam.type)
+            )
 
         if (changedTypeParams.length) {
             return {

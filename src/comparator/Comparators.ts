@@ -36,6 +36,7 @@ export namespace Comparator {
         | 'changed_constructor_parameter_type_union'
         //  method
         | 'changed_method_return_type'
+        | 'changed_method_return_type_union'
 
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
@@ -48,17 +49,37 @@ export namespace Comparator {
     export namespace Utils {
         export namespace Types {
             export function areCompatible(v0: string, v1: string): boolean {
+                if (v0.trim() === v1.trim()) {
+                    return true
+                }
                 const v0any = v0 === 'any'
                 const v1any = v1 === 'any'
                 if (v1any) {
                     return true
                 }
-                if (v0any && !v1any) {
+                if (v0any) {
                     return false
                 }
                 const v0Types = v0.split('|').map(s => s.trim())
                 const v1Types = v1.split('|').map(s => s.trim())
                 return v0Types.every(ut => v1Types.includes(ut))
+            }
+            export function isMoreApplicable(v0: string, v1: string): boolean {
+                if (v0.trim() === v1.trim()) {
+                    return false
+                }
+                const v0any = v0 === 'any'
+                const v1any = v1 === 'any'
+                if (v1any) {
+                    return true
+                }
+                if (v0any) {
+                    return false
+                }
+                const bUnionTypes = v0.split('|').map(s => s.trim())
+                const aUnionTypes = v1.split('|').map(s => s.trim())
+                const isAllIncluded = bUnionTypes.every(ut => aUnionTypes.includes(ut))
+                return isAllIncluded && bUnionTypes.length < aUnionTypes.length
             }
         }
     }

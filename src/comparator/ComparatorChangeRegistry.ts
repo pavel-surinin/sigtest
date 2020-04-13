@@ -67,4 +67,11 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'class',
         status: 'breaking',
     },
+    changed_method_return_type_union: {
+        action: 'changed',
+        code: 'changed_method_return_type_union',
+        description: 'Method return type changed to union type',
+        memberType: 'class',
+        status: 'compatible',
+    },
 }

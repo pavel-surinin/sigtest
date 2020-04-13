@@ -309,4 +309,50 @@ describe('Comparator', () => {
             }).toPassComparison()
         })
     })
+    describe('changed_method_return_type_union', () => {
+        it('should find changed compatible method return type', () => {
+            expect({
+                v1: `
+                    export class Test {
+                        a(): boolean {
+                        }
+                        c(): number {
+                        }
+                    } 
+                `,
+                v2: `
+                    export class Test {
+                        a(): boolean | string {
+                        }
+                        c(): any {
+                        }
+                    } 
+                `,
+                code: 'changed_method_return_type_union' as Comparator.ChangeCode,
+            }).toFailComparison(`Method: 'a', 'c' changed return types:
+    method 'a' before - 'boolean', current - 'string | boolean'
+    method 'c' before - 'number', current - 'any'`)
+        })
+        it('should not find changed compatible method return type', () => {
+            expect({
+                v1: `
+                    export class Test {
+                        a(): any {
+                        }
+                        c(): any {
+                        }
+                    } 
+                `,
+                v2: `
+                    export class Test {
+                        a(): boolean | string {
+                        }
+                        c(): any {
+                        }
+                    } 
+                `,
+                code: 'changed_method_return_type_union' as Comparator.ChangeCode,
+            }).toPassComparison()
+        })
+    })
 })
