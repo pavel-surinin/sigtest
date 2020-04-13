@@ -53,7 +53,7 @@ describe('Comparator', () => {
             }).toPassComparison()
         })
     })
-    describe('changed_required_constructor_generics_count', () => {
+    describe('changed_required_constructor_parameters_count', () => {
         it('different count', () => {
             expect({
                 v1: `
@@ -64,13 +64,15 @@ describe('Comparator', () => {
                 `,
                 v2: `
                     export class Test {
-                        constructor(a: string) {
+                        constructor(a: string, c: string, d: string, e?: string) {
                         }
                     } 
                 `,
                 code: 'changed_required_constructor_parameters_count' as Comparator.ChangeCode,
             }).toFailComparison(
-                `Constructor required generics count changed. Previous version had 2, current 1`
+                `Constructor required parameters count changed:
+    added: 'c', 'd'
+    removed: 'b'`
             )
         })
         it('optional is ignored', () => {
@@ -416,6 +418,46 @@ describe('Comparator', () => {
                     } 
                 `,
                 code: 'changed_method_parameter_modifier_to_required' as Comparator.ChangeCode,
+            }).toPassComparison()
+        })
+    })
+    describe('changed_method_parameter_required_count', () => {
+        it('should find changed parameters count', () => {
+            expect({
+                v1: `
+                export class Test {
+                    public a(p1: string, p2?: Date, p3: boolean = true): boolean { return false }
+                    public b(p1: any): boolean { return false }
+                } 
+                `,
+                v2: `
+                    export class Test {
+                        public a(p2: Date, p3: boolean, p4: number, p5?: any): boolean { return false }
+                        public b(p2: any): boolean { return false }
+                    } 
+                    `,
+                code: 'changed_method_parameter_required_count' as Comparator.ChangeCode,
+            }).toFailComparison(`Method required parameters changed:
+    method 'a':
+        added: 'p2', 'p3', 'p4'
+        removed: 'p1'
+    method 'b':
+        added: 'p2'
+        removed: 'p1'`)
+        })
+        it('should not find changed parameters', () => {
+            expect({
+                v1: `
+                    export class Test {
+                        a(p1: string, p2: Date): boolean { return false }
+                    } 
+                    `,
+                v2: `
+                    export class Test {
+                        a(p1: string, p2: boolean): boolean { return false }
+                    } 
+                `,
+                code: 'changed_method_parameter_required_count' as Comparator.ChangeCode,
             }).toPassComparison()
         })
     })

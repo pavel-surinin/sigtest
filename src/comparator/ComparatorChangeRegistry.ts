@@ -88,4 +88,11 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'class',
         status: 'breaking',
     },
+    changed_method_parameter_required_count: {
+        code: 'changed_method_parameter_required_count',
+        action: 'changed',
+        description: 'Changed required parameters count in class method',
+        memberType: 'class',
+        status: 'breaking',
+    },
 }

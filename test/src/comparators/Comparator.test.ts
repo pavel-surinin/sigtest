@@ -148,6 +148,17 @@ describe('Comparator.Utils', () => {
                 expect(getChangedToRequired([], [])).toHaveLength(0)
             })
         })
+        describe('getChangedRequired', () => {
+            const getChangedRequired = Comparator.Utils.Parameters.getChangedRequired
+            it('should find changed parameters', () => {
+                const result = getChangedRequired(
+                    [{ name: 'b', isOptional: false, type: 'any' }],
+                    [{ name: 'a', isOptional: false, type: 'any' }]
+                )
+                expect(result.added).toHaveLength(1)
+                expect(result.removed).toHaveLength(1)
+            })
+        })
     })
     describe('Methods', () => {
         describe('getCommonMethods', () => {
@@ -190,6 +201,42 @@ describe('Comparator.Utils', () => {
                         ]
                     )
                 ).toHaveLength(1)
+            })
+            it('should not common methods with function overload with custom key resolver', () => {
+                expect(
+                    getCommonMethods(
+                        [
+                            {
+                                modifier: 'public',
+                                name: 'sum',
+                                returnType: 'any',
+                                parameters: [
+                                    { isOptional: false, type: 'any', name: 'p1' },
+                                    { isOptional: false, type: 'any', name: 'p2' },
+                                ],
+                            },
+                            {
+                                modifier: 'public',
+                                name: 'sum',
+                                returnType: 'any',
+                                parameters: [
+                                    { isOptional: false, type: 'any', name: 'p1' },
+                                    { isOptional: false, type: 'any', name: 'p2' },
+                                    { isOptional: false, type: 'any', name: 'p3' },
+                                ],
+                            },
+                        ],
+                        [
+                            {
+                                modifier: 'public',
+                                name: 'sum',
+                                returnType: 'any',
+                                parameters: [{ isOptional: false, type: 'any', name: 'p3' }],
+                            },
+                        ],
+                        m => m.name
+                    )
+                ).toHaveLength(2)
             })
             it('should find common methods', () => {
                 expect(

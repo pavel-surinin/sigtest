@@ -9,13 +9,16 @@ export function changed_required_constructor_parameters_count({
     'changed_required_constructor_parameters_count'
 > {
     if (after && after.memberType === 'class' && before.memberType === 'class') {
-        const beforeGCount = before.constructors[0].parameters.filter(g => !g.isOptional).length
-        const afterGCount = after.constructors[0].parameters.filter(g => !g.isOptional).length
-        if (beforeGCount !== afterGCount) {
+        const changed = Comparator.Utils.Parameters.getChangedRequired(
+            before.constructors[0].parameters,
+            after.constructors[0].parameters
+        )
+        if (changed.added.length || changed.removed.length) {
+            const ra = Comparator.Utils.Parameters.Message.getChangedRequired(changed)
             return {
                 info: CHANGE_REGISTRY.changed_required_constructor_parameters_count,
                 signatures: { before, after },
-                message: `Constructor required generics count changed. Previous version had ${beforeGCount}, current ${afterGCount}`,
+                message: `Constructor required parameters count changed:${ra}`,
             }
         }
     }
