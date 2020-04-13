@@ -1,7 +1,7 @@
 import { ScriptTarget, ModuleKind } from 'typescript'
 import { compareSnapshots } from '../../src/SnapshotComparator'
 import { generateSignatures } from '../../src/TypeVisitor'
-import { writeFileSync, unlinkSync } from 'fs'
+import { writeFileSync, unlinkSync, existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 import { CHANGE_REGISTRY } from '../../src/comparator/ComparatorChangeRegistry'
 import { COMPARATOR_REGISTRY } from '../../src/comparator/ComparatorRegistry'
@@ -17,11 +17,16 @@ class SignatureProvider {
     private provide(v1: string, v2: string) {
         const doProvide = (code: string, version: string) => {
             const { currentTestName } = expect.getState()
+
             const path = join(
                 this.folder,
                 'checkers',
                 `${currentTestName}-${version}.checker.data.ts`
             )
+            const dir = join(this.folder, 'checkers')
+            if (!existsSync(dir)) {
+                mkdirSync(dir)
+            }
             writeFileSync(path, format(code, { parser: 'typescript' }))
             const s = generateSignatures([path], {
                 target: ScriptTarget.ES5,
