@@ -42,6 +42,11 @@ export namespace Comparator {
         | 'changed_method_parameter_modifier_to_optional'
         | 'changed_method_parameter_modifier_to_required'
         | 'changed_method_parameter_required_count'
+        | 'added_method'
+    // TODO
+    // | 'removed_method'
+    // | 'changed_method_modifier_more_strict'
+    // | 'changed_method_modifier_less_strict'
 
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status

@@ -95,4 +95,11 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'class',
         status: 'breaking',
     },
+    added_method: {
+        action: 'added',
+        code: 'added_method',
+        description: 'Method added to class',
+        memberType: 'class',
+        status: 'compatible',
+    },
 }

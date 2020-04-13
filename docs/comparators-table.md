@@ -13,3 +13,4 @@
 | class | changed_method_parameter_modifier_to_optional | changed | compatible | Method parameter changed from required to optional
 | class | changed_method_parameter_modifier_to_required | changed | breaking | Method parameter changed from optional to required
 | class | changed_method_parameter_required_count | changed | breaking | Changed required parameters count in class method
+| class | added_method | added | compatible | Method added to class

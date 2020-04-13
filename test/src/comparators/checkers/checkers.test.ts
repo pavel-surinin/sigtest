@@ -461,4 +461,48 @@ describe('Comparator', () => {
             }).toPassComparison()
         })
     })
+    describe('added_method', () => {
+        it('should find added methods count', () => {
+            expect({
+                v1: `
+                export class Test {
+                    public a(p1: string, p2:any, p3: any): boolean { return false }
+                    protected qqq(p1: any): boolean { return false }
+                    public c(): boolean { return false }
+                } 
+                `,
+                v2: `
+                export class Test {
+                    qqq(p1: any): boolean { return false }
+                    // added method overload
+                    a(p1: string, p2:any, p3: any): boolean 
+                    a(p1: string, p2: any): boolean
+                    a(p1: string, p2:any, p3?: any): boolean {return false} 
+                    
+                    // added new method
+                    protected b(): boolean { return false }
+                    } 
+                    `,
+                code: 'added_method' as Comparator.ChangeCode,
+            }).toFailComparison(`Methods added:
+    public a(p1, p2)
+    protected b()`)
+        })
+        it('should not find added methods', () => {
+            expect({
+                v1: `
+                export class Test {
+                    protected qqq(p1: any): boolean { return false }
+                } 
+                `,
+                v2: `
+                export class Test {
+                    qqq(p1: any): boolean { return false }
+                    private a(): boolean { return false }
+                }
+                    `,
+                code: 'added_method' as Comparator.ChangeCode,
+            }).toPassComparison()
+        })
+    })
 })
