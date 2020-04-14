@@ -2,17 +2,13 @@ import { Signatures } from '../../App.types'
 import { CHANGE_REGISTRY } from '../ComparatorChangeRegistry'
 import { Comparator } from '../Comparators'
 import { Reducer } from 'declarative-js'
+import Methods = Comparator.Utils.Methods
 
 export function added_method({
     before,
     after,
 }: Comparator.CompareOpt<Signatures.SignatureType>): Comparator.Change<'added_method'> {
     if (after && after.memberType === 'class' && before.memberType === 'class') {
-        function resolveKey(method: Signatures.MethodDefinition): string {
-            return `${method.modifier}:${method.name}:${method.parameters
-                .map(p => p.name)
-                .join(',')}`
-        }
         const beforeM = before.methods
             .filter(m => m.modifier !== 'private')
             .reduce(
@@ -36,8 +32,8 @@ export function added_method({
                 if (bms.length < ams.length) {
                     const now = ams.reduce(
                         Reducer.toObject(
-                            resolveKey,
-                            x => x,
+                            Methods.ToStrings.modifier_name_parameters,
+                            m => m,
                             // for overloaded methods
                             // key will be the same
                             // if duplicated set first
@@ -46,7 +42,9 @@ export function added_method({
                         {}
                     )
                     // remove prev methods
-                    bms.map(resolveKey).forEach(key => delete now[key])
+                    bms.map(Methods.ToStrings.modifier_name_parameters).forEach(
+                        key => delete now[key]
+                    )
                     return { name: entry.value[0].name, methods: Object.values(now) }
                 }
                 return { name: entry.value[0].name, methods: [] }
@@ -54,15 +52,12 @@ export function added_method({
             .filter(p => p.methods.length)
             .map(m => m.methods)
             .reduce(Reducer.flat, [])
+            .map(Methods.ToStrings.modifier_name_parameters)
         if (added.length) {
             return {
                 info: CHANGE_REGISTRY.added_method,
                 signatures: { after, before },
-                message: `Methods added:\n    ${added
-                    .map(
-                        m => `${m.modifier} ${m.name}(${m.parameters.map(p => p.name).join(', ')})`
-                    )
-                    .join('\n    ')}`,
+                message: `Methods added:\n    ${added.join('\n    ')}`,
             }
         }
     }

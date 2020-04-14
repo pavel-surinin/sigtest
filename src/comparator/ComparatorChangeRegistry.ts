@@ -102,4 +102,11 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'class',
         status: 'compatible',
     },
+    removed_method: {
+        action: 'removed',
+        code: 'removed_method',
+        description: 'Method removed from class',
+        memberType: 'class',
+        status: 'breaking',
+    },
 }

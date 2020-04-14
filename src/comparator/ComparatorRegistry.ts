@@ -13,6 +13,7 @@ import { changed_method_parameter_modifier_to_optional } from './checkers/change
 import { changed_method_parameter_modifier_to_required } from './checkers/changed_method_parameter_modifier_to_required'
 import { changed_method_parameter_required_count } from './checkers/changed_method_parameter_required_count'
 import { added_method } from './checkers/added_method'
+import { removed_method } from './checkers/removed_method'
 
 export type ComparatorRegistry = Record<
     Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>,
@@ -33,4 +34,5 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
     changed_method_parameter_modifier_to_required,
     changed_method_parameter_required_count,
     added_method,
+    removed_method,
 }

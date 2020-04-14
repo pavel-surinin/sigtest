@@ -43,8 +43,7 @@ export namespace Comparator {
         | 'changed_method_parameter_modifier_to_required'
         | 'changed_method_parameter_required_count'
         | 'added_method'
-    // TODO
-    // | 'removed_method'
+        | 'removed_method'
     // | 'changed_method_modifier_more_strict'
     // | 'changed_method_modifier_less_strict'
 
@@ -160,6 +159,19 @@ export namespace Comparator {
             }
         }
         export namespace Methods {
+            export namespace ToStrings {
+                export function modifier_name_parameters(
+                    method: Signatures.MethodDefinition
+                ): string {
+                    return `${method.modifier} ${method.name}(${method.parameters
+                        .map(p => p.name)
+                        .join(', ')})`
+                }
+                export function name_parameters(method: Signatures.MethodDefinition): string {
+                    return `${method.name} (${method.parameters.map(p => p.name).join(', ')})`
+                }
+            }
+
             export function getCommonMethods(
                 v0Methods: Signatures.MethodDefinition[],
                 v1Methods: Signatures.MethodDefinition[],
@@ -168,10 +180,7 @@ export namespace Comparator {
                 beforeMethod: Signatures.MethodDefinition
                 afterMethod: Signatures.MethodDefinition
             }[] {
-                function defaultMethodKey(method: Signatures.MethodDefinition): string {
-                    return `${method.name}:${method.parameters.map(p => p.name).join(',')}`
-                }
-                const resolveKey = resolveMethodKey || defaultMethodKey
+                const resolveKey = resolveMethodKey || ToStrings.modifier_name_parameters
                 const afterMethods = v1Methods
                     .filter(method => method.modifier !== 'private')
                     .reduce(Reducer.toObject(resolveKey), {})
