@@ -44,8 +44,8 @@ export namespace Comparator {
         | 'changed_method_parameter_required_count'
         | 'added_method'
         | 'removed_method'
-    // | 'changed_method_modifier_more_strict'
-    // | 'changed_method_modifier_less_strict'
+        | 'changed_method_modifier_more_visible'
+        | 'changed_method_modifier_less_visible'
 
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
@@ -159,6 +159,26 @@ export namespace Comparator {
             }
         }
         export namespace Methods {
+            export namespace Modifiers {
+                const ACCESS_MODIFIER_ORDER: Record<Signatures.AccessModifier, number> = {
+                    private: 10,
+                    protected: 20,
+                    public: 30,
+                }
+                export function isLessVisible(
+                    m1: Signatures.AccessModifier,
+                    m2: Signatures.AccessModifier
+                ): boolean {
+                    return ACCESS_MODIFIER_ORDER[m1] < ACCESS_MODIFIER_ORDER[m2]
+                }
+                export function isMoreVisible(
+                    m1: Signatures.AccessModifier,
+                    m2: Signatures.AccessModifier
+                ): boolean {
+                    return ACCESS_MODIFIER_ORDER[m1] > ACCESS_MODIFIER_ORDER[m2]
+                }
+            }
+
             export namespace ToStrings {
                 export function modifier_name_parameters(
                     method: Signatures.MethodDefinition
@@ -171,27 +191,32 @@ export namespace Comparator {
                     return `${method.name} (${method.parameters.map(p => p.name).join(', ')})`
                 }
             }
-
             export function getCommonMethods(
                 v0Methods: Signatures.MethodDefinition[],
                 v1Methods: Signatures.MethodDefinition[],
-                resolveMethodKey?: (method: Signatures.MethodDefinition) => string
+
+                options?: {
+                    resolveMethodKey?: (method: Signatures.MethodDefinition) => string
+                    isApplicable?: (method: Signatures.MethodDefinition) => boolean
+                }
             ): {
                 beforeMethod: Signatures.MethodDefinition
                 afterMethod: Signatures.MethodDefinition
             }[] {
-                const resolveKey = resolveMethodKey || ToStrings.modifier_name_parameters
+                const defaultIsApplicable = (method: Signatures.MethodDefinition) =>
+                    method.modifier !== 'private'
+                const resolveKey = options?.resolveMethodKey || ToStrings.modifier_name_parameters
+                const isApplicable = options?.isApplicable || defaultIsApplicable
                 const afterMethods = v1Methods
-                    .filter(method => method.modifier !== 'private')
+                    .filter(isApplicable)
                     .reduce(Reducer.toObject(resolveKey), {})
                 return v0Methods
-                    .filter(method => method.modifier !== 'private')
+                    .filter(isApplicable)
                     .map(beforeMethod => ({
                         beforeMethod,
                         afterMethod: afterMethods[resolveKey(beforeMethod)],
                     }))
                     .filter(p => Boolean(p.afterMethod))
-                    .filter(p => p.beforeMethod.modifier === p.afterMethod.modifier)
             }
         }
     }

@@ -548,4 +548,88 @@ describe('Comparator', () => {
             }).toPassComparison()
         })
     })
+    describe('changed_method_modifier_more_visible', () => {
+        it('should find changed methods', () => {
+            expect({
+                v1: `
+                export class Test {
+                    a(p1: string, p2:any, p3?: any): boolean {return false} 
+                    protected b(p1: any): boolean { return false }
+                    private c(p1: any): boolean { return false }
+                }
+                `,
+                v2: `
+                export class Test {
+                    a(p1: string, p2:any, p3?: any): boolean {return false} 
+                    public b(p1: any): boolean { return false }
+                    protected c(p1: any): boolean { return false }
+                }
+                `,
+                code: 'changed_method_modifier_more_visible' as Comparator.ChangeCode,
+            }).toFailComparison(`Methods changed access modifier:
+    method 'b (p1)' from 'protected' to 'public'
+    method 'c (p1)' from 'private' to 'protected'`)
+        })
+        it('should not find changed methods', () => {
+            expect({
+                v1: `
+                export class Test {
+                    a(p1: string, p2:any, p3?: any): boolean {return false} 
+                    protected b(p1: any): boolean { return false }
+                    private c(p1: any): boolean { return false }
+                }
+                `,
+                v2: `
+                export class Test {
+                    private a(p1: string, p2:any, p3?: any): boolean {return false} 
+                    private b(p1: any): boolean { return false }
+                    private c(p1: any): boolean { return false }
+                }
+                `,
+                code: 'changed_method_modifier_more_visible' as Comparator.ChangeCode,
+            }).toPassComparison()
+        })
+    })
+    describe('changed_method_modifier_less_visible', () => {
+        it('should find changed methods', () => {
+            expect({
+                v1: `
+                    export class Test {
+                        a(p1: string, p2:any, p3?: any): boolean {return false} 
+                        public b(p1: any): boolean { return false }
+                        protected c(p1: any): boolean { return false }
+                    }
+                    `,
+                v2: `
+                    export class Test {
+                        a(p1: string, p2:any, p3?: any): boolean {return false} 
+                        protected b(p1: any): boolean { return false }
+                        private c(p1: any): boolean { return false }
+                    }
+                    `,
+                code: 'changed_method_modifier_less_visible' as Comparator.ChangeCode,
+            }).toFailComparison(`Methods changed access modifier:
+    method 'b (p1)' from 'public' to 'protected'
+    method 'c (p1)' from 'protected' to 'private'`)
+        })
+        it('should not find changed methods', () => {
+            expect({
+                v2: `
+                    export class Test {
+                        a(p1: string, p2:any, p3?: any): boolean {return false} 
+                        protected b(p1: any): boolean { return false }
+                        private c(p1: any): boolean { return false }
+                    }
+                    `,
+                v1: `
+                    export class Test {
+                        private a(p1: string, p2:any, p3?: any): boolean {return false} 
+                        private b(p1: any): boolean { return false }
+                        private c(p1: any): boolean { return false }
+                    }
+                    `,
+                code: 'changed_method_modifier_less_visible' as Comparator.ChangeCode,
+            }).toPassComparison()
+        })
+    })
 })

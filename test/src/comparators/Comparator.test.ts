@@ -161,6 +161,24 @@ describe('Comparator.Utils', () => {
         })
     })
     describe('Methods', () => {
+        describe('Modifiers', () => {
+            const isLessVisible = Comparator.Utils.Methods.Modifiers.isLessVisible
+            const isMoreVisible = Comparator.Utils.Methods.Modifiers.isMoreVisible
+            it('should compare to be less visible', () => {
+                expect(isLessVisible('private', 'protected')).toBeTruthy()
+                expect(isLessVisible('private', 'public')).toBeTruthy()
+                expect(isLessVisible('protected', 'public')).toBeTruthy()
+                expect(isLessVisible('public', 'public')).toBeFalsy()
+            })
+            it('should compare to be more visible', () => {
+                expect(isMoreVisible('public', 'protected')).toBeTruthy()
+                expect(isMoreVisible('public', 'private')).toBeTruthy()
+                expect(isMoreVisible('protected', 'private')).toBeTruthy()
+                expect(isMoreVisible('protected', 'protected')).toBeFalsy()
+                expect(isMoreVisible('protected', 'public')).toBeFalsy()
+            })
+        })
+
         describe('getCommonMethods', () => {
             const getCommonMethods = Comparator.Utils.Methods.getCommonMethods
             it('should find common methods with function overload', () => {
@@ -234,7 +252,7 @@ describe('Comparator.Utils', () => {
                                 parameters: [{ isOptional: false, type: 'any', name: 'p3' }],
                             },
                         ],
-                        m => m.name
+                        { resolveMethodKey: m => m.name }
                     )
                 ).toHaveLength(2)
             })
@@ -293,6 +311,35 @@ describe('Comparator.Utils', () => {
                         ]
                     )
                 ).toHaveLength(0)
+            })
+            it('should find common methods including private', () => {
+                expect(
+                    getCommonMethods(
+                        [
+                            {
+                                modifier: 'private',
+                                name: 'div',
+                                returnType: 'any',
+                                parameters: [
+                                    { isOptional: false, type: 'any', name: 'p1' },
+                                    { isOptional: false, type: 'any', name: 'p2' },
+                                ],
+                            },
+                        ],
+                        [
+                            {
+                                modifier: 'private',
+                                name: 'div',
+                                returnType: 'any',
+                                parameters: [
+                                    { isOptional: false, type: 'any', name: 'p1' },
+                                    { isOptional: false, type: 'any', name: 'p2' },
+                                ],
+                            },
+                        ],
+                        { isApplicable: () => true }
+                    )
+                ).toHaveLength(1)
             })
         })
     })

@@ -9,11 +9,9 @@ export function changed_method_parameter_required_count({
     'changed_method_parameter_required_count'
 > {
     if (after && after.memberType === 'class' && before.memberType === 'class') {
-        const message = Comparator.Utils.Methods.getCommonMethods(
-            before.methods,
-            after.methods,
-            method => method.name
-        )
+        const message = Comparator.Utils.Methods.getCommonMethods(before.methods, after.methods, {
+            resolveMethodKey: method => method.name,
+        })
             .map(p => ({
                 name: p.beforeMethod.name,
                 changed: Comparator.Utils.Parameters.getChangedRequired(
