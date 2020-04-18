@@ -9,18 +9,14 @@ export function added_method({
     after,
 }: Comparator.CompareOpt<Signatures.SignatureType>): Comparator.Change<'added_method'> {
     if (after && after.memberType === 'class' && before.memberType === 'class') {
-        const beforeM = before.methods
-            .filter(m => m.modifier !== 'private')
-            .reduce(
-                Reducer.groupBy(m => m.name),
-                Reducer.Map()
-            )
-        const afterM = after.methods
-            .filter(m => m.modifier !== 'private')
-            .reduce(
-                Reducer.groupBy(m => m.name),
-                Reducer.Map()
-            )
+        const beforeM = before.methods.filter(Comparator.Utils.Methods.isNotPrivate).reduce(
+            Reducer.groupBy(m => m.name),
+            Reducer.Map()
+        )
+        const afterM = after.methods.filter(Comparator.Utils.Methods.isNotPrivate).reduce(
+            Reducer.groupBy(m => m.name),
+            Reducer.Map()
+        )
         const added = afterM
             .entries()
             .map(entry => {

@@ -52,11 +52,18 @@ export namespace Signatures {
     export interface ClassProperty {
         name: string
         type: string
-        modifiers: Modifier[]
+        modifiers: {
+            access: AccessModifier
+            usage: UsageModifier
+            write?: WriteModifier
+        }
     }
 
     export interface MethodDefinition {
-        modifier: AccessModifier
+        modifier: {
+            usage: UsageModifier
+            access: AccessModifier
+        }
         name: string
         parameters: Paramter[]
         returnType: string

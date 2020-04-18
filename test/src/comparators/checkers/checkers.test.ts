@@ -1,4 +1,7 @@
 import { Comparator } from '../../../../src/comparator/Comparators'
+import { comparatorMatcher } from '../../../matchers/Comparator.matcher'
+
+beforeAll(comparatorMatcher.cleanGenerated)
 
 describe('Comparator', () => {
     describe('changed_member_type', () => {
@@ -528,8 +531,8 @@ describe('Comparator', () => {
                 `,
                 code: 'removed_method' as Comparator.ChangeCode,
             }).toFailComparison(`Methods removed:
-    a (p1, p2)
-    b ()`)
+    a(p1, p2)
+    b()`)
         })
         it('should not find removed methods', () => {
             expect({
@@ -567,8 +570,8 @@ describe('Comparator', () => {
                 `,
                 code: 'changed_method_modifier_more_visible' as Comparator.ChangeCode,
             }).toFailComparison(`Methods changed access modifier:
-    method 'b (p1)' from 'protected' to 'public'
-    method 'c (p1)' from 'private' to 'protected'`)
+    method 'b(p1)' from 'protected' to 'public'
+    method 'c(p1)' from 'private' to 'protected'`)
         })
         it('should not find changed methods', () => {
             expect({
@@ -597,6 +600,7 @@ describe('Comparator', () => {
                     export class Test {
                         a(p1: string, p2:any, p3?: any): boolean {return false} 
                         public b(p1: any): boolean { return false }
+                        static public b(p1: any): boolean { return false }
                         protected c(p1: any): boolean { return false }
                     }
                     `,
@@ -604,13 +608,15 @@ describe('Comparator', () => {
                     export class Test {
                         a(p1: string, p2:any, p3?: any): boolean {return false} 
                         protected b(p1: any): boolean { return false }
+                        static protected b(p1: any): boolean { return false }
                         private c(p1: any): boolean { return false }
                     }
                     `,
                 code: 'changed_method_modifier_less_visible' as Comparator.ChangeCode,
             }).toFailComparison(`Methods changed access modifier:
-    method 'b (p1)' from 'public' to 'protected'
-    method 'c (p1)' from 'protected' to 'private'`)
+    method 'b(p1)' from 'public' to 'protected'
+    method 'static b(p1)' from 'public' to 'protected'
+    method 'c(p1)' from 'protected' to 'private'`)
         })
         it('should not find changed methods', () => {
             expect({
@@ -629,6 +635,93 @@ describe('Comparator', () => {
                     }
                     `,
                 code: 'changed_method_modifier_less_visible' as Comparator.ChangeCode,
+            }).toPassComparison()
+        })
+    })
+    describe('changed_property_modifier_more_visible', () => {
+        it('should find changed properties', () => {
+            expect({
+                v1: `
+                export class Test {
+                    a = false 
+                    protected b = false 
+                    private c = false
+                }
+                `,
+                v2: `
+                export class Test {
+                    a = false 
+                    b = false 
+                    protected c = false
+                }
+                `,
+                code: 'changed_property_modifier_more_visible' as Comparator.ChangeCode,
+            }).toFailComparison(`Properties changed access modifier:
+    property 'b' from 'protected' to 'public'
+    property 'c' from 'private' to 'protected'`)
+        })
+        it('should not find changed methods', () => {
+            expect({
+                v1: `
+                export class Test {
+                    a = false 
+                    b = false 
+                    protected c = false
+                }
+                `,
+                v2: `
+                export class Test {
+                    a = false 
+                    protected b = false 
+                    private c = false
+                }
+                `,
+                code: 'changed_property_modifier_more_visible' as Comparator.ChangeCode,
+            }).toPassComparison()
+        })
+    })
+    describe('changed_property_modifier_less_visible', () => {
+        it('should find changed methods', () => {
+            expect({
+                v1: `
+                export class Test {
+                    static a = false 
+                    a = false 
+                    protected b = false 
+                    private c = false
+                }
+                `,
+                v2: `
+                export class Test {
+                    static protected a = false 
+                    protected a = false 
+                    private b = false 
+                    protected c = false
+                }
+                `,
+                code: 'changed_property_modifier_less_visible' as Comparator.ChangeCode,
+            }).toFailComparison(`Properties changed access modifier:
+    property 'static a' from 'public' to 'protected'
+    property 'a' from 'public' to 'protected'
+    property 'b' from 'protected' to 'private'`)
+        })
+        it('should not find changed methods', () => {
+            expect({
+                v1: `
+                export class Test {
+                    protected a = false 
+                    private b = false 
+                    protected c = false
+                }
+                `,
+                v2: `
+                export class Test {
+                    a = false 
+                    protected b = false 
+                    protected c = false
+                }
+                `,
+                code: 'changed_property_modifier_less_visible' as Comparator.ChangeCode,
             }).toPassComparison()
         })
     })

@@ -283,22 +283,46 @@ export class Serializer {
     }
 
     private serializeMethod(method: ts.MethodDeclaration): Signatures.MethodDefinition {
+        const flags = ts.getCombinedModifierFlags(method)
+        let access: Signatures.AccessModifier = 'public'
+        if (ts.ModifierFlags.Protected & flags) {
+            access = 'protected'
+        } else if (ts.ModifierFlags.Private & flags) {
+            access = 'private'
+        }
+        const usage: Signatures.UsageModifier =
+            ts.ModifierFlags.Static & flags ? 'static' : 'instance'
         return {
             returnType: method.type
                 ? this.checker.typeToString(this.checker.getTypeFromTypeNode(method.type))
                 : 'any',
             name: method.name.getText(),
-            modifier: method.modifiers
-                ? (method.modifiers[0].getText() as Signatures.AccessModifier)
-                : 'public',
+            modifier: {
+                access,
+                usage,
+            },
             parameters: method.parameters.map(this.serializeParameter),
         }
     }
 
     private serializeClassProperty(prop: ts.PropertyDeclaration): Signatures.ClassProperty {
+        const all = prop.modifiers?.map(m => m.getText() as Signatures.Modifier) ?? []
+        const usage: Signatures.UsageModifier[] = ['instance', 'static']
+        const access: Signatures.AccessModifier[] = ['private', 'protected', 'public']
+        const modifiers: Signatures.ClassProperty['modifiers'] = {
+            access:
+                (all.find(m =>
+                    access.includes(m as Signatures.AccessModifier)
+                ) as Signatures.AccessModifier) || 'public',
+            usage:
+                (all.find(m =>
+                    usage.includes(m as Signatures.UsageModifier)
+                ) as Signatures.UsageModifier) || 'instance',
+            write: all.find(m => m === 'readonly') as Signatures.WriteModifier,
+        }
         return {
             name: this.checker.getSymbolAtLocation(prop.name)?.name!,
-            modifiers: prop.modifiers?.map(m => m.getText() as Signatures.Modifier) ?? [],
+            modifiers,
             type: this.checker.typeToString(this.checker.getTypeAtLocation(prop)),
         }
     }

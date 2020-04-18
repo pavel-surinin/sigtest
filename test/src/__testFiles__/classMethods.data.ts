@@ -1,5 +1,5 @@
 export class Calc {
-    sum(n1: number, n2: number, n3?: number): number {
+    static sum(n1: number, n2: number, n3?: number): number {
         return 1
     }
     protected div(n1: number, n2: number = 2): number {

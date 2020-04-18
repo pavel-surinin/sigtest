@@ -1,4 +1,5 @@
 import { Comparator } from '../../../src/comparator/Comparators'
+import { Signatures } from '../../../src/App.types'
 
 describe('Comparator.Utils', () => {
     describe('Types', () => {
@@ -161,24 +162,6 @@ describe('Comparator.Utils', () => {
         })
     })
     describe('Methods', () => {
-        describe('Modifiers', () => {
-            const isLessVisible = Comparator.Utils.Methods.Modifiers.isLessVisible
-            const isMoreVisible = Comparator.Utils.Methods.Modifiers.isMoreVisible
-            it('should compare to be less visible', () => {
-                expect(isLessVisible('private', 'protected')).toBeTruthy()
-                expect(isLessVisible('private', 'public')).toBeTruthy()
-                expect(isLessVisible('protected', 'public')).toBeTruthy()
-                expect(isLessVisible('public', 'public')).toBeFalsy()
-            })
-            it('should compare to be more visible', () => {
-                expect(isMoreVisible('public', 'protected')).toBeTruthy()
-                expect(isMoreVisible('public', 'private')).toBeTruthy()
-                expect(isMoreVisible('protected', 'private')).toBeTruthy()
-                expect(isMoreVisible('protected', 'protected')).toBeFalsy()
-                expect(isMoreVisible('protected', 'public')).toBeFalsy()
-            })
-        })
-
         describe('getCommonMethods', () => {
             const getCommonMethods = Comparator.Utils.Methods.getCommonMethods
             it('should find common methods with function overload', () => {
@@ -186,7 +169,10 @@ describe('Comparator.Utils', () => {
                     getCommonMethods(
                         [
                             {
-                                modifier: 'public',
+                                modifier: {
+                                    access: 'public' as Signatures.AccessModifier,
+                                    usage: 'instance' as Signatures.UsageModifier,
+                                },
                                 name: 'sum',
                                 returnType: 'any',
                                 parameters: [
@@ -195,7 +181,10 @@ describe('Comparator.Utils', () => {
                                 ],
                             },
                             {
-                                modifier: 'public',
+                                modifier: {
+                                    access: 'public' as Signatures.AccessModifier,
+                                    usage: 'instance' as Signatures.UsageModifier,
+                                },
                                 name: 'sum',
                                 returnType: 'any',
                                 parameters: [
@@ -207,7 +196,10 @@ describe('Comparator.Utils', () => {
                         ],
                         [
                             {
-                                modifier: 'public',
+                                modifier: {
+                                    access: 'public' as Signatures.AccessModifier,
+                                    usage: 'instance' as Signatures.UsageModifier,
+                                },
                                 name: 'sum',
                                 returnType: 'any',
                                 parameters: [
@@ -225,7 +217,10 @@ describe('Comparator.Utils', () => {
                     getCommonMethods(
                         [
                             {
-                                modifier: 'public',
+                                modifier: {
+                                    access: 'public' as Signatures.AccessModifier,
+                                    usage: 'instance' as Signatures.UsageModifier,
+                                },
                                 name: 'sum',
                                 returnType: 'any',
                                 parameters: [
@@ -234,7 +229,10 @@ describe('Comparator.Utils', () => {
                                 ],
                             },
                             {
-                                modifier: 'public',
+                                modifier: {
+                                    access: 'public' as Signatures.AccessModifier,
+                                    usage: 'instance' as Signatures.UsageModifier,
+                                },
                                 name: 'sum',
                                 returnType: 'any',
                                 parameters: [
@@ -246,7 +244,10 @@ describe('Comparator.Utils', () => {
                         ],
                         [
                             {
-                                modifier: 'public',
+                                modifier: {
+                                    access: 'public' as Signatures.AccessModifier,
+                                    usage: 'instance' as Signatures.UsageModifier,
+                                },
                                 name: 'sum',
                                 returnType: 'any',
                                 parameters: [{ isOptional: false, type: 'any', name: 'p3' }],
@@ -261,7 +262,10 @@ describe('Comparator.Utils', () => {
                     getCommonMethods(
                         [
                             {
-                                modifier: 'public',
+                                modifier: {
+                                    access: 'public' as Signatures.AccessModifier,
+                                    usage: 'instance' as Signatures.UsageModifier,
+                                },
                                 name: 'sum',
                                 returnType: 'any',
                                 parameters: [
@@ -272,7 +276,10 @@ describe('Comparator.Utils', () => {
                         ],
                         [
                             {
-                                modifier: 'public',
+                                modifier: {
+                                    access: 'public' as Signatures.AccessModifier,
+                                    usage: 'instance' as Signatures.UsageModifier,
+                                },
                                 name: 'sum',
                                 returnType: 'any',
                                 parameters: [
@@ -289,7 +296,10 @@ describe('Comparator.Utils', () => {
                     getCommonMethods(
                         [
                             {
-                                modifier: 'protected',
+                                modifier: {
+                                    access: 'protected' as Signatures.AccessModifier,
+                                    usage: 'instance' as Signatures.UsageModifier,
+                                },
                                 name: 'sum',
                                 returnType: 'any',
                                 parameters: [
@@ -300,7 +310,10 @@ describe('Comparator.Utils', () => {
                         ],
                         [
                             {
-                                modifier: 'public',
+                                modifier: {
+                                    access: 'public' as Signatures.AccessModifier,
+                                    usage: 'instance' as Signatures.UsageModifier,
+                                },
                                 name: 'sum',
                                 returnType: 'any',
                                 parameters: [
@@ -317,7 +330,10 @@ describe('Comparator.Utils', () => {
                     getCommonMethods(
                         [
                             {
-                                modifier: 'private',
+                                modifier: {
+                                    access: 'private' as Signatures.AccessModifier,
+                                    usage: 'instance' as Signatures.UsageModifier,
+                                },
                                 name: 'div',
                                 returnType: 'any',
                                 parameters: [
@@ -328,7 +344,10 @@ describe('Comparator.Utils', () => {
                         ],
                         [
                             {
-                                modifier: 'private',
+                                modifier: {
+                                    access: 'private' as Signatures.AccessModifier,
+                                    usage: 'instance' as Signatures.UsageModifier,
+                                },
                                 name: 'div',
                                 returnType: 'any',
                                 parameters: [
@@ -340,6 +359,89 @@ describe('Comparator.Utils', () => {
                         { isApplicable: () => true }
                     )
                 ).toHaveLength(1)
+            })
+        })
+    })
+    describe('Modifiers', () => {
+        const isLessVisible = Comparator.Utils.Modifiers.isLessVisible
+        const isMoreVisible = Comparator.Utils.Modifiers.isMoreVisible
+        it('should compare to be less visible', () => {
+            expect(isLessVisible('private', 'protected')).toBeTruthy()
+            expect(isLessVisible('private', 'public')).toBeTruthy()
+            expect(isLessVisible('protected', 'public')).toBeTruthy()
+            expect(isLessVisible('public', 'public')).toBeFalsy()
+        })
+        it('should compare to be more visible', () => {
+            expect(isMoreVisible('public', 'protected')).toBeTruthy()
+            expect(isMoreVisible('public', 'private')).toBeTruthy()
+            expect(isMoreVisible('protected', 'private')).toBeTruthy()
+            expect(isMoreVisible('protected', 'protected')).toBeFalsy()
+            expect(isMoreVisible('protected', 'public')).toBeFalsy()
+        })
+    })
+    describe('ClassProperties', () => {
+        describe('getCommonProperties', () => {
+            const getCommonProperties = Comparator.Utils.ClassProperties.getCommonProperties
+            it('should find common properties', () => {
+                expect(
+                    getCommonProperties(
+                        [
+                            {
+                                type: 'any',
+                                name: 'a',
+                                modifiers: {
+                                    access: 'private',
+                                    usage: 'instance',
+                                },
+                            },
+                            {
+                                type: 'any',
+                                name: 'b',
+                                modifiers: {
+                                    access: 'private',
+                                    usage: 'static',
+                                },
+                            },
+                            {
+                                type: 'any',
+                                name: 'c',
+                                modifiers: {
+                                    access: 'protected',
+                                    usage: 'instance',
+                                },
+                            },
+                        ],
+                        [
+                            {
+                                type: 'any',
+                                name: 'a',
+                                modifiers: {
+                                    access: 'private' as Signatures.AccessModifier,
+                                    usage: 'instance' as Signatures.UsageModifier,
+                                },
+                            },
+                            {
+                                type: 'any',
+                                name: 'a',
+                                modifiers: {
+                                    access: 'private' as Signatures.AccessModifier,
+                                    usage: 'static' as Signatures.UsageModifier,
+                                },
+                            },
+                            {
+                                type: 'any',
+                                name: 'c',
+                                modifiers: {
+                                    access: 'public' as Signatures.AccessModifier,
+                                    usage: 'instance' as Signatures.UsageModifier,
+                                },
+                            },
+                        ],
+                        {
+                            resolveKey: p => `${p.modifiers.usage} ${p.name}`,
+                        }
+                    )
+                ).toHaveLength(2)
             })
         })
     })

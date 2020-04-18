@@ -231,22 +231,52 @@ describe('TypesVisitor', () => {
                 properties: [
                     {
                         name: 'publicData',
-                        modifiers: ['public', 'readonly'],
+                        modifiers: {
+                            access: 'public',
+                            usage: 'instance',
+                            write: 'readonly',
+                        },
                         type: 'Map<string, V>',
-                    },
+                    } as Signatures.ClassProperty,
                     {
                         name: 'data',
-                        modifiers: ['private', 'readonly'],
+                        modifiers: {
+                            access: 'private',
+                            usage: 'instance',
+                            write: 'readonly',
+                        },
                         type: 'Map<string, V>',
                     },
                     {
                         name: 'protectedData',
-                        modifiers: ['protected'],
+                        modifiers: {
+                            access: 'protected',
+                            usage: 'instance',
+                        },
                         type: 'Map<string, V>',
                     },
                     {
+                        name: 'noMod',
+                        modifiers: {
+                            access: 'public',
+                            usage: 'instance',
+                        },
+                        type: 'string',
+                    },
+                    {
+                        name: 'stat',
+                        modifiers: {
+                            access: 'public',
+                            usage: 'static',
+                        },
+                        type: 'string',
+                    },
+                    {
                         name: 'fields',
-                        modifiers: ['private'],
+                        modifiers: {
+                            access: 'private',
+                            usage: 'instance',
+                        },
                         type: 'string',
                     },
                 ],
@@ -273,7 +303,10 @@ describe('TypesVisitor', () => {
                 methods: [
                     {
                         name: 'sum',
-                        modifier: 'public',
+                        modifier: {
+                            access: 'public',
+                            usage: 'static',
+                        },
                         returnType: 'number',
                         parameters: [
                             {
@@ -295,7 +328,10 @@ describe('TypesVisitor', () => {
                     },
                     {
                         name: 'div',
-                        modifier: 'protected',
+                        modifier: {
+                            access: 'protected',
+                            usage: 'instance',
+                        },
                         returnType: 'number',
                         parameters: [
                             {
@@ -312,7 +348,10 @@ describe('TypesVisitor', () => {
                     },
                     {
                         name: 'mul',
-                        modifier: 'private',
+                        modifier: {
+                            access: 'private',
+                            usage: 'instance',
+                        },
                         returnType: 'number',
                         parameters: [
                             {

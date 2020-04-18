@@ -14,7 +14,10 @@ import { changed_method_parameter_modifier_to_required } from './checkers/change
 import { changed_method_parameter_required_count } from './checkers/changed_method_parameter_required_count'
 import { added_method } from './checkers/added_method'
 import { removed_method } from './checkers/removed_method'
-import { createMethodModifierChecker } from './checkers/reusable/changed_modifier.reusable'
+import {
+    createMethodModifierChecker,
+    createPropertyModifierChecker,
+} from './checkers/reusable/changed_modifier.reusable'
 
 export type ComparatorRegistry = Record<
     Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>,
@@ -38,10 +41,18 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
     removed_method,
     changed_method_modifier_more_visible: createMethodModifierChecker({
         changeCode: 'changed_method_modifier_more_visible',
-        compareModifiers: Comparator.Utils.Methods.Modifiers.isMoreVisible,
+        compareModifiers: Comparator.Utils.Modifiers.isMoreVisible,
     }),
     changed_method_modifier_less_visible: createMethodModifierChecker({
         changeCode: 'changed_method_modifier_less_visible',
-        compareModifiers: Comparator.Utils.Methods.Modifiers.isLessVisible,
+        compareModifiers: Comparator.Utils.Modifiers.isLessVisible,
+    }),
+    changed_property_modifier_less_visible: createPropertyModifierChecker({
+        changeCode: 'changed_property_modifier_less_visible',
+        compareModifiers: Comparator.Utils.Modifiers.isLessVisible,
+    }),
+    changed_property_modifier_more_visible: createPropertyModifierChecker({
+        changeCode: 'changed_property_modifier_more_visible',
+        compareModifiers: Comparator.Utils.Modifiers.isMoreVisible,
     }),
 }

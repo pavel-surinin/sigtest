@@ -123,4 +123,18 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'class',
         status: 'breaking',
     },
+    changed_property_modifier_more_visible: {
+        action: 'changed',
+        code: 'changed_property_modifier_more_visible',
+        description: 'Property access modifier changed, to be less restrictive.',
+        memberType: 'class',
+        status: 'compatible',
+    },
+    changed_property_modifier_less_visible: {
+        action: 'changed',
+        code: 'changed_property_modifier_less_visible',
+        description: 'Property access modifier changed, to be more restrictive.',
+        memberType: 'class',
+        status: 'breaking',
+    },
 }

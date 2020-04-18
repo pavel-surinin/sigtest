@@ -46,6 +46,9 @@ export namespace Comparator {
         | 'removed_method'
         | 'changed_method_modifier_more_visible'
         | 'changed_method_modifier_less_visible'
+        //    property
+        | 'changed_property_modifier_more_visible'
+        | 'changed_property_modifier_less_visible'
 
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
@@ -159,36 +162,29 @@ export namespace Comparator {
             }
         }
         export namespace Methods {
-            export namespace Modifiers {
-                const ACCESS_MODIFIER_ORDER: Record<Signatures.AccessModifier, number> = {
-                    private: 10,
-                    protected: 20,
-                    public: 30,
-                }
-                export function isLessVisible(
-                    m1: Signatures.AccessModifier,
-                    m2: Signatures.AccessModifier
-                ): boolean {
-                    return ACCESS_MODIFIER_ORDER[m1] < ACCESS_MODIFIER_ORDER[m2]
-                }
-                export function isMoreVisible(
-                    m1: Signatures.AccessModifier,
-                    m2: Signatures.AccessModifier
-                ): boolean {
-                    return ACCESS_MODIFIER_ORDER[m1] > ACCESS_MODIFIER_ORDER[m2]
-                }
-            }
-
             export namespace ToStrings {
-                export function modifier_name_parameters(
-                    method: Signatures.MethodDefinition
-                ): string {
-                    return `${method.modifier} ${method.name}(${method.parameters
+                export function name_parameters(method: Signatures.MethodDefinition): string {
+                    return `${method.name}(${method.parameters.map(p => p.name).join(', ')})`
+                }
+                export function usage_name_parameters(method: Signatures.MethodDefinition): string {
+                    let usage = ''
+                    if (method.modifier.usage === 'static') {
+                        usage = 'static '
+                    }
+                    return `${usage}${method.name}(${method.parameters
                         .map(p => p.name)
                         .join(', ')})`
                 }
-                export function name_parameters(method: Signatures.MethodDefinition): string {
-                    return `${method.name} (${method.parameters.map(p => p.name).join(', ')})`
+                export function modifier_name_parameters(
+                    method: Signatures.MethodDefinition
+                ): string {
+                    let usage = ''
+                    if (method.modifier.usage === 'static') {
+                        usage = 'static '
+                    }
+                    return `${usage}${method.modifier.access} ${
+                        method.name
+                    }(${method.parameters.map(p => p.name).join(', ')})`
                 }
             }
             export function getCommonMethods(
@@ -203,20 +199,82 @@ export namespace Comparator {
                 beforeMethod: Signatures.MethodDefinition
                 afterMethod: Signatures.MethodDefinition
             }[] {
-                const defaultIsApplicable = (method: Signatures.MethodDefinition) =>
-                    method.modifier !== 'private'
                 const resolveKey = options?.resolveMethodKey || ToStrings.modifier_name_parameters
-                const isApplicable = options?.isApplicable || defaultIsApplicable
+                const isApplicable = options?.isApplicable || Methods.isNotPrivate
                 const afterMethods = v1Methods
                     .filter(isApplicable)
                     .reduce(Reducer.toObject(resolveKey), {})
-                return v0Methods
+                const methods = []
+                for (const beforeMethod of v0Methods) {
+                    if (isApplicable(beforeMethod)) {
+                        const methodKey = resolveKey(beforeMethod)
+                        if (afterMethods[methodKey]) {
+                            methods.push({
+                                beforeMethod,
+                                afterMethod: afterMethods[resolveKey(beforeMethod)],
+                            })
+                        }
+                    }
+                }
+                return methods
+            }
+            export function isNotPrivate(m: Signatures.MethodDefinition) {
+                return m.modifier.access !== 'private'
+            }
+        }
+        export namespace Modifiers {
+            const ACCESS_MODIFIER_ORDER: Record<Signatures.AccessModifier, number> = {
+                private: 10,
+                protected: 20,
+                public: 30,
+            }
+            export function isLessVisible(
+                m1: Signatures.AccessModifier,
+                m2: Signatures.AccessModifier
+            ): boolean {
+                return ACCESS_MODIFIER_ORDER[m1] < ACCESS_MODIFIER_ORDER[m2]
+            }
+            export function isMoreVisible(
+                m1: Signatures.AccessModifier,
+                m2: Signatures.AccessModifier
+            ): boolean {
+                return ACCESS_MODIFIER_ORDER[m1] > ACCESS_MODIFIER_ORDER[m2]
+            }
+        }
+        export namespace ClassProperties {
+            export namespace ToStrings {
+                export function usage_name(property: Signatures.ClassProperty) {
+                    const modifier =
+                        property.modifiers.usage === 'instance'
+                            ? ''
+                            : property.modifiers.usage + ' '
+                    return `${modifier}${property.name}`
+                }
+                export function name(property: Signatures.ClassProperty) {
+                    return property.name
+                }
+            }
+
+            export function getCommonProperties(
+                p0: Signatures.ClassProperty[],
+                p1: Signatures.ClassProperty[],
+                options?: {
+                    resolveKey?: (method: Signatures.ClassProperty) => string
+                }
+            ) {
+                function isApplicable(s: Signatures.ClassProperty) {
+                    return true
+                }
+                const resolveKey = options?.resolveKey || ToStrings.name
+
+                const afterMethods = p1.filter(isApplicable).reduce(toObject(resolveKey), {})
+                return p0
                     .filter(isApplicable)
-                    .map(beforeMethod => ({
-                        beforeMethod,
-                        afterMethod: afterMethods[resolveKey(beforeMethod)],
+                    .map(beforeProp => ({
+                        beforeProp: beforeProp,
+                        afterProp: afterMethods[resolveKey(beforeProp)],
                     }))
-                    .filter(p => Boolean(p.afterMethod))
+                    .filter(p => Boolean(p.afterProp))
             }
         }
     }
