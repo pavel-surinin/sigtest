@@ -18,7 +18,7 @@ export function changed_constructor_parameter_type_union({
             .filter(p => Boolean(afterObj[p.name]))
             .map(beforeParam => ({ beforeParam, afterParam: afterObj[beforeParam.name] }))
             .filter(p =>
-                Comparator.Utils.Types.isMoreApplicable(p.beforeParam.type, p.afterParam.type)
+                Comparator.Utils.Types.areMoreApplicable(p.beforeParam.type, p.afterParam.type)
             )
 
         if (changedTypeParams.length) {

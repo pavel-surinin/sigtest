@@ -19,7 +19,7 @@ export function changed_method_return_type_union({
             .filter(method => Boolean(afterObj[method.name]))
             .map(beforeMethod => ({ beforeMethod, afterMethod: afterObj[beforeMethod.name] }))
             .filter(method =>
-                Comparator.Utils.Types.isMoreApplicable(
+                Comparator.Utils.Types.areMoreApplicable(
                     method.beforeMethod.returnType,
                     method.afterMethod.returnType
                 )

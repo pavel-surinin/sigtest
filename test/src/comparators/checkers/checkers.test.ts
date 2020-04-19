@@ -832,4 +832,129 @@ describe('Comparator', () => {
             } as ComparatorTestPayload).toPassComparison()
         })
     })
+    describe('changed_class_property_type_union', () => {
+        it('should find changed type', () => {
+            expect({
+                v1: `
+                export class Test {
+                    private a: 'b' | 'c' = 'b'
+                    b: 'b' | 'c' = 'b'
+                    static b: 'b' | 'c' = 'b'
+                    d = 'a'
+                }
+                `,
+                v2: `
+                export class Test {
+                    private a: 'b' | 'c' | 'd' = 'b'
+                    b: 'b' | 'c' | 'd' = 'b'
+                    static b: 'b' | 'c' | 'd' = 'b'
+                    d: any
+                }
+                `,
+                code: 'changed_class_property_type_union',
+            } as ComparatorTestPayload).toFailComparison(`Properties changed type:
+    property 'b' from '"b" | "c"' to '"b" | "c" | "d"'
+    property 'static b' from '"b" | "c"' to '"b" | "c" | "d"'
+    property 'd' from 'string' to 'any'`)
+        })
+        it('should not find changed type', () => {
+            expect({
+                v1: `
+                export class Test {
+                    private a: any = 'a'
+                    b: 'a' | 'b' | 'c' = 'c'
+                }
+                `,
+                v2: `
+                export class Test {
+                    private a = false
+                    b: 'a' | 'b' = 'a'
+                }
+                `,
+                code: 'changed_class_property_type_union',
+            } as ComparatorTestPayload).toPassComparison()
+        })
+    })
+    describe('changed_class_property_to_readonly', () => {
+        it('should find changes', () => {
+            expect({
+                v1: `
+                export class Test {
+                    private a = 'a'
+                    static a = 'a'
+                    readonly b = 'b'
+                } 
+                `,
+                v2: `
+                export class Test {
+                    private readonly a = 'a'
+                    readonly static a = 'a'
+                    b = 'b'
+                } 
+                `,
+                code: 'changed_class_property_to_readonly',
+            } as ComparatorTestPayload).toFailComparison(`Properties changed write modifier:
+    property 'static a' from '' to 'readonly'`)
+        })
+        it('should not find changes', () => {
+            expect({
+                v1: `
+                export class Test {
+                    private a = 'a'
+                    readonly static a = 'a'
+                    b = 'b'
+                } 
+                `,
+                v2: `
+                export class Test {
+                    private readonly a = 'a'
+                    static a = 'a'
+                } 
+                `,
+                code: 'changed_class_property_to_readonly',
+            } as ComparatorTestPayload).toPassComparison()
+        })
+    })
+    describe('changed_class_property_to_not_readonly', () => {
+        it('should find changes', () => {
+            expect({
+                v1: `
+                export class Test {
+                    readonly private a = 'a'
+                    readonly static a = 'a'
+                    readonly b = 'b'
+                } 
+                `,
+                v2: `
+                export class Test {
+                    private a = 'a'
+                    static a = 'a'
+                    b = 'b'
+                } 
+                `,
+                code: 'changed_class_property_to_not_readonly',
+            } as ComparatorTestPayload).toFailComparison(`Properties changed write modifier:
+    property 'static a' from 'readonly' to ''
+    property 'b' from 'readonly' to ''`)
+        })
+        it('should not find changes', () => {
+            expect({
+                v1: `
+                export class Test {
+                    private a = 'a'
+                    static a = 'a'
+                    b = 'b'
+                } 
+                `,
+                v2: `
+                export class Test {
+                    readonly private a = 'a'
+                    readonly static a = 'a'
+                    readonly b = 'b'
+                } 
+                `,
+                code: 'changed_class_property_to_not_readonly',
+            } as ComparatorTestPayload).toPassComparison()
+        })
+    })
 })

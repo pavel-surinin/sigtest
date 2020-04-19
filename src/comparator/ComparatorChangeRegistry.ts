@@ -158,4 +158,25 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'class',
         status: 'breaking',
     },
+    changed_class_property_type_union: {
+        action: 'changed',
+        code: 'changed_class_property_type_union',
+        description: 'Property type was changed to less strict',
+        memberType: 'class',
+        status: 'compatible',
+    },
+    changed_class_property_to_readonly: {
+        action: 'changed',
+        code: 'changed_class_property_to_readonly',
+        description: 'Property write access was changed to more strict',
+        memberType: 'class',
+        status: 'breaking',
+    },
+    changed_class_property_to_not_readonly: {
+        action: 'changed',
+        code: 'changed_class_property_type_union',
+        description: 'Property write access was changed to less strict',
+        memberType: 'class',
+        status: 'compatible',
+    },
 }

@@ -1,5 +1,10 @@
 import { Comparator } from './Comparators'
 
+import {
+    createMethodModifierChecker,
+    createPropertyModifierChecker,
+} from './checkers/reusable/changed_modifier.reusable'
+
 import { changed_member_type } from './checkers/changed-member-type'
 import { member_removal } from './checkers/member_removal'
 import { changed_required_constructor_parameters_count } from './checkers/changed_required_constructor_parameters_count'
@@ -14,13 +19,10 @@ import { changed_method_parameter_modifier_to_required } from './checkers/change
 import { changed_method_parameter_required_count } from './checkers/changed_method_parameter_required_count'
 import { added_method } from './checkers/added_method'
 import { removed_method } from './checkers/removed_method'
-import {
-    createMethodModifierChecker,
-    createPropertyModifierChecker,
-} from './checkers/reusable/changed_modifier.reusable'
+import { createChangeTypeChecker } from './checkers/reusable/changed_class_property_type.reusable'
 import { removed_class_property } from './checkers/removed_class_property'
 import { added_class_property } from './checkers/added_class_property'
-import { changed_class_property_type } from './checkers/changed_class_property_type'
+import { createChangeWriteChecker } from './checkers/reusable/changed_class_property_write.reusable'
 
 export type ComparatorRegistry = Record<
     Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>,
@@ -60,5 +62,20 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
     }),
     removed_class_property,
     added_class_property,
-    changed_class_property_type,
+    changed_class_property_type: createChangeTypeChecker({
+        changeCode: 'changed_class_property_type',
+        compareTypes: Comparator.Utils.Types.areNotCompatible,
+    }),
+    changed_class_property_type_union: createChangeTypeChecker({
+        changeCode: 'changed_class_property_type_union',
+        compareTypes: Comparator.Utils.Types.areMoreApplicable,
+    }),
+    changed_class_property_to_readonly: createChangeWriteChecker({
+        changeCode: 'changed_class_property_to_readonly',
+        compareWriteModifiers: Comparator.Utils.Modifiers.isNotReadOnlyCompatible,
+    }),
+    changed_class_property_to_not_readonly: createChangeWriteChecker({
+        changeCode: 'changed_class_property_to_not_readonly',
+        compareWriteModifiers: Comparator.Utils.Modifiers.isReadOnlyCompatible,
+    }),
 }

@@ -11,7 +11,7 @@
         "prefix": "checktest",
         "body": [
             "describe('$1', () => {",
-            "\tit('should ', () => {",
+            "\tit('should find changes', () => {",
             "\t\texpect({",
             "\t\t\tv1: `",
             "\t\t\t`,",
@@ -20,7 +20,7 @@
             "\t\tcode: '$1',",
             "\t\t} as ComparatorTestPayload).toFailComparison(``)",
             "\t})",
-            "\tit('should not ', () => {",
+            "\tit('should not find changes', () => {",
             "\t\texpect({",
             "\t\t\tv1: `",
             "\t\t\t`,",

@@ -53,9 +53,12 @@ export namespace Comparator {
         | 'removed_class_property'
         | 'added_class_property'
         | 'changed_class_property_type'
-    // | changed_class_property_type_union
-    // | changed_class_property_to_readonly
-    // | changed_class_property_to_not_readonly
+        | 'changed_class_property_type_union'
+        | 'changed_class_property_to_readonly'
+        | 'changed_class_property_to_not_readonly'
+    //    generics
+    // | removed_generic
+    // | added_required_generic
 
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
@@ -91,7 +94,12 @@ export namespace Comparator {
                 const v1Types = v1.split('|').map(s => s.trim())
                 return v0Types.every(ut => v1Types.includes(ut))
             }
-            export function isMoreApplicable(v0: string, v1: string): boolean {
+
+            export function areNotCompatible(v0: string, v1: string): boolean {
+                return !areCompatible(v0, v1)
+            }
+
+            export function areMoreApplicable(v0: string, v1: string): boolean {
                 if (v0.trim() === v1.trim()) {
                     return false
                 }
@@ -255,6 +263,18 @@ export namespace Comparator {
             ): boolean {
                 return ACCESS_MODIFIER_ORDER[m1] > ACCESS_MODIFIER_ORDER[m2]
             }
+            export function isReadOnlyCompatible(
+                m1: Signatures.WriteModifier | undefined,
+                m2: Signatures.WriteModifier | undefined
+            ): boolean {
+                return m1 === m2 || m1 === 'readonly'
+            }
+            export function isNotReadOnlyCompatible(
+                m1?: Signatures.WriteModifier,
+                m2?: Signatures.WriteModifier
+            ): boolean {
+                return !isReadOnlyCompatible(m1, m2)
+            }
         }
         export namespace ClassProperties {
             export namespace ToStrings {
@@ -264,7 +284,6 @@ export namespace Comparator {
                         property.modifiers.usage === 'instance'
                             ? ''
                             : property.modifiers.usage + ' '
-                    console.log(`${modifier}${property.name}`)
                     return `${modifier}${property.name}`
                 }
                 export function name(property: Signatures.ClassProperty) {

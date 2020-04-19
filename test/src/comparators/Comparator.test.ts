@@ -32,7 +32,7 @@ describe('Comparator.Utils', () => {
             })
         })
         describe('isMoreApplicable', () => {
-            const isMoreApplicable = Comparator.Utils.Types.isMoreApplicable
+            const isMoreApplicable = Comparator.Utils.Types.areMoreApplicable
             it('should check v1 union type', () => {
                 expect(isMoreApplicable('string', 'string|number')).toBeTruthy()
                 expect(isMoreApplicable('string|number', 'string |  number  | Date')).toBeTruthy()
@@ -364,20 +364,34 @@ describe('Comparator.Utils', () => {
         })
     })
     describe('Modifiers', () => {
-        const isLessVisible = Comparator.Utils.Modifiers.isLessVisible
-        const isMoreVisible = Comparator.Utils.Modifiers.isMoreVisible
         it('should compare to be less visible', () => {
+            const isLessVisible = Comparator.Utils.Modifiers.isLessVisible
             expect(isLessVisible('private', 'protected')).toBeTruthy()
             expect(isLessVisible('private', 'public')).toBeTruthy()
             expect(isLessVisible('protected', 'public')).toBeTruthy()
             expect(isLessVisible('public', 'public')).toBeFalsy()
         })
         it('should compare to be more visible', () => {
+            const isMoreVisible = Comparator.Utils.Modifiers.isMoreVisible
             expect(isMoreVisible('public', 'protected')).toBeTruthy()
             expect(isMoreVisible('public', 'private')).toBeTruthy()
             expect(isMoreVisible('protected', 'private')).toBeTruthy()
             expect(isMoreVisible('protected', 'protected')).toBeFalsy()
             expect(isMoreVisible('protected', 'public')).toBeFalsy()
+        })
+        it('should compare write modifiers with isReadOnlyCompatible', () => {
+            const isReadOnlyCompatible = Comparator.Utils.Modifiers.isReadOnlyCompatible
+            expect(isReadOnlyCompatible('readonly', 'readonly')).toBeTruthy()
+            expect(isReadOnlyCompatible(undefined, undefined)).toBeTruthy()
+            expect(isReadOnlyCompatible('readonly', undefined)).toBeTruthy()
+            expect(isReadOnlyCompatible(undefined, 'readonly')).toBeFalsy()
+        })
+        it('should compare write modifiers with isNotReadOnlyCompatible', () => {
+            const isNotReadOnlyCompatible = Comparator.Utils.Modifiers.isNotReadOnlyCompatible
+            expect(isNotReadOnlyCompatible('readonly', 'readonly')).toBeFalsy()
+            expect(isNotReadOnlyCompatible(undefined, undefined)).toBeFalsy()
+            expect(isNotReadOnlyCompatible('readonly', undefined)).toBeFalsy()
+            expect(isNotReadOnlyCompatible(undefined, 'readonly')).toBeTruthy()
         })
     })
     describe('ClassProperties', () => {

@@ -11,5 +11,11 @@
         "prefix": "suite",
         "body": ["describe('$1', () => {", "\tit('should ', () => {", "\t})", "})"],
         "description": "Jest Test Suite"
+    },
+    "it": {
+        "scope": "typescript",
+        "body": ["it('should $1', () => {", "})"],
+        "prefix": "it",
+        "description": "jest it block"
     }
 }
