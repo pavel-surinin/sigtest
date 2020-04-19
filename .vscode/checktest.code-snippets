@@ -17,20 +17,38 @@
             "\t\t\t`,",
             "\t\t\tv2: `",
             "\t\t\t`,",
-            "\t\tcode: '$1' as Comparator.ChangeCode,",
-            "\t\t}).toFailComparison(``)",
+            "\t\tcode: '$1',",
+            "\t\t} as ComparatorTestPayload).toFailComparison(``)",
             "\t})",
             "\tit('should not ', () => {",
             "\t\texpect({",
-            "\t\t\tv2: `",
-            "\t\t\t`,",
             "\t\t\tv1: `",
             "\t\t\t`,",
-            "\t\tcode: '$1' as Comparator.ChangeCode,",
-            "\t\t}).toPassComparison()",
+            "\t\t\tv2: `",
+            "\t\t\t`,",
+            "\t\tcode: '$1',",
+            "\t\t} as ComparatorTestPayload).toPassComparison()",
             "\t})",
             "})"
         ],
         "description": "Create suite for Comparator"
+    },
+    "Create Comparator": {
+        "scope": "typescript",
+        "prefix": "checker",
+        "body": [
+            "export function $1({",
+            "\tbefore,",
+            "\tafter,",
+            "}: Comparator.CompareOpt<Signatures.SignatureType>): Comparator.Change<'$1'> {",
+            "\tif (after && after.memberType === 'class' && before.memberType === 'class') {",
+            "\t}",
+            "\treturn {",
+            "\t\tinfo: CHANGE_REGISTRY.no_change,",
+            "\t\tsignatures: { before, after },",
+            "\t}",
+            "}"
+        ],
+        "description": "Create Comparator"
     }
 }

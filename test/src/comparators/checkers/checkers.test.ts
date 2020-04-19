@@ -1,5 +1,5 @@
 import { Comparator } from '../../../../src/comparator/Comparators'
-import { comparatorMatcher } from '../../../matchers/Comparator.matcher'
+import { comparatorMatcher, ComparatorTestPayload } from '../../../matchers/Comparator.matcher'
 
 beforeAll(comparatorMatcher.cleanGenerated)
 
@@ -723,6 +723,113 @@ describe('Comparator', () => {
                 `,
                 code: 'changed_property_modifier_less_visible' as Comparator.ChangeCode,
             }).toPassComparison()
+        })
+    })
+    describe('removed_class_property', () => {
+        it('should find property removal', () => {
+            expect({
+                v1: `
+                export class Test {
+                    a = false
+                    static a = false
+                    protected b = false
+                    private c = false
+                }`,
+                v2: `
+                export class Test {
+                }`,
+                code: 'removed_class_property',
+            } as ComparatorTestPayload).toFailComparison(`Properties removed: 'a', 'static a', 'b'`)
+        })
+        it('should not find removed property', () => {
+            expect({
+                v1: `
+                export class Test {
+                    private c = false
+                }`,
+                v2: `
+                export class Test {
+                    static a = false
+                    a = false
+                }`,
+                code: 'removed_class_property',
+            } as ComparatorTestPayload).toPassComparison()
+        })
+    })
+    describe('added_class_property', () => {
+        it('should find added property', () => {
+            expect({
+                v1: `
+                export class Test {
+                }
+                `,
+                v2: `
+                export class Test {
+                    private a = 'a'
+                    protected b = 'b'
+                    c = 'c'
+                    static c = 'c'
+                }
+                `,
+                code: 'added_class_property',
+            } as ComparatorTestPayload).toFailComparison(`Properties added: 'b', 'c', 'static c'`)
+        })
+        it('should not find added property', () => {
+            expect({
+                v2: `
+                export class Test {
+                }
+                `,
+                v1: `
+                export class Test {
+                    private a = 'a'
+                    protected b = 'b'
+                    c = 'c'
+                    static c = 'c'
+                }
+                `,
+                code: 'added_class_property',
+            } as ComparatorTestPayload).toPassComparison()
+        })
+    })
+    describe('changed_class_property_type', () => {
+        it('should find changed type', () => {
+            expect({
+                v1: `
+                export class Test {
+                    private a = 'a'
+                    b = 'b'
+                    static b = 'b'
+                }
+                `,
+                v2: `
+                export class Test {
+                    private a = false
+                    b = false
+                    static b = false
+                }
+                `,
+                code: 'changed_class_property_type',
+            } as ComparatorTestPayload).toFailComparison(`Properties changed type:
+    property 'b' from 'string' to 'boolean'
+    property 'static b' from 'string' to 'boolean'`)
+        })
+        it('should not find changed type', () => {
+            expect({
+                v1: `
+                export class Test {
+                    private a = false
+                    b: 'a' | 'b' = 'a'
+                }
+                `,
+                v2: `
+                export class Test {
+                    private a = 'a'
+                    b: 'a' | 'b' | 'c' = 'c'
+                }
+                `,
+                code: 'changed_class_property_type',
+            } as ComparatorTestPayload).toPassComparison()
         })
     })
 })

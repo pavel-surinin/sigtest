@@ -1,5 +1,6 @@
 import { Comparator } from '../../../src/comparator/Comparators'
 import { Signatures } from '../../../src/App.types'
+import { Reducer } from 'declarative-js'
 
 describe('Comparator.Utils', () => {
     describe('Types', () => {
@@ -442,6 +443,76 @@ describe('Comparator.Utils', () => {
                         }
                     )
                 ).toHaveLength(2)
+            })
+        })
+    })
+    describe('Common', () => {
+        describe('isIn', () => {
+            const isIn = Comparator.Utils.Common.isIn
+            it('should find common', () => {
+                const v1: Signatures.ClassProperty[] = [
+                    {
+                        modifiers: { access: 'private', usage: 'instance' },
+                        name: 'test1',
+                        type: 'any',
+                    },
+                    {
+                        modifiers: { access: 'private', usage: 'instance' },
+                        name: 'test2',
+                        type: 'any',
+                    },
+                ]
+                const v2: Signatures.ClassProperty[] = [
+                    {
+                        modifiers: { access: 'private', usage: 'instance' },
+                        name: 'test1',
+                        type: 'any',
+                    },
+                    {
+                        modifiers: { access: 'private', usage: 'instance' },
+                        name: 'test3',
+                        type: 'any',
+                    },
+                ]
+                const obj = v1.reduce(
+                    Reducer.toObject(x => x.name),
+                    {}
+                )
+                expect(v2.filter(isIn(obj, x => x.name))).toHaveLength(1)
+            })
+        })
+        describe('isNotIn', () => {
+            const isNotIn = Comparator.Utils.Common.isNotIn
+            it('should find common', () => {
+                const v1: Signatures.ClassProperty[] = [
+                    {
+                        modifiers: { access: 'private', usage: 'instance' },
+                        name: 'test1',
+                        type: 'any',
+                    },
+                    {
+                        modifiers: { access: 'private', usage: 'instance' },
+                        name: 'test2',
+                        type: 'any',
+                    },
+                ]
+                const v2: Signatures.ClassProperty[] = [
+                    {
+                        modifiers: { access: 'private', usage: 'instance' },
+                        name: 'test1',
+                        type: 'any',
+                    },
+                    {
+                        modifiers: { access: 'private', usage: 'instance' },
+                        name: 'test2',
+                        type: 'any',
+                    },
+                ]
+                const obj = v1.reduce(
+                    Reducer.toObject(x => x.name),
+                    {}
+                )
+                expect(v2.filter(isNotIn(obj, x => x.name))).toHaveLength(0)
             })
         })
     })

@@ -137,4 +137,25 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'class',
         status: 'breaking',
     },
+    removed_class_property: {
+        action: 'changed',
+        code: 'removed_class_property',
+        description: 'Property was removed from class.',
+        memberType: 'class',
+        status: 'breaking',
+    },
+    added_class_property: {
+        action: 'added',
+        code: 'added_class_property',
+        description: 'Property was added to class.',
+        memberType: 'class',
+        status: 'compatible',
+    },
+    changed_class_property_type: {
+        action: 'changed',
+        code: 'changed_class_property_type',
+        description: 'Property type was changed',
+        memberType: 'class',
+        status: 'breaking',
+    },
 }

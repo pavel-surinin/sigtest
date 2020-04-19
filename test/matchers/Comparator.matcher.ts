@@ -75,13 +75,15 @@ class SignatureProvider {
     }
 }
 
+export type ComparatorTestPayload = {
+    v1: string
+    v2: string
+    code: Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>
+}
+
 function toFailComparison(
     this: jest.MatcherContext,
-    received: {
-        v1: string
-        v2: string
-        code: Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>
-    },
+    received: ComparatorTestPayload,
     actual: string
 ): jest.CustomMatcherResult {
     const result = new SignatureProvider(TEST_FILES_FOLDER).compare(received)
@@ -139,11 +141,7 @@ function toFailComparison(
 
 function toPassComparison(
     this: jest.MatcherContext,
-    received: {
-        v1: string
-        v2: string
-        code: Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>
-    }
+    received: ComparatorTestPayload
 ): jest.CustomMatcherResult {
     const result = new SignatureProvider(TEST_FILES_FOLDER).compare(received)
     if (result.changes.length !== 1) {

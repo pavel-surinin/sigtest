@@ -18,6 +18,9 @@ import {
     createMethodModifierChecker,
     createPropertyModifierChecker,
 } from './checkers/reusable/changed_modifier.reusable'
+import { removed_class_property } from './checkers/removed_class_property'
+import { added_class_property } from './checkers/added_class_property'
+import { changed_class_property_type } from './checkers/changed_class_property_type'
 
 export type ComparatorRegistry = Record<
     Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>,
@@ -55,4 +58,7 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
         changeCode: 'changed_property_modifier_more_visible',
         compareModifiers: Comparator.Utils.Modifiers.isMoreVisible,
     }),
+    removed_class_property,
+    added_class_property,
+    changed_class_property_type,
 }

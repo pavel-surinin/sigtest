@@ -1,6 +1,7 @@
 import { Signatures } from '../App.types'
 import { Reducer } from 'declarative-js'
 import toObject = Reducer.toObject
+import { memoize } from 'auto-memoize'
 
 export namespace Comparator {
     export type Action = 'removed' | 'added' | 'changed' | 'none'
@@ -49,9 +50,9 @@ export namespace Comparator {
         //    property
         | 'changed_property_modifier_more_visible'
         | 'changed_property_modifier_less_visible'
-    // | removed_class_property
-    // | added_class_property
-    // | changed_class_property_type
+        | 'removed_class_property'
+        | 'added_class_property'
+        | 'changed_class_property_type'
     // | changed_class_property_type_union
     // | changed_class_property_to_readonly
     // | changed_class_property_to_not_readonly
@@ -66,6 +67,14 @@ export namespace Comparator {
 
     export namespace Utils {
         export namespace Types {
+            /**
+             * Check compatibility between types
+             *
+             * @export
+             * @param {string} v0 type before
+             * @param {string} v1 type after
+             * @returns {boolean} are types compatible
+             */
             export function areCompatible(v0: string, v1: string): boolean {
                 if (v0.trim() === v1.trim()) {
                     return true
@@ -249,16 +258,22 @@ export namespace Comparator {
         }
         export namespace ClassProperties {
             export namespace ToStrings {
-                export function usage_name(property: Signatures.ClassProperty) {
+                export const usage_name = memoize(_usage_name, 'weak')
+                function _usage_name(property: Signatures.ClassProperty) {
                     const modifier =
                         property.modifiers.usage === 'instance'
                             ? ''
                             : property.modifiers.usage + ' '
+                    console.log(`${modifier}${property.name}`)
                     return `${modifier}${property.name}`
                 }
                 export function name(property: Signatures.ClassProperty) {
                     return property.name
                 }
+            }
+
+            export function isNotPrivate(property: Signatures.ClassProperty): boolean {
+                return property.modifiers.access !== 'private'
             }
 
             export function getCommonProperties(
@@ -281,6 +296,18 @@ export namespace Comparator {
                         afterProp: afterMethods[resolveKey(beforeProp)],
                     }))
                     .filter(p => Boolean(p.afterProp))
+            }
+        }
+        export namespace Common {
+            export function isIn<T>(object: Record<string, T>, toKey: (el: T) => string) {
+                return function _isIn(el: T): boolean {
+                    return object[toKey(el)] != null
+                }
+            }
+            export function isNotIn<T>(object: Record<string, T>, toKey: (el: T) => string) {
+                return function _isNotIn(el: T): boolean {
+                    return object[toKey(el)] == null
+                }
             }
         }
     }
