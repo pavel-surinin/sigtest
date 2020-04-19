@@ -49,6 +49,12 @@ export namespace Comparator {
         //    property
         | 'changed_property_modifier_more_visible'
         | 'changed_property_modifier_less_visible'
+    // | removed_class_property
+    // | added_class_property
+    // | changed_class_property_type
+    // | changed_class_property_type_union
+    // | changed_class_property_to_readonly
+    // | changed_class_property_to_not_readonly
 
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status

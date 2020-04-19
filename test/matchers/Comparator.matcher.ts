@@ -167,8 +167,9 @@ expect.extend({
 
 export const comparatorMatcher = {
     cleanGenerated: () => {
-        readdirSync(join(TEST_FILES_FOLDER, 'checkers')).forEach(x =>
-            unlinkSync(join(TEST_FILES_FOLDER, 'checkers', x))
-        )
+        const checkersPath = join(TEST_FILES_FOLDER, 'checkers')
+        if (existsSync(checkersPath)) {
+            readdirSync(checkersPath).forEach(x => unlinkSync(join(checkersPath, x)))
+        }
     },
 }
