@@ -957,4 +957,107 @@ describe('Comparator', () => {
             } as ComparatorTestPayload).toPassComparison()
         })
     })
+    describe('removed_generic', () => {
+        it('should find changes', () => {
+            expect({
+                v1: `export class Test<T, E> {
+                }`,
+                v2: `export class Test<T> {
+                }`,
+                code: 'removed_generic',
+            } as ComparatorTestPayload).toFailComparison(`Removed class generics: 'E'`)
+        })
+        it('should not find changes', () => {
+            expect({
+                v1: `export class Test<T> {
+                }`,
+                v2: `export class Test<T, E> {
+                        }`,
+                code: 'removed_generic',
+            } as ComparatorTestPayload).toPassComparison()
+        })
+    })
+    describe('added_required_generic', () => {
+        it('should find changes', () => {
+            expect({
+                v1: `export class Test<T> {
+                }`,
+                v2: `export class Test<T, E> {
+                }`,
+                code: 'added_required_generic',
+            } as ComparatorTestPayload).toFailComparison(`Added class generics: 'E'`)
+        })
+        it('should not find changes', () => {
+            expect({
+                v1: `export class Test<T> {
+                }`,
+                v2: `export class Test<T, E = any> {
+                }`,
+                code: 'added_required_generic',
+            } as ComparatorTestPayload).toPassComparison()
+        })
+    })
+    describe('added_optional_generic', () => {
+        it('should find changes', () => {
+            expect({
+                v1: `export class Test<T> {
+                }`,
+                v2: `export class Test<T, E = any> {
+                }`,
+                code: 'added_optional_generic',
+            } as ComparatorTestPayload).toFailComparison(`Added class generics: 'E'`)
+        })
+        it('should not find changes', () => {
+            expect({
+                v1: `export class Test<T> {
+                }`,
+                v2: `export class Test<T, E extends string> {
+                }`,
+                code: 'added_optional_generic',
+            } as ComparatorTestPayload).toPassComparison()
+        })
+    })
+    describe('changed_generic_extends_type', () => {
+        it('should find changes', () => {
+            expect({
+                v1: `export class Test<E extends number, C> {
+                }`,
+                v2: `export class Test<E extends string, C extends Date> {
+                }`,
+                code: 'changed_generic_extends_type',
+            } as ComparatorTestPayload).toFailComparison(`Generics changed type:
+    generic 'E' from 'number' to 'string'
+    generic 'C' from 'any' to 'Date'`)
+        })
+        it('should not find changes', () => {
+            expect({
+                v1: `export class Test<E extends number> {
+                }`,
+                v2: `export class Test<E extends any> {
+                }`,
+                code: 'changed_generic_extends_type',
+            } as ComparatorTestPayload).toPassComparison()
+        })
+    })
+    describe('changed_generic_extends_type_to_less_strict', () => {
+        it('should find changes', () => {
+            expect({
+                v1: `export class Test<E extends number> {
+                }`,
+                v2: `export class Test<E extends any> {
+                }`,
+                code: 'changed_generic_extends_type_to_less_strict',
+            } as ComparatorTestPayload).toFailComparison(`Generics changed type:
+    generic 'E' from 'number' to 'any'`)
+        })
+        it('should not find changes', () => {
+            expect({
+                v1: `export class Test<E extends any> {
+                }`,
+                v2: `export class Test<E extends string> {
+                }`,
+                code: 'changed_generic_extends_type_to_less_strict',
+            } as ComparatorTestPayload).toPassComparison()
+        })
+    })
 })

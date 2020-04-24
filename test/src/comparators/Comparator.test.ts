@@ -530,4 +530,86 @@ describe('Comparator.Utils', () => {
             })
         })
     })
+    describe('Generics', () => {
+        it('should test addedRequired', () => {
+            const addedRequired = Comparator.Utils.Generics.addedRequired
+            expect(
+                addedRequired({
+                    beforeGeneric: undefined,
+                    afterGeneric: {
+                        name: 'T',
+                    },
+                })
+            ).toBeTruthy()
+            expect(
+                addedRequired({
+                    beforeGeneric: undefined,
+                    afterGeneric: {
+                        name: 'T',
+                        extends: 'string',
+                    },
+                })
+            ).toBeTruthy()
+            expect(
+                addedRequired({
+                    beforeGeneric: undefined,
+                    afterGeneric: {
+                        name: 'T',
+                        default: 'string',
+                    },
+                })
+            ).toBeFalsy()
+            expect(
+                addedRequired({
+                    beforeGeneric: {
+                        name: 'T',
+                        default: 'string',
+                    },
+                    afterGeneric: {
+                        name: 'T',
+                    },
+                })
+            ).toBeFalsy()
+        })
+        it('should test addedOptional', () => {
+            const addedOptional = Comparator.Utils.Generics.addedOptional
+            expect(
+                addedOptional({
+                    beforeGeneric: undefined,
+                    afterGeneric: {
+                        name: 'T',
+                    },
+                })
+            ).toBeFalsy()
+            expect(
+                addedOptional({
+                    beforeGeneric: undefined,
+                    afterGeneric: {
+                        name: 'T',
+                        extends: 'string',
+                    },
+                })
+            ).toBeFalsy()
+            expect(
+                addedOptional({
+                    beforeGeneric: undefined,
+                    afterGeneric: {
+                        name: 'T',
+                        default: 'string',
+                    },
+                })
+            ).toBeTruthy()
+            expect(
+                addedOptional({
+                    beforeGeneric: {
+                        name: 'T',
+                        default: 'string',
+                    },
+                    afterGeneric: {
+                        name: 'T',
+                    },
+                })
+            ).toBeFalsy()
+        })
+    })
 })

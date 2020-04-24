@@ -56,9 +56,18 @@ export namespace Comparator {
         | 'changed_class_property_type_union'
         | 'changed_class_property_to_readonly'
         | 'changed_class_property_to_not_readonly'
-    //    generics
-    // | removed_generic
-    // | added_required_generic
+        //    generics
+        | 'removed_generic'
+        | 'added_required_generic'
+        | 'added_optional_generic'
+        | 'added_optional_generic'
+        | 'changed_generic_extends_type'
+        | 'changed_generic_extends_type_to_less_strict'
+    // constant
+    // | 'added_constant'
+    // | 'removed_constant'
+    // | 'changed_constant_type'
+    // | 'changed_constant_type_to_less_strict'
 
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
@@ -327,6 +336,21 @@ export namespace Comparator {
                 return function _isNotIn(el: T): boolean {
                     return object[toKey(el)] == null
                 }
+            }
+            export function surroundWithQuotes(s: string) {
+                return "'" + s + "'"
+            }
+        }
+        export namespace Generics {
+            export type AddedGenericPair = {
+                beforeGeneric?: Signatures.GenericDefinition
+                afterGeneric: Signatures.GenericDefinition
+            }
+            export function addedRequired(g: AddedGenericPair): boolean {
+                return !g.beforeGeneric && g.afterGeneric.default == null
+            }
+            export function addedOptional(g: AddedGenericPair): boolean {
+                return !g.beforeGeneric && g.afterGeneric.default != null
             }
         }
     }
