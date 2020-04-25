@@ -33,9 +33,9 @@
         ],
         "description": "Create suite for Comparator"
     },
-    "Create Comparator": {
+    "Create Comparator (old)": {
         "scope": "typescript",
-        "prefix": "checker",
+        "prefix": "old_checker",
         "body": [
             "export function $1({",
             "\tbefore,",
@@ -49,6 +49,25 @@
             "\t}",
             "}"
         ],
-        "description": "Create Comparator"
+        "description": "Create Comparator (old)"
+    },
+    "Create Comparator (new)": {
+        "scope": "typescript",
+        "prefix": "checker",
+        "body": [
+            "export const $1 = Comparator.Utils.Common.comparatorFor.enum(signatures => {",
+            "\tconst { after, before } = signatures",
+            "\tconst changed = []",
+            "\tif (changed.length) {",
+            "\t\tconst changedMessage = \"\"",
+            "\t\treturn {",
+            "\t\t\tinfo: CHANGE_REGISTRY.$1,",
+            "\t\t\tsignatures,",
+            "\t\t\tmessage: ``,",
+            "\t\t}",
+            "\t}",
+            "})"
+        ],
+        "description": "Create Comparator (new)"
     }
 }

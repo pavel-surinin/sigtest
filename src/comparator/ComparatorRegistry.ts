@@ -29,10 +29,12 @@ import { removed_method } from './checkers/removed_method'
 import { removed_class_property } from './checkers/removed_class_property'
 import { added_class_property } from './checkers/added_class_property'
 import { removed_generic } from './checkers/removed_generic'
+import { added_enum } from './checkers/added_enum'
+import { Signatures } from '../App.types'
 
 export type ComparatorRegistry = Record<
     Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>,
-    Comparator.Comparator<Comparator.ChangeCode>
+    Comparator.Comparator<Comparator.ChangeCode, Signatures.MemberType>
 >
 
 export const COMPARATOR_REGISTRY: ComparatorRegistry = {
@@ -109,4 +111,5 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
         changeCode: 'changed_constant_type_to_less_strict',
         compareTypes: Comparator.Utils.Types.areMoreApplicable,
     }),
+    added_enum,
 }

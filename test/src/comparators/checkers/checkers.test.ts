@@ -77,8 +77,8 @@ describe('Comparator', () => {
                     code: 'changed_required_constructor_parameters_count' as Comparator.ChangeCode,
                 }).toFailComparison(
                     `Constructor required parameters count changed:
-        added: 'c', 'd'
-        removed: 'b'`
+    added: 'c', 'd'
+    removed: 'b'`
                 )
             })
             it('optional is ignored', () => {
@@ -205,10 +205,10 @@ describe('Comparator', () => {
                     `,
                     code: 'changed_constructor_parameter_type' as Comparator.ChangeCode,
                 }).toFailComparison(`Constructor parameters: 'a', 'b', 'c', 'd' changed types:
-        parameter 'a' before - 'string', current - 'Date'
-        parameter 'b' before - 'string | boolean', current - 'boolean'
-        parameter 'c' before - 'string', current - 'number | boolean'
-        parameter 'd' before - '{ a: 1; } | { b: 2; }', current - '{ a: 1; } & { b: 2; }'`)
+    parameter 'a' before - 'string', current - 'Date'
+    parameter 'b' before - 'string | boolean', current - 'boolean'
+    parameter 'c' before - 'string', current - 'number | boolean'
+    parameter 'd' before - '{ a: 1; } | { b: 2; }', current - '{ a: 1; } & { b: 2; }'`)
             })
             it('should not find changes in parameter types', () => {
                 expect({
@@ -245,8 +245,8 @@ describe('Comparator', () => {
                         `,
                     code: 'changed_constructor_parameter_type_union' as Comparator.ChangeCode,
                 }).toFailComparison(`Constructor parameters: 'a', 'b' changed types:
-        parameter 'a' before - 'string', current - 'string | number'
-        parameter 'b' before - 'string | boolean', current - 'string | number | boolean'`)
+    parameter 'a' before - 'string', current - 'string | number'
+    parameter 'b' before - 'string | boolean', current - 'string | number | boolean'`)
             })
             it('should not find changes to union type', () => {
                 expect({
@@ -285,9 +285,9 @@ describe('Comparator', () => {
                     `,
                     code: 'changed_method_return_type' as Comparator.ChangeCode,
                 }).toFailComparison(`Method: 'a', 'b', 'c' changed return types:
-        method 'a' before - 'number | boolean', current - 'boolean'
-        method 'b' before - 'boolean', current - 'number'
-        method 'c' before - 'any', current - 'string'`)
+    method 'a' before - 'number | boolean', current - 'boolean'
+    method 'b' before - 'boolean', current - 'number'
+    method 'c' before - 'any', current - 'string'`)
             })
             it('should not find changed incompatible method return type', () => {
                 expect({
@@ -324,8 +324,8 @@ describe('Comparator', () => {
                     `,
                     code: 'changed_method_return_type_union' as Comparator.ChangeCode,
                 }).toFailComparison(`Method: 'a', 'c' changed return types:
-        method 'a' before - 'boolean', current - 'string | boolean'
-        method 'c' before - 'number', current - 'any'`)
+    method 'a' before - 'boolean', current - 'string | boolean'
+    method 'c' before - 'number', current - 'any'`)
             })
             it('should not find changed compatible method return type', () => {
                 expect({
@@ -364,8 +364,8 @@ describe('Comparator', () => {
                     `,
                     code: 'changed_method_parameter_modifier_to_optional' as Comparator.ChangeCode,
                 }).toFailComparison(`Method parameters changed from required to optional:
-        method 'a' parameters: 'p2', 'p3'
-        method 'c' parameters: 'p1'`)
+    method 'a' parameters: 'p2', 'p3'
+    method 'c' parameters: 'p1'`)
             })
             it('should not find changed parameters', () => {
                 expect({
@@ -405,8 +405,8 @@ describe('Comparator', () => {
                         `,
                     code: 'changed_method_parameter_modifier_to_required' as Comparator.ChangeCode,
                 }).toFailComparison(`Method parameters changed from optional to required:
-        method 'a' parameters: 'p2', 'p3'
-        method 'c' parameters: 'p1'`)
+    method 'a' parameters: 'p2', 'p3'
+    method 'c' parameters: 'p1'`)
             })
             it('should not find changed parameters', () => {
                 expect({
@@ -444,12 +444,12 @@ describe('Comparator', () => {
                         `,
                     code: 'changed_method_parameter_required_count' as Comparator.ChangeCode,
                 }).toFailComparison(`Method required parameters changed:
-        method 'a':
-            added: 'p2', 'p3', 'p4'
-            removed: 'p1'
-        method 'b':
-            added: 'p2'
-            removed: 'p1'`)
+    method 'a':
+        added: 'p2', 'p3', 'p4'
+        removed: 'p1'
+    method 'b':
+        added: 'p2'
+        removed: 'p1'`)
             })
             it('should not find changed parameters', () => {
                 expect({
@@ -491,8 +491,8 @@ describe('Comparator', () => {
                         `,
                     code: 'added_method' as Comparator.ChangeCode,
                 }).toFailComparison(`Methods added:
-        public a(p1, p2)
-        protected b()`)
+    public a(p1, p2)
+    protected b()`)
             })
             it('should not find added methods', () => {
                 expect({
@@ -534,8 +534,8 @@ describe('Comparator', () => {
                     `,
                     code: 'removed_method' as Comparator.ChangeCode,
                 }).toFailComparison(`Methods removed:
-        a(p1, p2)
-        b()`)
+    a(p1, p2)
+    b()`)
             })
             it('should not find removed methods', () => {
                 expect({
@@ -573,8 +573,8 @@ describe('Comparator', () => {
                     `,
                     code: 'changed_method_modifier_more_visible' as Comparator.ChangeCode,
                 }).toFailComparison(`Methods changed access modifier:
-        method 'b(p1)' from 'protected' to 'public'
-        method 'c(p1)' from 'private' to 'protected'`)
+    method 'b(p1)' from 'protected' to 'public'
+    method 'c(p1)' from 'private' to 'protected'`)
             })
             it('should not find changed methods', () => {
                 expect({
@@ -617,9 +617,9 @@ describe('Comparator', () => {
                         `,
                     code: 'changed_method_modifier_less_visible' as Comparator.ChangeCode,
                 }).toFailComparison(`Methods changed access modifier:
-        method 'b(p1)' from 'public' to 'protected'
-        method 'static b(p1)' from 'public' to 'protected'
-        method 'c(p1)' from 'protected' to 'private'`)
+    method 'b(p1)' from 'public' to 'protected'
+    method 'static b(p1)' from 'public' to 'protected'
+    method 'c(p1)' from 'protected' to 'private'`)
             })
             it('should not find changed methods', () => {
                 expect({
@@ -660,8 +660,8 @@ describe('Comparator', () => {
                     `,
                     code: 'changed_property_modifier_more_visible' as Comparator.ChangeCode,
                 }).toFailComparison(`Properties changed access modifier:
-        property 'b' from 'protected' to 'public'
-        property 'c' from 'private' to 'protected'`)
+    property 'b' from 'protected' to 'public'
+    property 'c' from 'private' to 'protected'`)
             })
             it('should not find changed methods', () => {
                 expect({
@@ -704,9 +704,9 @@ describe('Comparator', () => {
                     `,
                     code: 'changed_property_modifier_less_visible' as Comparator.ChangeCode,
                 }).toFailComparison(`Properties changed access modifier:
-        property 'static a' from 'public' to 'protected'
-        property 'a' from 'public' to 'protected'
-        property 'b' from 'protected' to 'private'`)
+    property 'static a' from 'public' to 'protected'
+    property 'a' from 'public' to 'protected'
+    property 'b' from 'protected' to 'private'`)
             })
             it('should not find changed methods', () => {
                 expect({
@@ -818,8 +818,8 @@ describe('Comparator', () => {
                     `,
                     code: 'changed_class_property_type',
                 } as ComparatorTestPayload).toFailComparison(`Properties changed type:
-        property 'b' from 'string' to 'boolean'
-        property 'static b' from 'string' to 'boolean'`)
+    property 'b' from 'string' to 'boolean'
+    property 'static b' from 'string' to 'boolean'`)
             })
             it('should not find changed type', () => {
                 expect({
@@ -860,9 +860,9 @@ describe('Comparator', () => {
                     `,
                     code: 'changed_class_property_type_union',
                 } as ComparatorTestPayload).toFailComparison(`Properties changed type:
-        property 'b' from '"b" | "c"' to '"b" | "c" | "d"'
-        property 'static b' from '"b" | "c"' to '"b" | "c" | "d"'
-        property 'd' from 'string' to 'any'`)
+    property 'b' from '"b" | "c"' to '"b" | "c" | "d"'
+    property 'static b' from '"b" | "c"' to '"b" | "c" | "d"'
+    property 'd' from 'string' to 'any'`)
             })
             it('should not find changed type', () => {
                 expect({
@@ -901,7 +901,7 @@ describe('Comparator', () => {
                     `,
                     code: 'changed_class_property_to_readonly',
                 } as ComparatorTestPayload).toFailComparison(`Properties changed write modifier:
-        property 'static a' from '' to 'readonly'`)
+    property 'static a' from '' to 'readonly'`)
             })
             it('should not find changes', () => {
                 expect({
@@ -941,8 +941,8 @@ describe('Comparator', () => {
                     `,
                     code: 'changed_class_property_to_not_readonly',
                 } as ComparatorTestPayload).toFailComparison(`Properties changed write modifier:
-        property 'static a' from 'readonly' to ''
-        property 'b' from 'readonly' to ''`)
+    property 'static a' from 'readonly' to ''
+    property 'b' from 'readonly' to ''`)
             })
             it('should not find changes', () => {
                 expect({
@@ -1033,8 +1033,8 @@ describe('Comparator', () => {
                     }`,
                     code: 'changed_generic_extends_type',
                 } as ComparatorTestPayload).toFailComparison(`Generics changed type:
-        generic 'E' from 'number' to 'string'
-        generic 'C' from 'any' to 'Date'`)
+    generic 'E' from 'number' to 'string'
+    generic 'C' from 'any' to 'Date'`)
             })
             it('should not find changes', () => {
                 expect({
@@ -1055,7 +1055,7 @@ describe('Comparator', () => {
                     }`,
                     code: 'changed_generic_extends_type_to_less_strict',
                 } as ComparatorTestPayload).toFailComparison(`Generics changed type:
-        generic 'E' from 'number' to 'any'`)
+    generic 'E' from 'number' to 'any'`)
             })
             it('should not find changes', () => {
                 expect({
@@ -1102,6 +1102,46 @@ describe('Comparator', () => {
                     v1: `export const a: any = 'a'`,
                     v2: `export const a= 'a'`,
                     code: 'changed_constant_type_to_less_strict',
+                } as ComparatorTestPayload).toPassComparison()
+            })
+        })
+    })
+    describe('enum', () => {
+        describe('added_enum', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export enum Direction {
+                        UP,
+                        DOWN
+                    }
+                    `,
+                    v2: `
+                    export enum Direction {
+                        UP,
+                        DOWN,
+                        LEFT,
+                        RIGHT
+                    }
+                    `,
+                    code: 'added_enum',
+                } as ComparatorTestPayload).toFailComparison(`Enum values added: 'LEFT', 'RIGHT'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `
+                    export enum Direction {
+                        UP,
+                        DOWN,
+                        LEFT,
+                        RIGHT
+                    }
+                    `,
+                    v2: `export enum Direction {
+                        UP,
+                        DOWN
+                    }
+                    `,
+                    code: 'added_enum',
                 } as ComparatorTestPayload).toPassComparison()
             })
         })

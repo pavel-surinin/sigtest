@@ -14,7 +14,7 @@ import ChangeCode = Comparator.ChangeCode
 // report
 export function compareSnapshots(
     snapshots: Compare<Snapshot.Snapshot>,
-    comparators: Comparator.Comparator<ChangeCode>[]
+    comparators: Comparator.Comparator<ChangeCode, Signatures.MemberType>[]
 ): ComparisonResult {
     const versions: ComparisonResult['versions'] = {
         before: snapshots.before.version,

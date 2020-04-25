@@ -7,7 +7,7 @@ export namespace Signatures {
         isOptional: boolean
     }
 
-    interface Signature {
+    interface Signature<T extends MemberType> {
         /**
          * path to file
          */
@@ -15,7 +15,7 @@ export namespace Signatures {
         /**
          * exported member
          */
-        memberType: MemberType
+        memberType: T
         /**
          * Namespace name, that contains this member
          */
@@ -105,37 +105,45 @@ export namespace Signatures {
         type: string
     }
 
-    export interface FunctionSignature extends FunctionDeclaration, Signature {
+    export interface FunctionSignature extends FunctionDeclaration, Signature<'function'> {
         memberType: 'function'
     }
 
-    export interface ConstantSignature extends ConstantDeclaration, Signature {
+    export interface ConstantSignature extends ConstantDeclaration, Signature<'constant'> {
         memberType: 'constant'
     }
 
-    export interface ClassSignature extends ClassDeclaration, Signature {
+    export interface ClassSignature extends ClassDeclaration, Signature<'class'> {
         memberType: 'class'
     }
 
-    export interface EnumSignature extends EnumDeclaration, Signature {
+    export interface EnumSignature extends EnumDeclaration, Signature<'enum'> {
         memberType: 'enum'
     }
 
-    export interface InterfaceSignature extends InterfaceDeclaration, Signature {
+    export interface InterfaceSignature extends InterfaceDeclaration, Signature<'interface'> {
         memberType: 'interface'
     }
 
-    export interface TypeAliasSignature extends TypeDeclaration, Signature {
+    export interface TypeAliasSignature extends TypeDeclaration, Signature<'type'> {
         memberType: 'type'
     }
 
-    export type SignatureType =
-        | FunctionSignature
-        | ConstantSignature
-        | ClassSignature
-        | EnumSignature
-        | InterfaceSignature
-        | TypeAliasSignature
+    export type SignatureType<
+        T extends Signatures.MemberType = Signatures.MemberType
+    > = T extends 'function'
+        ? FunctionSignature
+        : T extends 'constant'
+        ? ConstantSignature
+        : T extends 'class'
+        ? ClassSignature
+        : T extends 'enum'
+        ? EnumSignature
+        : T extends 'interface'
+        ? InterfaceSignature
+        : T extends 'type'
+        ? TypeAliasSignature
+        : never
 
     export function toFulName(namespace: string | undefined, memberName: string): string {
         return namespace ? namespace + '.' + memberName : memberName
@@ -144,7 +152,7 @@ export namespace Signatures {
 
 export namespace Snapshot {
     export interface Snapshot {
-        signatures: Signatures.SignatureType[]
+        signatures: Signatures.SignatureType<Signatures.MemberType>[]
         version: string
     }
 }

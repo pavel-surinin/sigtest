@@ -228,4 +228,11 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'constant',
         status: 'compatible',
     },
+    added_enum: {
+        action: 'added',
+        code: 'added_enum',
+        description: 'Enum value added',
+        memberType: 'enum',
+        status: 'compatible',
+    },
 }

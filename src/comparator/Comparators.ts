@@ -2,6 +2,7 @@ import { Signatures } from '../App.types'
 import { Reducer } from 'declarative-js'
 import toObject = Reducer.toObject
 import { memoize } from 'auto-memoize'
+import { CHANGE_REGISTRY } from './ComparatorChangeRegistry'
 
 export namespace Comparator {
     export type Action = 'removed' | 'added' | 'changed' | 'none'
@@ -11,7 +12,7 @@ export namespace Comparator {
     export type CompareOpt<T> = { before: T; after?: T }
 
     export interface Change<C extends ChangeCode> {
-        signatures: CompareOpt<Signatures.SignatureType>
+        signatures: CompareOpt<Signatures.SignatureType<Signatures.MemberType>>
         info: ChangeInfo<ChangeCode>
         message?: string
     }
@@ -20,8 +21,8 @@ export namespace Comparator {
         versions: Compare<string>
         changes: Change<ChangeCode>[]
     }
-    export type Comparator<C extends ChangeCode> = (
-        comparison: Compare<Signatures.SignatureType>
+    export type Comparator<C extends ChangeCode, T extends Signatures.MemberType> = (
+        comparison: Compare<Signatures.SignatureType<T>>
     ) => Change<C>
 
     export type NothingChangedCode = 'no_change'
@@ -66,6 +67,8 @@ export namespace Comparator {
         // constant
         | 'changed_constant_type'
         | 'changed_constant_type_to_less_strict'
+        // enum
+        | 'added_enum'
 
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
@@ -337,6 +340,41 @@ export namespace Comparator {
             }
             export function surroundWithQuotes(s: string) {
                 return "'" + s + "'"
+            }
+            export const comparatorFor = {
+                enum: areSignaturesTypeOf('enum'),
+                class: areSignaturesTypeOf('class'),
+                constant: areSignaturesTypeOf('constant'),
+                function: areSignaturesTypeOf('function'),
+                interface: areSignaturesTypeOf('interface'),
+                type: areSignaturesTypeOf('type'),
+            }
+            export function areSignaturesTypeOf<
+                C extends Comparator.ChangeCode,
+                T extends Signatures.MemberType
+            >(memberType: T) {
+                return function _createComparator(
+                    compare: (
+                        comparison: Compare<Signatures.SignatureType<T>>
+                    ) => Change<C> | undefined
+                ): Comparator.Comparator<Comparator.ChangeCode, T> {
+                    return function __createComparator(v) {
+                        if (
+                            v.after &&
+                            v.after.memberType === memberType &&
+                            v.before.memberType === memberType
+                        ) {
+                            const change = compare(v)
+                            if (change) {
+                                return change
+                            }
+                        }
+                        return {
+                            info: CHANGE_REGISTRY.no_change,
+                            signatures: { before: v.before, after: v.after },
+                        }
+                    }
+                }
             }
         }
         export namespace Generics {
