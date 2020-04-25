@@ -7,6 +7,7 @@ import {
 import {
     createChangeTypeChecker,
     createClassGenericChangeTypeChecker,
+    createConstantChangeTypeChecker,
 } from './checkers/reusable/changed_type.reusable'
 import { createChangeWriteChecker } from './checkers/reusable/changed_class_property_write.reusable'
 import { createAddedClassGenericTypeChecker } from './checkers/reusable/added_generic_type.reusable'
@@ -98,6 +99,14 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
     }),
     changed_generic_extends_type_to_less_strict: createClassGenericChangeTypeChecker({
         changeCode: 'changed_generic_extends_type_to_less_strict',
+        compareTypes: Comparator.Utils.Types.areMoreApplicable,
+    }),
+    changed_constant_type: createConstantChangeTypeChecker({
+        changeCode: 'changed_constant_type',
+        compareTypes: Comparator.Utils.Types.areNotCompatible,
+    }),
+    changed_constant_type_to_less_strict: createConstantChangeTypeChecker({
+        changeCode: 'changed_constant_type_to_less_strict',
         compareTypes: Comparator.Utils.Types.areMoreApplicable,
     }),
 }

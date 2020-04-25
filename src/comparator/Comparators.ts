@@ -63,11 +63,9 @@ export namespace Comparator {
         | 'added_optional_generic'
         | 'changed_generic_extends_type'
         | 'changed_generic_extends_type_to_less_strict'
-    // constant
-    // | 'added_constant'
-    // | 'removed_constant'
-    // | 'changed_constant_type'
-    // | 'changed_constant_type_to_less_strict'
+        // constant
+        | 'changed_constant_type'
+        | 'changed_constant_type_to_less_strict'
 
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status

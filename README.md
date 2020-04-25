@@ -10,8 +10,8 @@ This repository is WIP
 |               | Introspection | Comparing | Reports |
 | ------------- | ------------- | --------- | ------- |
 | **function**  | ☀️            |           |         |
-| **constant**  | ☀️            |           |         |
-| **class**     | ☀️            | ⛅        |         |
+| **constant**  | ☀️            | ☀️        |         |
+| **class**     | ☀️            | ☀️        |         |
 | **enum**      | ☀️            |           |         |
 | **interface** | ☀️            |           |         |
 | **type**      | ⛅            |           |         |

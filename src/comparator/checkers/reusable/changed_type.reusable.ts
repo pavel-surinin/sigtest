@@ -85,3 +85,29 @@ export function createClassGenericChangeTypeChecker(options: {
         }
     }
 }
+
+export function createConstantChangeTypeChecker(options: {
+    compareTypes(tBefore: string, tAfter: string): boolean
+    changeCode: Comparator.ChangeCode
+}) {
+    return function _createClassGenericChangeTypeChecker({
+        before,
+        after,
+    }: Comparator.CompareOpt<Signatures.SignatureType>): Comparator.Change<
+        typeof options.changeCode
+    > {
+        if (after && after.memberType === 'constant' && before.memberType === 'constant') {
+            if (options.compareTypes(before.type, after.type)) {
+                return {
+                    info: CHANGE_REGISTRY[options.changeCode],
+                    signatures: { before, after },
+                    message: `Variable '${after.memberName}' changed type from '${before.type}' to '${after.type}'`,
+                }
+            }
+        }
+        return {
+            info: CHANGE_REGISTRY.no_change,
+            signatures: { before, after },
+        }
+    }
+}

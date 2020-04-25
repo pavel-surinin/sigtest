@@ -214,4 +214,18 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'class',
         status: 'compatible',
     },
+    changed_constant_type: {
+        action: 'changed',
+        code: 'changed_constant_type',
+        description: 'Variable constraint type was changed',
+        memberType: 'constant',
+        status: 'breaking',
+    },
+    changed_constant_type_to_less_strict: {
+        action: 'changed',
+        code: 'changed_constant_type_to_less_strict',
+        description: 'Variable constraint type was changed to less strict',
+        memberType: 'constant',
+        status: 'compatible',
+    },
 }
