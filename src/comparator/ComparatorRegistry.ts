@@ -1,3 +1,4 @@
+import { Signatures } from '../App.types'
 import { Comparator } from './Comparators'
 
 import {
@@ -30,7 +31,7 @@ import { removed_class_property } from './checkers/removed_class_property'
 import { added_class_property } from './checkers/added_class_property'
 import { removed_generic } from './checkers/removed_generic'
 import { added_enum } from './checkers/added_enum'
-import { Signatures } from '../App.types'
+import { removed_enum } from './checkers/removed_enum'
 
 export type ComparatorRegistry = Record<
     Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>,
@@ -112,4 +113,5 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
         compareTypes: Comparator.Utils.Types.areMoreApplicable,
     }),
     added_enum,
+    removed_enum,
 }

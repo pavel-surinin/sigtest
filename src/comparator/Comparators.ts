@@ -69,6 +69,7 @@ export namespace Comparator {
         | 'changed_constant_type_to_less_strict'
         // enum
         | 'added_enum'
+        | 'removed_enum'
 
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
@@ -328,6 +329,13 @@ export namespace Comparator {
             }
         }
         export namespace Common {
+            export type WithName = { name: string }
+            export function formatSequenceMessage(p: WithName[]) {
+                return p.map(Common.getName).map(Common.surroundWithQuotes).join(', ')
+            }
+            export function getName(p: WithName) {
+                return p.name
+            }
             export function isIn<T>(object: Record<string, T>, toKey: (el: T) => string) {
                 return function _isIn(el: T): boolean {
                     return object[toKey(el)] != null

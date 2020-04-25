@@ -1145,5 +1145,43 @@ describe('Comparator', () => {
                 } as ComparatorTestPayload).toPassComparison()
             })
         })
+        describe('removed_enum', () => {
+            it('should find changes', () => {
+                expect({
+                    v2: `export enum Direction {
+                        UP,
+                        DOWN
+                    }
+                    `,
+                    v1: `
+                    export enum Direction {
+                        UP,
+                        DOWN,
+                        LEFT,
+                        RIGHT
+                    }
+                    `,
+                    code: 'removed_enum',
+                } as ComparatorTestPayload).toFailComparison(`Enum values removed: 'LEFT', 'RIGHT'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export enum Direction {
+                        UP,
+                        DOWN
+                    }
+                    `,
+                    v2: `
+                    export enum Direction {
+                        UP,
+                        DOWN,
+                        LEFT,
+                        RIGHT
+                    }
+                    `,
+                    code: 'removed_enum',
+                } as ComparatorTestPayload).toPassComparison()
+            })
+        })
     })
 })

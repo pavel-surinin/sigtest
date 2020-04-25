@@ -235,4 +235,11 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'enum',
         status: 'compatible',
     },
+    removed_enum: {
+        action: 'removed',
+        code: 'removed_enum',
+        description: 'Enum value removed',
+        memberType: 'enum',
+        status: 'breaking',
+    },
 }
