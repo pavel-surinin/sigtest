@@ -1162,7 +1162,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'removed_enum',
-                } as ComparatorTestPayload).toFailComparison(`Enum values removed: 'LEFT', 'RIGHT'`)
+                } as ComparatorTestPayload).toFailComparison(`Removed enum values: 'LEFT', 'RIGHT'`)
             })
             it('should not find changes', () => {
                 expect({
@@ -1180,6 +1180,55 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'removed_enum',
+                } as ComparatorTestPayload).toPassComparison()
+            })
+        })
+        describe('changed_enum_value', () => {
+            it('should find changes num to num', () => {
+                expect({
+                    v1: `export enum Direction {
+                        UP,
+                        DOWN
+                    }
+                    `,
+                    v2: `export enum Direction {
+                        UP = 3,
+                        DOWN
+                    }
+                    `,
+                    code: 'changed_enum_value',
+                } as ComparatorTestPayload).toFailComparison(`Enum changed values:
+    'Direction.UP' from '0' to '3'
+    'Direction.DOWN' from '1' to '4'`)
+            })
+            it('should find changes num to string', () => {
+                expect({
+                    v1: `export enum Direction {
+                        UP,
+                        DOWN
+                    }
+                    `,
+                    v2: `export enum Direction {
+                        UP = 'up',
+                        DOWN = 'down'
+                    }
+                    `,
+                    code: 'changed_enum_value',
+                } as ComparatorTestPayload).toFailComparison(`Enum changed values:
+    'Direction.UP' from '0' to 'up'
+    'Direction.DOWN' from '1' to 'down'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export enum Direction {
+                        UP,
+                        DOWN
+                    }
+                    `,
+                    v2: `export enum Direction {
+                    }
+                    `,
+                    code: 'changed_enum_value',
                 } as ComparatorTestPayload).toPassComparison()
             })
         })

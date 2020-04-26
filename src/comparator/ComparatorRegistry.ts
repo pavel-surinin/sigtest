@@ -32,6 +32,7 @@ import { added_class_property } from './checkers/added_class_property'
 import { removed_generic } from './checkers/removed_generic'
 import { added_enum } from './checkers/added_enum'
 import { removed_enum } from './checkers/removed_enum'
+import { changed_enum_value } from './checkers/changed_enum_value'
 
 export type ComparatorRegistry = Record<
     Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>,
@@ -114,4 +115,5 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
     }),
     added_enum,
     removed_enum,
+    changed_enum_value,
 }

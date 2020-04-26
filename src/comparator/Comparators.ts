@@ -70,7 +70,7 @@ export namespace Comparator {
         // enum
         | 'added_enum'
         | 'removed_enum'
-
+        | 'changed_enum_value'
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
         action: Action

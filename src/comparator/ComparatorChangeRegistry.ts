@@ -242,4 +242,11 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'enum',
         status: 'breaking',
     },
+    changed_enum_value: {
+        action: 'changed',
+        code: 'changed_enum_value',
+        description: 'Enum changed value, serialized to json values will be different',
+        memberType: 'enum',
+        status: 'breaking',
+    },
 }

@@ -32,3 +32,10 @@
 |  added_method | added | compatible | Method added to class
 |  added_class_property | added | compatible | Property was added to class.
 |  added_optional_generic | added | compatible | Class optional generic type was added
+| **CONSTANT**
+|  changed_constant_type | changed | breaking | Variable constraint type was changed
+|  changed_constant_type_to_less_strict | changed | compatible | Variable constraint type was changed to less strict
+| **ENUM**
+|  removed_enum | removed | breaking | Enum value removed
+|  changed_enum_value | changed | breaking | Enum changed value, serialized to json values will be different
+|  added_enum | added | compatible | Enum value added
