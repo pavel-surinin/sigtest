@@ -17,7 +17,7 @@
             "\t\t\t`,",
             "\t\t\tv2: `",
             "\t\t\t`,",
-            "\t\tcode: '$1',",
+            "\t\t\tcode: '$1',",
             "\t\t} as ComparatorTestPayload).toFindChanges(``)",
             "\t})",
             "\tit('should not find changes', () => {",
@@ -26,8 +26,7 @@
             "\t\t\t`,",
             "\t\t\tv2: `",
             "\t\t\t`,",
-            "\t\tcode: '$1',",
-            "\t\tupdate: true,",
+            "\t\t\tcode: '$1',",
             "\t\t} as ComparatorTestPayload).toFindNoChanges()",
             "\t})",
             "})"

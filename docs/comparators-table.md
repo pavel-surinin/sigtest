@@ -39,3 +39,6 @@
 |  removed_enum | removed | breaking | Enum value removed
 |  changed_enum_value | changed | breaking | Enum changed value, serialized to json values will be different
 |  added_enum | added | compatible | Enum value added
+| **FUNCTION**
+|  changed_function_return_type | changed | breaking | Function return type changed
+|  changed_function_return_type_to_less_strict | changed | compatible | Function return type changed to less strict

@@ -9,6 +9,7 @@ import {
     createChangeTypeChecker,
     createClassGenericChangeTypeChecker,
     createConstantChangeTypeChecker,
+    createFunctionReturnTypeChangeChecker,
 } from './checkers/reusable/changed_type.reusable'
 import { createChangeWriteChecker } from './checkers/reusable/changed_class_property_write.reusable'
 import { createAddedClassGenericTypeChecker } from './checkers/reusable/added_generic_type.reusable'
@@ -116,4 +117,12 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
     added_enum,
     removed_enum,
     changed_enum_value,
+    changed_function_return_type: createFunctionReturnTypeChangeChecker({
+        changeCode: 'changed_function_return_type',
+        compareTypes: Comparator.Utils.Types.areNotCompatible,
+    }),
+    changed_function_return_type_to_less_strict: createFunctionReturnTypeChangeChecker({
+        changeCode: 'changed_function_return_type_to_less_strict',
+        compareTypes: Comparator.Utils.Types.areMoreApplicable,
+    }),
 }

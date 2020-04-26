@@ -8,6 +8,7 @@
         "test": "jest",
         "docs": "node ./scripts/generate-error-code-info && node ./scripts/generate-comparators-info",
         "format": "prettier --write src test scripts",
+        "build": "npm run test && npm run compile",
         "ci": "npm run test -- --coverage && npm run compile"
     },
     "author": "pavel.surinin@gmail.com",

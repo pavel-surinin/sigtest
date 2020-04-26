@@ -1231,5 +1231,60 @@ describe('Comparator', () => {
             })
         })
     })
-    describe('function', () => {})
+    describe('function', () => {
+        describe('changed_function_return_type', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export function is() {
+                        return false
+                    }`,
+                    v2: `export function is() {
+                        return 1
+                    }`,
+                    code: 'changed_function_return_type',
+                } as ComparatorTestPayload).toFindChanges(
+                    `Function return type changed from 'boolean' to 'number'`
+                )
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export function is() {
+                        return false
+                    }
+                    `,
+                    v2: `export function is(): any {
+                        return false
+                    }
+                    `,
+                    code: 'changed_function_return_type',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('changed_function_return_type_to_less_strict', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export function is() {
+                        return false
+                    }`,
+                    v2: `export function is(): boolean | number {
+                        return 1
+                    }`,
+                    code: 'changed_function_return_type_to_less_strict',
+                } as ComparatorTestPayload).toFindChanges(
+                    `Function return type changed from 'boolean' to 'number | boolean'`
+                )
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export function is() {
+                        return false
+                    }`,
+                    v2: `export function is() {
+                        return 1
+                    }`,
+                    code: 'changed_function_return_type_to_less_strict',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+    })
 })

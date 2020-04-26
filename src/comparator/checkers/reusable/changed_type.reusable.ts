@@ -1,7 +1,8 @@
-import { Comparator } from '../../Comparators'
+import { Reducer } from 'declarative-js'
 import { Signatures } from '../../../App.types'
 import { CHANGE_REGISTRY } from '../../ComparatorChangeRegistry'
-import { Reducer } from 'declarative-js'
+import { Comparator } from '../../Comparators'
+import Common = Comparator.Utils.Common
 
 export function createChangeTypeChecker(options: {
     compareTypes(tBefore: string, tAfter: string): boolean
@@ -110,4 +111,21 @@ export function createConstantChangeTypeChecker(options: {
             signatures: { before, after },
         }
     }
+}
+
+export function createFunctionReturnTypeChangeChecker(options: {
+    compareTypes(tBefore: string, tAfter: string): boolean
+    changeCode: Comparator.ChangeCode
+}) {
+    return Common.comparatorFor.function(signatures => {
+        const { after, before } = signatures
+        const foundChange = options.compareTypes(before.returnType, after.returnType)
+        if (foundChange) {
+            return {
+                info: CHANGE_REGISTRY[options.changeCode],
+                signatures,
+                message: `Function return type changed from '${before.returnType}' to '${after.returnType}'`,
+            }
+        }
+    })
 }

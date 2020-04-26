@@ -249,4 +249,18 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'enum',
         status: 'breaking',
     },
+    changed_function_return_type: {
+        action: 'changed',
+        code: 'changed_function_return_type',
+        description: 'Function return type changed',
+        memberType: 'function',
+        status: 'breaking',
+    },
+    changed_function_return_type_to_less_strict: {
+        action: 'changed',
+        code: 'changed_function_return_type_to_less_strict',
+        description: 'Function return type changed to less strict',
+        memberType: 'function',
+        status: 'compatible',
+    },
 }

@@ -71,9 +71,9 @@ export namespace Comparator {
         | 'added_enum'
         | 'removed_enum'
         | 'changed_enum_value'
-    // function
-    // | 'changed_function_return_type'
-    // | 'changed_function_return_type_to_less_strict'
+        // function
+        | 'changed_function_return_type'
+        | 'changed_function_return_type_to_less_strict'
     // | 'changed_function_parameter_modifier_to_optional'
     // | 'changed_function_parameter_modifier_to_required'
     // | 'changed_function_parameter_required_count'
