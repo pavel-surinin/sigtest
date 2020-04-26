@@ -1,7 +1,7 @@
 import { Comparator } from '../../../../src/comparator/Comparators'
-import { comparatorMatcher, ComparatorTestPayload } from '../../../matchers/Comparator.matcher'
+import { ComparatorTestPayload } from '../../../matchers/Comparator.matcher'
 
-beforeAll(comparatorMatcher.cleanGenerated)
+// beforeAll(comparatorMatcher.cleanGenerated)
 
 describe('Comparator', () => {
     describe('common', () => {
@@ -1233,4 +1233,5 @@ describe('Comparator', () => {
             })
         })
     })
+    describe('function', () => {})
 })

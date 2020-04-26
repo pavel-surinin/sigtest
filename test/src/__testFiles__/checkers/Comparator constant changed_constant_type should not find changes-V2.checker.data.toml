@@ -1,0 +1,5 @@
+[a]
+memberName = "a"
+memberType = "constant"
+path = "test/src/__testFiles__/checkers/Comparator constant changed_constant_type should not find changes-V2.checker.data.ts"
+type = "any"

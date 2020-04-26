@@ -1,0 +1,31 @@
+[Test]
+memberType = "class"
+memberName = "Test"
+generics = [ ]
+path = "test/src/__testFiles__/checkers/Comparator class changed_constructor_parameter_type should find changes in parameter types-V2.checker.data.ts"
+properties = [ ]
+methods = [ ]
+
+  [[Test.constructors]]
+  generics = [ ]
+  returnType = "typeof Test"
+
+    [[Test.constructors.parameters]]
+    name = "a"
+    type = "Date"
+    isOptional = false
+
+    [[Test.constructors.parameters]]
+    name = "b"
+    type = "boolean"
+    isOptional = false
+
+    [[Test.constructors.parameters]]
+    name = "c"
+    type = "number | boolean"
+    isOptional = false
+
+    [[Test.constructors.parameters]]
+    name = "d"
+    type = "{ a: 1; } & { b: 2; }"
+    isOptional = false

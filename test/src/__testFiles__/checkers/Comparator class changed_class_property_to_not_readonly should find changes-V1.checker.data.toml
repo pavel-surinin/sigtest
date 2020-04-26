@@ -1,0 +1,38 @@
+[Test]
+memberType = "class"
+memberName = "Test"
+generics = [ ]
+path = "test/src/__testFiles__/checkers/Comparator class changed_class_property_to_not_readonly should find changes-V1.checker.data.ts"
+methods = [ ]
+
+  [[Test.constructors]]
+  generics = [ ]
+  parameters = [ ]
+  returnType = "typeof Test"
+
+  [[Test.properties]]
+  name = "a"
+  type = '"a"'
+
+    [Test.properties.modifiers]
+    access = "private"
+    usage = "instance"
+    write = "readonly"
+
+  [[Test.properties]]
+  name = "a"
+  type = '"a"'
+
+    [Test.properties.modifiers]
+    access = "public"
+    usage = "static"
+    write = "readonly"
+
+  [[Test.properties]]
+  name = "b"
+  type = '"b"'
+
+    [Test.properties.modifiers]
+    access = "public"
+    usage = "instance"
+    write = "readonly"

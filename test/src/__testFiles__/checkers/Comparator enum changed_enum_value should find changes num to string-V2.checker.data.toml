@@ -1,0 +1,14 @@
+[Direction]
+memberType = "enum"
+path = "test/src/__testFiles__/checkers/Comparator enum changed_enum_value should find changes num to string-V2.checker.data.ts"
+memberName = "Direction"
+
+  [[Direction.values]]
+  name = "UP"
+  type = "string"
+  value = "up"
+
+  [[Direction.values]]
+  name = "DOWN"
+  type = "string"
+  value = "down"

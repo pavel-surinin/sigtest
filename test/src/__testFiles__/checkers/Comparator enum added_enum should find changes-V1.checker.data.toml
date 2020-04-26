@@ -1,0 +1,14 @@
+[Direction]
+memberType = "enum"
+path = "test/src/__testFiles__/checkers/Comparator enum added_enum should find changes-V1.checker.data.ts"
+memberName = "Direction"
+
+  [[Direction.values]]
+  name = "UP"
+  type = "number"
+  value = 0
+
+  [[Direction.values]]
+  name = "DOWN"
+  type = "number"
+  value = 1

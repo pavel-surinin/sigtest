@@ -1,7 +1,15 @@
 import { ScriptTarget, ModuleKind } from 'typescript'
 import { compareSnapshots } from '../../src/SnapshotComparator'
 import { generateSignatures } from '../../src/TypeVisitor'
-import { writeFileSync, unlinkSync, existsSync, mkdirSync, fstat, readdirSync } from 'fs'
+import {
+    writeFileSync,
+    unlinkSync,
+    existsSync,
+    mkdirSync,
+    fstat,
+    readdirSync,
+    readFileSync,
+} from 'fs'
 import { join } from 'path'
 import { CHANGE_REGISTRY } from '../../src/comparator/ComparatorChangeRegistry'
 import { COMPARATOR_REGISTRY } from '../../src/comparator/ComparatorRegistry'
@@ -10,6 +18,7 @@ import { Comparator } from '../../src/comparator/Comparators'
 import { format } from 'prettier'
 import toml from '@iarna/toml'
 import { Reducer } from 'declarative-js'
+import { Signatures } from '../../src/App.types'
 
 const TEST_FILES_FOLDER = 'test/src/__testFiles__/'
 
@@ -17,43 +26,64 @@ const TEST_FILES_FOLDER = 'test/src/__testFiles__/'
 class SignatureProvider {
     constructor(private folder: string) {}
 
-    @CallOnceBy('string')
-    private provide(v1: string, v2: string) {
-        const doProvide = (code: string, version: string) => {
+    private provide(v1: string, v2: string, shouldUpdate: boolean) {
+        const doProvide = (code: string, version: string): Signatures.SignatureType[] => {
             const { currentTestName } = expect.getState()
 
-            const path = join(
+            const tsPath = join(
                 this.folder,
                 'checkers',
                 `${currentTestName}-${version}.checker.data.ts`
             )
-            const dir = join(this.folder, 'checkers')
-            if (!existsSync(dir)) {
-                mkdirSync(dir)
-            }
-            writeFileSync(path, format(code, { parser: 'typescript' }))
-            const s = generateSignatures([path], {
-                target: ScriptTarget.ES5,
-                module: ModuleKind.CommonJS,
-            })
-            // unlinkSync(path)
             const tomlPath = join(
                 this.folder,
                 'checkers',
                 `${currentTestName}-${version}.checker.data.toml`
             )
-            writeFileSync(
-                tomlPath,
-                toml.stringify(
-                    s
-                        .map(s => s.signature!)
-                        .reduce(
-                            Reducer.toObject(x => `${x.memberName}`),
-                            {}
-                        ) as any
+
+            // create /checkers dir if it is absent
+            const dir = join(this.folder, 'checkers')
+            if (!existsSync(dir)) {
+                mkdirSync(dir)
+            }
+
+            if (shouldUpdate || !existsSync(tsPath)) {
+                // create .ts file
+                writeFileSync(tsPath, format(code, { parser: 'typescript' }))
+            }
+
+            let metadata: Signatures.SignatureType
+            if (shouldUpdate || !existsSync(tomlPath)) {
+                //metadata is absent
+
+                // generate metadata
+                const generated = generateSignatures([tsPath], {
+                    target: ScriptTarget.ES5,
+                    module: ModuleKind.CommonJS,
+                })
+
+                // create .toml file
+                writeFileSync(
+                    tomlPath,
+                    toml.stringify(
+                        generated
+                            .map(s => s.signature!)
+                            .reduce(
+                                Reducer.toObject(x => `${x.memberName}`),
+                                {}
+                            ) as any
+                    )
                 )
-            )
-            return s.map(s => s.signature!)
+                metadata = generated.map(s => s.signature!)[0]
+            } else {
+                // metadata is present
+                const parsedResult = (toml.parse(
+                    readFileSync(tomlPath, { encoding: 'UTF-8' })
+                ) as any) as Record<string, Signatures.SignatureType>
+                metadata = parsedResult[Object.keys(parsedResult)[0]]
+            }
+
+            return metadata ? [metadata] : []
         }
         return [doProvide(v1, 'V1'), doProvide(v2, 'V2')]
     }
@@ -62,8 +92,9 @@ class SignatureProvider {
         v1: string
         v2: string
         code: Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>
+        update?: boolean
     }): Comparator.ComparisonResult {
-        const [v1meta, v2meta] = this.provide(options.v1, options.v2)
+        const [v1meta, v2meta] = this.provide(options.v1, options.v2, !!options.update)
         const result = compareSnapshots(
             {
                 before: { version: '0.0.1', signatures: v1meta },
@@ -79,6 +110,7 @@ export type ComparatorTestPayload = {
     v1: string
     v2: string
     code: Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>
+    update?: boolean
 }
 
 function toFailComparison(

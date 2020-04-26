@@ -27,6 +27,7 @@
             "\t\t\tv2: `",
             "\t\t\t`,",
             "\t\tcode: '$1',",
+            "\t\tupdate: true,",
             "\t\t} as ComparatorTestPayload).toPassComparison()",
             "\t})",
             "})"

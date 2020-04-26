@@ -1,0 +1,15 @@
+[Test]
+memberType = "class"
+memberName = "Test"
+path = "test/src/__testFiles__/checkers/Comparator class changed_generic_extends_type_to_less_strict should find changes-V2.checker.data.ts"
+properties = [ ]
+methods = [ ]
+
+  [[Test.generics]]
+  name = "E"
+  extends = "any"
+
+  [[Test.constructors]]
+  generics = [ ]
+  parameters = [ ]
+  returnType = "typeof Test"

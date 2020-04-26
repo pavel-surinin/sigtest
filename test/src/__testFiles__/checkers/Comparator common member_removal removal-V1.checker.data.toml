@@ -1,0 +1,5 @@
+[a]
+memberName = "a"
+memberType = "constant"
+path = "test/src/__testFiles__/checkers/Comparator common member_removal removal-V1.checker.data.ts"
+type = "number"

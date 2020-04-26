@@ -1,0 +1,21 @@
+[Test]
+memberType = "class"
+memberName = "Test"
+generics = [ ]
+path = "test/src/__testFiles__/checkers/Comparator class changed_constructor_parameter_modifier_to_optional changed to optional and default -V2.checker.data.ts"
+properties = [ ]
+methods = [ ]
+
+  [[Test.constructors]]
+  generics = [ ]
+  returnType = "typeof Test"
+
+    [[Test.constructors.parameters]]
+    name = "a"
+    type = "string"
+    isOptional = true
+
+    [[Test.constructors.parameters]]
+    name = "b"
+    type = "string"
+    isOptional = true

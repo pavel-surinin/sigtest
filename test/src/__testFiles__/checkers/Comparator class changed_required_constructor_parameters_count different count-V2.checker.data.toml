@@ -1,0 +1,31 @@
+[Test]
+memberType = "class"
+memberName = "Test"
+generics = [ ]
+path = "test/src/__testFiles__/checkers/Comparator class changed_required_constructor_parameters_count different count-V2.checker.data.ts"
+properties = [ ]
+methods = [ ]
+
+  [[Test.constructors]]
+  generics = [ ]
+  returnType = "typeof Test"
+
+    [[Test.constructors.parameters]]
+    name = "a"
+    type = "string"
+    isOptional = false
+
+    [[Test.constructors.parameters]]
+    name = "c"
+    type = "string"
+    isOptional = false
+
+    [[Test.constructors.parameters]]
+    name = "d"
+    type = "string"
+    isOptional = false
+
+    [[Test.constructors.parameters]]
+    name = "e"
+    type = "string"
+    isOptional = true

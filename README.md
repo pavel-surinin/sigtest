@@ -12,7 +12,7 @@ This repository is WIP
 | **function**  | ☀️            |           |         |
 | **constant**  | ☀️            | ☀️        |         |
 | **class**     | ☀️            | ☀️        |         |
-| **enum**      | ☀️            | ⛅        |         |
+| **enum**      | ☀️            | ☀️        |         |
 | **interface** | ☀️            |           |         |
 | **type**      | ⛅            |           |         |
 | **namespace** | ☀️            |           |         |

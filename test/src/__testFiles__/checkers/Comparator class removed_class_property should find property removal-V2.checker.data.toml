@@ -1,0 +1,12 @@
+[Test]
+memberType = "class"
+memberName = "Test"
+generics = [ ]
+path = "test/src/__testFiles__/checkers/Comparator class removed_class_property should find property removal-V2.checker.data.ts"
+properties = [ ]
+methods = [ ]
+
+  [[Test.constructors]]
+  generics = [ ]
+  parameters = [ ]
+  returnType = "typeof Test"

@@ -1,0 +1,17 @@
+[Test]
+memberType = "class"
+memberName = "Test"
+path = "test/src/__testFiles__/checkers/Comparator class added_required_generic should find changes-V2.checker.data.ts"
+properties = [ ]
+methods = [ ]
+
+  [[Test.generics]]
+  name = "T"
+
+  [[Test.generics]]
+  name = "E"
+
+  [[Test.constructors]]
+  generics = [ ]
+  parameters = [ ]
+  returnType = "typeof Test"
