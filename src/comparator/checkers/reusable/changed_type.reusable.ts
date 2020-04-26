@@ -129,3 +129,26 @@ export function createFunctionReturnTypeChangeChecker(options: {
         }
     })
 }
+
+export function createFunctionParamsTypeChangeChecker(options: {
+    compareTypes(tBefore: string, tAfter: string): boolean
+    changeCode: Comparator.ChangeCode
+}) {
+    return Common.comparatorFor.function(signatures => {
+        const { after, before } = signatures
+        const obj = after.parameters.reduce(Reducer.toObject(Common.getName), {})
+        const changed = before.parameters
+            .filter(Common.isIn(obj))
+            .filter(b => options.compareTypes(b.type, obj[Common.getName(b)].type))
+        if (changed.length) {
+            const cm = changed
+                .map(p => `'${p.name}' from '${p.type}' to '${obj[Common.getName(p)].type}'`)
+                .join('\n    ')
+            return {
+                info: CHANGE_REGISTRY[options.changeCode],
+                signatures,
+                message: `Function parameter changed type:\n    ${cm}`,
+            }
+        }
+    })
+}

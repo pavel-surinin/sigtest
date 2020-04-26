@@ -61,7 +61,6 @@ export namespace Comparator {
         | 'removed_generic'
         | 'added_required_generic'
         | 'added_optional_generic'
-        | 'added_optional_generic'
         | 'changed_generic_extends_type'
         | 'changed_generic_extends_type_to_less_strict'
         // constant
@@ -74,11 +73,11 @@ export namespace Comparator {
         // function
         | 'changed_function_return_type'
         | 'changed_function_return_type_to_less_strict'
-    // | 'changed_function_parameter_modifier_to_optional'
-    // | 'changed_function_parameter_modifier_to_required'
-    // | 'changed_function_parameter_required_count'
-    // | 'changed_function_parameter_type'
-    // | 'changed_function_parameter_type_to_less_strict'
+        | 'changed_function_parameter_modifier_to_optional'
+        | 'changed_function_parameter_modifier_to_required'
+        | 'changed_function_parameter_required_count'
+        | 'changed_function_parameter_type'
+        | 'changed_function_parameter_type_to_less_strict'
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
         action: Action
@@ -294,6 +293,12 @@ export namespace Comparator {
             ): boolean {
                 return !isReadOnlyCompatible(m1, m2)
             }
+            export function isNowOptional(p0: boolean, p1: boolean) {
+                return !p0 && p1
+            }
+            export function isNowRequired(p0: boolean, p1: boolean) {
+                return p0 && !p1
+            }
         }
         export namespace ClassProperties {
             export namespace ToStrings {
@@ -341,12 +346,16 @@ export namespace Comparator {
             export function formatSequenceMessage(p: WithName[]) {
                 return p.map(Common.getName).map(Common.surroundWithQuotes).join(', ')
             }
-            export function getName(p: WithName) {
+            export function getName<T extends WithName>(p: T) {
                 return p.name
             }
-            export function isIn<T>(object: Record<string, T>, toKey: (el: T) => string) {
+            export function isIn<T extends WithName>(
+                object: Record<string, T>,
+                toKey?: (el: T) => string
+            ) {
+                const resolveKey = toKey ?? Common.getName
                 return function _isIn(el: T): boolean {
-                    return object[toKey(el)] != null
+                    return object[resolveKey(el)] != null
                 }
             }
             export function isNotIn<T>(object: Record<string, T>, toKey: (el: T) => string) {

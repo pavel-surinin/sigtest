@@ -1286,5 +1286,111 @@ describe('Comparator', () => {
                 } as ComparatorTestPayload).toFindNoChanges()
             })
         })
+        describe('changed_function_parameter_modifier_to_optional', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export function test(a: string): void {}
+                    `,
+                    v2: `export function test(a?: string): void {}
+                    `,
+                    code: 'changed_function_parameter_modifier_to_optional',
+                } as ComparatorTestPayload).toFindChanges(`Parameters changed to optional: 'a'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export function test(a?: string): void {}
+                    `,
+                    v2: `export function test(a: string): void {}
+                    `,
+                    code: 'changed_function_parameter_modifier_to_optional',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('changed_function_parameter_modifier_to_required', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export function test(a?: string): void {}
+                    `,
+                    v2: `export function test(a: string): void {}
+                    `,
+                    code: 'changed_function_parameter_modifier_to_required',
+                } as ComparatorTestPayload).toFindChanges(`Parameters changed to required: 'a'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export function test(a: string): void {}
+                    `,
+                    v2: `export function test(a?: string): void {}
+                    `,
+                    code: 'changed_function_parameter_modifier_to_required',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('changed_function_parameter_required_count', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export function test(a: any, b: number = 1) {}
+                    `,
+                    v2: `export function test(b: number) {}
+                    `,
+                    code: 'changed_function_parameter_required_count',
+                } as ComparatorTestPayload)
+                    .toFindChanges(`Function required parameters count changed:
+    added: 'b'
+    removed: 'a'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export function test(a: any, b?: any) {}
+                    `,
+                    v2: `export function test(a: any, b?: any) {}
+                    `,
+                    code: 'changed_function_parameter_required_count',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('changed_function_parameter_type', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export function test(a: number | string, b: any): void {}
+                    `,
+                    v2: `export function test(a: number, b: Date): void {}
+                    `,
+                    code: 'changed_function_parameter_type',
+                } as ComparatorTestPayload).toFindChanges(`Function parameter changed type:
+    'a' from 'string | number' to 'number'
+    'b' from 'any' to 'Date'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export function test(a: number, b: string): void {}
+                    `,
+                    v2: `export function test(a: number | string, b: any): void {}
+                    `,
+                    code: 'changed_function_parameter_type',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('changed_function_parameter_type_to_less_strict', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export function test(a: number) {}
+                    `,
+                    v2: `export function test(a: any) {}
+                    `,
+                    code: 'changed_function_parameter_type_to_less_strict',
+                } as ComparatorTestPayload).toFindChanges(`Function parameter changed type:
+    'a' from 'number' to 'any'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export function test(a: any) {}
+                    `,
+                    v2: `export function test(a: number) {}
+                    `,
+                    code: 'changed_function_parameter_type_to_less_strict',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
     })
 })

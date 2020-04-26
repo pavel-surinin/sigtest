@@ -10,6 +10,7 @@ import {
     createClassGenericChangeTypeChecker,
     createConstantChangeTypeChecker,
     createFunctionReturnTypeChangeChecker,
+    createFunctionParamsTypeChangeChecker,
 } from './checkers/reusable/changed_type.reusable'
 import { createChangeWriteChecker } from './checkers/reusable/changed_class_property_write.reusable'
 import { createAddedClassGenericTypeChecker } from './checkers/reusable/added_generic_type.reusable'
@@ -34,6 +35,8 @@ import { removed_generic } from './checkers/removed_generic'
 import { added_enum } from './checkers/added_enum'
 import { removed_enum } from './checkers/removed_enum'
 import { changed_enum_value } from './checkers/changed_enum_value'
+import { createOptReqModifierChangeComparator } from './checkers/reusable/opt_req_modifier.reusable'
+import { changed_function_parameter_required_count } from './checkers/changed_function_parameter_required_count'
 
 export type ComparatorRegistry = Record<
     Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>,
@@ -123,6 +126,25 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
     }),
     changed_function_return_type_to_less_strict: createFunctionReturnTypeChangeChecker({
         changeCode: 'changed_function_return_type_to_less_strict',
+        compareTypes: Comparator.Utils.Types.areMoreApplicable,
+    }),
+    changed_function_parameter_modifier_to_optional: createOptReqModifierChangeComparator({
+        changeCode: 'changed_function_parameter_modifier_to_optional',
+        compare: Comparator.Utils.Modifiers.isNowOptional,
+        modifierName: 'optional',
+    }),
+    changed_function_parameter_modifier_to_required: createOptReqModifierChangeComparator({
+        changeCode: 'changed_function_parameter_modifier_to_required',
+        compare: Comparator.Utils.Modifiers.isNowRequired,
+        modifierName: 'required',
+    }),
+    changed_function_parameter_required_count,
+    changed_function_parameter_type: createFunctionParamsTypeChangeChecker({
+        changeCode: 'changed_function_parameter_type',
+        compareTypes: Comparator.Utils.Types.areNotCompatible,
+    }),
+    changed_function_parameter_type_to_less_strict: createFunctionParamsTypeChangeChecker({
+        changeCode: 'changed_function_parameter_type_to_less_strict',
         compareTypes: Comparator.Utils.Types.areMoreApplicable,
     }),
 }

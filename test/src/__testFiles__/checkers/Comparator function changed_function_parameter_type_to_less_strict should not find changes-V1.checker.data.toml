@@ -1,0 +1,10 @@
+[test]
+memberName = "test"
+memberType = "function"
+path = "test/src/__testFiles__/checkers/Comparator function changed_function_parameter_type_to_less_strict should not find changes-V1.checker.data.ts"
+returnType = "void"
+
+  [[test.parameters]]
+  name = "a"
+  type = "any"
+  isOptional = false

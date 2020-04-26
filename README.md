@@ -9,7 +9,7 @@ This repository is WIP
 
 |               | Introspection | Comparing | Reports |
 | ------------- | ------------- | --------- | ------- |
-| **function**  | ☀️            |           |         |
+| **function**  | ☀️            | ⛅        |         |
 | **constant**  | ☀️            | ☀️        |         |
 | **class**     | ☀️            | ☀️        |         |
 | **enum**      | ☀️            | ☀️        |         |

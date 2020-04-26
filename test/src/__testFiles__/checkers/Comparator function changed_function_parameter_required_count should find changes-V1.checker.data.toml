@@ -1,0 +1,15 @@
+[test]
+memberName = "test"
+memberType = "function"
+path = "test/src/__testFiles__/checkers/Comparator function changed_function_parameter_required_count should find changes-V1.checker.data.ts"
+returnType = "void"
+
+  [[test.parameters]]
+  name = "a"
+  type = "any"
+  isOptional = false
+
+  [[test.parameters]]
+  name = "b"
+  type = "number"
+  isOptional = true

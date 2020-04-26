@@ -41,4 +41,9 @@
 |  added_enum | added | compatible | Enum value added
 | **FUNCTION**
 |  changed_function_return_type | changed | breaking | Function return type changed
+|  changed_function_parameter_modifier_to_required | changed | breaking | Function parameter became required
+|  changed_function_parameter_required_count | changed | breaking | Function required parameters count changed
+|  changed_function_parameter_type | changed | breaking | Function paramter type changed
 |  changed_function_return_type_to_less_strict | changed | compatible | Function return type changed to less strict
+|  changed_function_parameter_modifier_to_optional | changed | compatible | Function parameter became optional
+|  changed_function_parameter_type_to_less_strict | changed | compatible | Function paramter type changed to less strict
