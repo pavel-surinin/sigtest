@@ -113,14 +113,14 @@ export type ComparatorTestPayload = {
     update?: boolean
 }
 
-function toFailComparison(
+function toFindChanges(
     this: jest.MatcherContext,
     received: ComparatorTestPayload,
     actual: string
 ): jest.CustomMatcherResult {
     const result = new SignatureProvider(TEST_FILES_FOLDER).compare(received)
     if (result.changes.length !== 1) {
-        throw new Error('One comparison result must be present in "toFailComparison" matcher')
+        throw new Error('One comparison result must be present in "toFindChanges" matcher')
     }
 
     const expected: Comparator.Change<Comparator.ChangeCode> = {
@@ -133,7 +133,7 @@ function toFailComparison(
         return {
             pass: false,
             message: () =>
-                this.utils.matcherHint('toFailComparison', undefined, undefined, {
+                this.utils.matcherHint('toFindChanges', undefined, undefined, {
                     comment: 'change code',
                 }) +
                 '\n\n' +
@@ -145,7 +145,7 @@ function toFailComparison(
         return {
             pass: false,
             message: () =>
-                this.utils.matcherHint('toFailComparison', undefined, undefined, {
+                this.utils.matcherHint('toFindChanges', undefined, undefined, {
                     comment: 'change info',
                 }) +
                 '\n\n' +
@@ -157,7 +157,7 @@ function toFailComparison(
         return {
             pass: false,
             message: () =>
-                this.utils.matcherHint('toFailComparison', undefined, undefined, {
+                this.utils.matcherHint('toFindChanges', undefined, undefined, {
                     comment: 'message',
                 }) +
                 '\n\n' +
@@ -171,19 +171,19 @@ function toFailComparison(
     }
 }
 
-function toPassComparison(
+function toFindNoChanges(
     this: jest.MatcherContext,
     received: ComparatorTestPayload
 ): jest.CustomMatcherResult {
     const result = new SignatureProvider(TEST_FILES_FOLDER).compare(received)
     if (result.changes.length !== 1) {
-        throw new Error('One comparison result must be present in "toFailComparison" matcher')
+        throw new Error('One comparison result must be present in "toFindChanges" matcher')
     }
 
     return {
         pass: CHANGE_REGISTRY.no_change.code === result.changes[0].info.code,
         message: () =>
-            this.utils.matcherHint('toPassComparison', undefined, undefined, undefined) +
+            this.utils.matcherHint('toFindNoChanges', undefined, undefined, undefined) +
             '\n\n' +
             `Expected: ${this.utils.printExpected(CHANGE_REGISTRY.no_change.code)}\n` +
             `Received: ${this.utils.printReceived(result.changes[0].info.code)}`,
@@ -191,8 +191,8 @@ function toPassComparison(
 }
 
 expect.extend({
-    toFailComparison,
-    toPassComparison,
+    toFindChanges,
+    toFindNoChanges,
 })
 
 export const comparatorMatcher = {

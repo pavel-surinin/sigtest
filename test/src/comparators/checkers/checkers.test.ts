@@ -11,21 +11,21 @@ describe('Comparator', () => {
                     v1: `export const a = 1`,
                     v2: `export function a() {}`,
                     code: 'changed_member_type',
-                }).toFailComparison("Member type changed from 'constant' to 'function'")
+                }).toFindChanges("Member type changed from 'constant' to 'function'")
             })
             it('pass on no change', () => {
                 expect({
                     v1: `export const a = 1`,
                     v2: `export const a = 'string'`,
                     code: 'changed_member_type',
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
             it('pass on removal', () => {
                 expect({
                     v1: `export const a = 1`,
                     v2: ``,
                     code: 'changed_member_type',
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('member_removal', () => {
@@ -34,7 +34,7 @@ describe('Comparator', () => {
                     v1: `export const a = 1`,
                     v2: ``,
                     code: 'member_removal',
-                }).toFailComparison("Member 'a' removed from package")
+                }).toFindChanges("Member 'a' removed from package")
             })
             it('removal from namespace ', () => {
                 expect({
@@ -47,14 +47,14 @@ describe('Comparator', () => {
                         export const a = 1
                     `,
                     code: 'member_removal',
-                }).toFailComparison("Member 'Test.a' removed from package")
+                }).toFindChanges("Member 'Test.a' removed from package")
             })
             it('should pass', () => {
                 expect({
                     v1: `export const a = 1`,
                     v2: `export const a = 'string'`,
                     code: 'member_removal',
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
     })
@@ -75,7 +75,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_required_constructor_parameters_count' as Comparator.ChangeCode,
-                }).toFailComparison(
+                }).toFindChanges(
                     `Constructor required parameters count changed:
     added: 'c', 'd'
     removed: 'b'`
@@ -96,7 +96,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_required_constructor_parameters_count' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
             it('default is ignored', () => {
                 expect({
@@ -113,7 +113,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_required_constructor_parameters_count' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('changed_constructor_parameter_modifier_to_optional', () => {
@@ -132,7 +132,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_constructor_parameter_modifier_to_optional' as Comparator.ChangeCode,
-                }).toFailComparison(`Constructor parameters: 'a' and 'b' became optional`)
+                }).toFindChanges(`Constructor parameters: 'a' and 'b' became optional`)
             })
             it('changed from optional and default ', () => {
                 expect({
@@ -149,7 +149,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_constructor_parameter_modifier_to_optional' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('changed_constructor_parameter_modifier_to_required', () => {
@@ -168,7 +168,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_constructor_parameter_modifier_to_required' as Comparator.ChangeCode,
-                }).toFailComparison(`Constructor parameters: 'a' and 'b' became required`)
+                }).toFindChanges(`Constructor parameters: 'a' and 'b' became required`)
             })
             it('should not find changes to required parameters', () => {
                 expect({
@@ -185,7 +185,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_constructor_parameter_modifier_to_required' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('changed_constructor_parameter_type', () => {
@@ -204,7 +204,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_constructor_parameter_type' as Comparator.ChangeCode,
-                }).toFailComparison(`Constructor parameters: 'a', 'b', 'c', 'd' changed types:
+                }).toFindChanges(`Constructor parameters: 'a', 'b', 'c', 'd' changed types:
     parameter 'a' before - 'string', current - 'Date'
     parameter 'b' before - 'string | boolean', current - 'boolean'
     parameter 'c' before - 'string', current - 'number | boolean'
@@ -225,7 +225,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_constructor_parameter_type' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('changed_constructor_parameter_type_union', () => {
@@ -244,7 +244,7 @@ describe('Comparator', () => {
                             } 
                         `,
                     code: 'changed_constructor_parameter_type_union' as Comparator.ChangeCode,
-                }).toFailComparison(`Constructor parameters: 'a', 'b' changed types:
+                }).toFindChanges(`Constructor parameters: 'a', 'b' changed types:
     parameter 'a' before - 'string', current - 'string | number'
     parameter 'b' before - 'string | boolean', current - 'string | number | boolean'`)
             })
@@ -263,7 +263,7 @@ describe('Comparator', () => {
                             } 
                         `,
                     code: 'changed_constructor_parameter_type_union' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('changed_method_return_type', () => {
@@ -284,7 +284,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_method_return_type' as Comparator.ChangeCode,
-                }).toFailComparison(`Method: 'a', 'b', 'c' changed return types:
+                }).toFindChanges(`Method: 'a', 'b', 'c' changed return types:
     method 'a' before - 'number | boolean', current - 'boolean'
     method 'b' before - 'boolean', current - 'number'
     method 'c' before - 'any', current - 'string'`)
@@ -304,7 +304,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_method_return_type' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('changed_method_return_type_union', () => {
@@ -323,7 +323,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_method_return_type_union' as Comparator.ChangeCode,
-                }).toFailComparison(`Method: 'a', 'c' changed return types:
+                }).toFindChanges(`Method: 'a', 'c' changed return types:
     method 'a' before - 'boolean', current - 'string | boolean'
     method 'c' before - 'number', current - 'any'`)
             })
@@ -342,7 +342,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_method_return_type_union' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('changed_method_parameter_modifier_to_optional', () => {
@@ -363,7 +363,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_method_parameter_modifier_to_optional' as Comparator.ChangeCode,
-                }).toFailComparison(`Method parameters changed from required to optional:
+                }).toFindChanges(`Method parameters changed from required to optional:
     method 'a' parameters: 'p2', 'p3'
     method 'c' parameters: 'p1'`)
             })
@@ -383,7 +383,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_method_parameter_modifier_to_optional' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('changed_method_parameter_modifier_to_required', () => {
@@ -404,7 +404,7 @@ describe('Comparator', () => {
                         } 
                         `,
                     code: 'changed_method_parameter_modifier_to_required' as Comparator.ChangeCode,
-                }).toFailComparison(`Method parameters changed from optional to required:
+                }).toFindChanges(`Method parameters changed from optional to required:
     method 'a' parameters: 'p2', 'p3'
     method 'c' parameters: 'p1'`)
             })
@@ -424,7 +424,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_method_parameter_modifier_to_required' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('changed_method_parameter_required_count', () => {
@@ -443,7 +443,7 @@ describe('Comparator', () => {
                         } 
                         `,
                     code: 'changed_method_parameter_required_count' as Comparator.ChangeCode,
-                }).toFailComparison(`Method required parameters changed:
+                }).toFindChanges(`Method required parameters changed:
     method 'a':
         added: 'p2', 'p3', 'p4'
         removed: 'p1'
@@ -464,7 +464,7 @@ describe('Comparator', () => {
                         } 
                     `,
                     code: 'changed_method_parameter_required_count' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('added_method', () => {
@@ -490,7 +490,7 @@ describe('Comparator', () => {
                         } 
                         `,
                     code: 'added_method' as Comparator.ChangeCode,
-                }).toFailComparison(`Methods added:
+                }).toFindChanges(`Methods added:
     public a(p1, p2)
     protected b()`)
             })
@@ -508,7 +508,7 @@ describe('Comparator', () => {
                     }
                         `,
                     code: 'added_method' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('removed_method', () => {
@@ -533,7 +533,7 @@ describe('Comparator', () => {
                     } 
                     `,
                     code: 'removed_method' as Comparator.ChangeCode,
-                }).toFailComparison(`Methods removed:
+                }).toFindChanges(`Methods removed:
     a(p1, p2)
     b()`)
             })
@@ -551,7 +551,7 @@ describe('Comparator', () => {
                     }
                         `,
                     code: 'removed_method' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('changed_method_modifier_more_visible', () => {
@@ -572,7 +572,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_method_modifier_more_visible' as Comparator.ChangeCode,
-                }).toFailComparison(`Methods changed access modifier:
+                }).toFindChanges(`Methods changed access modifier:
     method 'b(p1)' from 'protected' to 'public'
     method 'c(p1)' from 'private' to 'protected'`)
             })
@@ -593,7 +593,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_method_modifier_more_visible' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('changed_method_modifier_less_visible', () => {
@@ -616,7 +616,7 @@ describe('Comparator', () => {
                         }
                         `,
                     code: 'changed_method_modifier_less_visible' as Comparator.ChangeCode,
-                }).toFailComparison(`Methods changed access modifier:
+                }).toFindChanges(`Methods changed access modifier:
     method 'b(p1)' from 'public' to 'protected'
     method 'static b(p1)' from 'public' to 'protected'
     method 'c(p1)' from 'protected' to 'private'`)
@@ -638,7 +638,7 @@ describe('Comparator', () => {
                         }
                         `,
                     code: 'changed_method_modifier_less_visible' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('changed_property_modifier_more_visible', () => {
@@ -659,7 +659,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_property_modifier_more_visible' as Comparator.ChangeCode,
-                }).toFailComparison(`Properties changed access modifier:
+                }).toFindChanges(`Properties changed access modifier:
     property 'b' from 'protected' to 'public'
     property 'c' from 'private' to 'protected'`)
             })
@@ -680,7 +680,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_property_modifier_more_visible' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('changed_property_modifier_less_visible', () => {
@@ -703,7 +703,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_property_modifier_less_visible' as Comparator.ChangeCode,
-                }).toFailComparison(`Properties changed access modifier:
+                }).toFindChanges(`Properties changed access modifier:
     property 'static a' from 'public' to 'protected'
     property 'a' from 'public' to 'protected'
     property 'b' from 'protected' to 'private'`)
@@ -725,7 +725,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_property_modifier_less_visible' as Comparator.ChangeCode,
-                }).toPassComparison()
+                }).toFindNoChanges()
             })
         })
         describe('removed_class_property', () => {
@@ -742,7 +742,7 @@ describe('Comparator', () => {
                     export class Test {
                     }`,
                     code: 'removed_class_property',
-                } as ComparatorTestPayload).toFailComparison(
+                } as ComparatorTestPayload).toFindChanges(
                     `Properties removed: 'a', 'static a', 'b'`
                 )
             })
@@ -758,7 +758,7 @@ describe('Comparator', () => {
                         a = false
                     }`,
                     code: 'removed_class_property',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
         describe('added_class_property', () => {
@@ -777,9 +777,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'added_class_property',
-                } as ComparatorTestPayload).toFailComparison(
-                    `Properties added: 'b', 'c', 'static c'`
-                )
+                } as ComparatorTestPayload).toFindChanges(`Properties added: 'b', 'c', 'static c'`)
             })
             it('should not find added property', () => {
                 expect({
@@ -796,7 +794,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'added_class_property',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
         describe('changed_class_property_type', () => {
@@ -817,7 +815,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_class_property_type',
-                } as ComparatorTestPayload).toFailComparison(`Properties changed type:
+                } as ComparatorTestPayload).toFindChanges(`Properties changed type:
     property 'b' from 'string' to 'boolean'
     property 'static b' from 'string' to 'boolean'`)
             })
@@ -836,7 +834,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_class_property_type',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
         describe('changed_class_property_type_union', () => {
@@ -859,7 +857,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_class_property_type_union',
-                } as ComparatorTestPayload).toFailComparison(`Properties changed type:
+                } as ComparatorTestPayload).toFindChanges(`Properties changed type:
     property 'b' from '"b" | "c"' to '"b" | "c" | "d"'
     property 'static b' from '"b" | "c"' to '"b" | "c" | "d"'
     property 'd' from 'string' to 'any'`)
@@ -879,7 +877,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_class_property_type_union',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
         describe('changed_class_property_to_readonly', () => {
@@ -900,7 +898,7 @@ describe('Comparator', () => {
                     } 
                     `,
                     code: 'changed_class_property_to_readonly',
-                } as ComparatorTestPayload).toFailComparison(`Properties changed write modifier:
+                } as ComparatorTestPayload).toFindChanges(`Properties changed write modifier:
     property 'static a' from '' to 'readonly'`)
             })
             it('should not find changes', () => {
@@ -919,7 +917,7 @@ describe('Comparator', () => {
                     } 
                     `,
                     code: 'changed_class_property_to_readonly',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
         describe('changed_class_property_to_not_readonly', () => {
@@ -940,7 +938,7 @@ describe('Comparator', () => {
                     } 
                     `,
                     code: 'changed_class_property_to_not_readonly',
-                } as ComparatorTestPayload).toFailComparison(`Properties changed write modifier:
+                } as ComparatorTestPayload).toFindChanges(`Properties changed write modifier:
     property 'static a' from 'readonly' to ''
     property 'b' from 'readonly' to ''`)
             })
@@ -961,7 +959,7 @@ describe('Comparator', () => {
                     } 
                     `,
                     code: 'changed_class_property_to_not_readonly',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
         describe('removed_generic', () => {
@@ -972,7 +970,7 @@ describe('Comparator', () => {
                     v2: `export class Test<T> {
                     }`,
                     code: 'removed_generic',
-                } as ComparatorTestPayload).toFailComparison(`Removed class generics: 'E'`)
+                } as ComparatorTestPayload).toFindChanges(`Removed class generics: 'E'`)
             })
             it('should not find changes', () => {
                 expect({
@@ -981,7 +979,7 @@ describe('Comparator', () => {
                     v2: `export class Test<T, E> {
                             }`,
                     code: 'removed_generic',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
         describe('added_required_generic', () => {
@@ -992,7 +990,7 @@ describe('Comparator', () => {
                     v2: `export class Test<T, E> {
                     }`,
                     code: 'added_required_generic',
-                } as ComparatorTestPayload).toFailComparison(`Added class generics: 'E'`)
+                } as ComparatorTestPayload).toFindChanges(`Added class generics: 'E'`)
             })
             it('should not find changes', () => {
                 expect({
@@ -1001,7 +999,7 @@ describe('Comparator', () => {
                     v2: `export class Test<T, E = any> {
                     }`,
                     code: 'added_required_generic',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
         describe('added_optional_generic', () => {
@@ -1012,7 +1010,7 @@ describe('Comparator', () => {
                     v2: `export class Test<T, E = any> {
                     }`,
                     code: 'added_optional_generic',
-                } as ComparatorTestPayload).toFailComparison(`Added class generics: 'E'`)
+                } as ComparatorTestPayload).toFindChanges(`Added class generics: 'E'`)
             })
             it('should not find changes', () => {
                 expect({
@@ -1021,7 +1019,7 @@ describe('Comparator', () => {
                     v2: `export class Test<T, E extends string> {
                     }`,
                     code: 'added_optional_generic',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
         describe('changed_generic_extends_type', () => {
@@ -1032,7 +1030,7 @@ describe('Comparator', () => {
                     v2: `export class Test<E extends string, C extends Date> {
                     }`,
                     code: 'changed_generic_extends_type',
-                } as ComparatorTestPayload).toFailComparison(`Generics changed type:
+                } as ComparatorTestPayload).toFindChanges(`Generics changed type:
     generic 'E' from 'number' to 'string'
     generic 'C' from 'any' to 'Date'`)
             })
@@ -1043,7 +1041,7 @@ describe('Comparator', () => {
                     v2: `export class Test<E extends any> {
                     }`,
                     code: 'changed_generic_extends_type',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
         describe('changed_generic_extends_type_to_less_strict', () => {
@@ -1054,7 +1052,7 @@ describe('Comparator', () => {
                     v2: `export class Test<E extends any> {
                     }`,
                     code: 'changed_generic_extends_type_to_less_strict',
-                } as ComparatorTestPayload).toFailComparison(`Generics changed type:
+                } as ComparatorTestPayload).toFindChanges(`Generics changed type:
     generic 'E' from 'number' to 'any'`)
             })
             it('should not find changes', () => {
@@ -1064,7 +1062,7 @@ describe('Comparator', () => {
                     v2: `export class Test<E extends string> {
                     }`,
                     code: 'changed_generic_extends_type_to_less_strict',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
     })
@@ -1075,7 +1073,7 @@ describe('Comparator', () => {
                     v1: `export const a: string = 'a'`,
                     v2: `export const a: number = 2`,
                     code: 'changed_constant_type',
-                } as ComparatorTestPayload).toFailComparison(
+                } as ComparatorTestPayload).toFindChanges(
                     `Variable 'a' changed type from 'string' to 'number'`
                 )
             })
@@ -1084,7 +1082,7 @@ describe('Comparator', () => {
                     v1: `export const a: string = 'a'`,
                     v2: `export const a: any = 'a'`,
                     code: 'changed_constant_type',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
         describe('changed_constant_type_to_less_strict', () => {
@@ -1093,7 +1091,7 @@ describe('Comparator', () => {
                     v1: `export const a: string = 'a'`,
                     v2: `export const a: any = 'a'`,
                     code: 'changed_constant_type_to_less_strict',
-                } as ComparatorTestPayload).toFailComparison(
+                } as ComparatorTestPayload).toFindChanges(
                     `Variable 'a' changed type from 'string' to 'any'`
                 )
             })
@@ -1102,7 +1100,7 @@ describe('Comparator', () => {
                     v1: `export const a: any = 'a'`,
                     v2: `export const a= 'a'`,
                     code: 'changed_constant_type_to_less_strict',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
     })
@@ -1124,7 +1122,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'added_enum',
-                } as ComparatorTestPayload).toFailComparison(`Enum values added: 'LEFT', 'RIGHT'`)
+                } as ComparatorTestPayload).toFindChanges(`Enum values added: 'LEFT', 'RIGHT'`)
             })
             it('should not find changes', () => {
                 expect({
@@ -1142,7 +1140,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'added_enum',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
         describe('removed_enum', () => {
@@ -1162,7 +1160,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'removed_enum',
-                } as ComparatorTestPayload).toFailComparison(`Removed enum values: 'LEFT', 'RIGHT'`)
+                } as ComparatorTestPayload).toFindChanges(`Removed enum values: 'LEFT', 'RIGHT'`)
             })
             it('should not find changes', () => {
                 expect({
@@ -1180,7 +1178,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'removed_enum',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
         describe('changed_enum_value', () => {
@@ -1197,7 +1195,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_enum_value',
-                } as ComparatorTestPayload).toFailComparison(`Enum changed values:
+                } as ComparatorTestPayload).toFindChanges(`Enum changed values:
     'Direction.UP' from '0' to '3'
     'Direction.DOWN' from '1' to '4'`)
             })
@@ -1214,7 +1212,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_enum_value',
-                } as ComparatorTestPayload).toFailComparison(`Enum changed values:
+                } as ComparatorTestPayload).toFindChanges(`Enum changed values:
     'Direction.UP' from '0' to 'up'
     'Direction.DOWN' from '1' to 'down'`)
             })
@@ -1229,7 +1227,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_enum_value',
-                } as ComparatorTestPayload).toPassComparison()
+                } as ComparatorTestPayload).toFindNoChanges()
             })
         })
     })
