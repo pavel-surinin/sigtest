@@ -1,0 +1,10 @@
+[test]
+memberName = "test"
+memberType = "function"
+path = "test/src/__testFiles__/checkers/Comparator function added_function_required_generic should not find changes-V1.checker.data.ts"
+parameters = [ ]
+returnType = "void"
+
+  [[test.generics]]
+  name = "T"
+  default = "any"

@@ -40,10 +40,15 @@
 |  changed_enum_value | changed | breaking | Enum changed value, serialized to json values will be different
 |  added_enum | added | compatible | Enum value added
 | **FUNCTION**
+|  removed_function_generic | removed | breaking | Function generic type is removed
 |  changed_function_return_type | changed | breaking | Function return type changed
 |  changed_function_parameter_modifier_to_required | changed | breaking | Function parameter became required
 |  changed_function_parameter_required_count | changed | breaking | Function required parameters count changed
 |  changed_function_parameter_type | changed | breaking | Function paramter type changed
+|  changed_function_generic_extends_type | changed | breaking | Changed function generic type constraint
+|  added_function_required_generic | added | breaking | Added required generic type to function
 |  changed_function_return_type_to_less_strict | changed | compatible | Function return type changed to less strict
 |  changed_function_parameter_modifier_to_optional | changed | compatible | Function parameter became optional
 |  changed_function_parameter_type_to_less_strict | changed | compatible | Function paramter type changed to less strict
+|  changed_function_generic_extends_type_to_less_strict | changed | compatible | Changed function generic type constraint to be less restrictive
+|  added_function_optional_generic | added | compatible | Added optional generic type to function

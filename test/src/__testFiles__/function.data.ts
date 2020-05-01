@@ -1,4 +1,4 @@
-export function namedFunction(param: number, b: Blob): boolean {
+export function namedFunction<T>(param: number, b: Blob, t: T): boolean {
     return false
 }
 

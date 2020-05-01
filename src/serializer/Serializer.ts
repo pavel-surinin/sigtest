@@ -1,6 +1,7 @@
 import * as ts from 'typescript'
 import { Signatures } from '../App.types'
 import { SerializationError } from './SerializerError'
+import { optional } from 'declarative-js'
 
 const EMPTY_RESULT = {}
 
@@ -389,6 +390,10 @@ export class Serializer {
         parameters: Signatures.Paramter[],
         namespace: string | undefined
     ) {
+        const generics =
+            (fxDeclaration as ts.SignatureDeclarationBase).typeParameters?.map(
+                this.serializeTypeParameter
+            ) ?? []
         const returnType = this.checker.typeToString(
             this.checker
                 .getTypeOfSymbolAtLocation(symbol, fxDeclaration)
@@ -402,6 +407,7 @@ export class Serializer {
             parameters,
             returnType,
             namespace,
+            generics,
         } as Signatures.FunctionSignature
     }
 

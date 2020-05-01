@@ -73,5 +73,11 @@
             "})"
         ],
         "description": "Create Comparator (new)"
+    },
+    "Create object with after impl": {
+        "scope": "typescript",
+        "body": ["const afterO = after.$0.reduce(Reducer.toObject(Common.getName), {})"],
+        "description": "Create object with after impl",
+        "prefix": "afterO"
     }
 }

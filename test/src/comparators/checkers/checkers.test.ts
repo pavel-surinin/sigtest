@@ -970,7 +970,7 @@ describe('Comparator', () => {
                     v2: `export class Test<T> {
                     }`,
                     code: 'removed_generic',
-                } as ComparatorTestPayload).toFindChanges(`Removed class generics: 'E'`)
+                } as ComparatorTestPayload).toFindChanges(`Generic type removed: 'E'`)
             })
             it('should not find changes', () => {
                 expect({
@@ -1122,7 +1122,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'added_enum',
-                } as ComparatorTestPayload).toFindChanges(`Enum values added: 'LEFT', 'RIGHT'`)
+                } as ComparatorTestPayload).toFindChanges(`Enum value added: 'LEFT', 'RIGHT'`)
             })
             it('should not find changes', () => {
                 expect({
@@ -1160,7 +1160,7 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'removed_enum',
-                } as ComparatorTestPayload).toFindChanges(`Removed enum values: 'LEFT', 'RIGHT'`)
+                } as ComparatorTestPayload).toFindChanges(`Enum value removed: 'LEFT', 'RIGHT'`)
             })
             it('should not find changes', () => {
                 expect({
@@ -1389,6 +1389,108 @@ describe('Comparator', () => {
                     v2: `export function test(a: number) {}
                     `,
                     code: 'changed_function_parameter_type_to_less_strict',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('removed_function_generic', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export function test<T>() {}
+                    `,
+                    v2: `export function test() {}
+                    `,
+                    code: 'removed_function_generic',
+                } as ComparatorTestPayload).toFindChanges(`Generic types removed: 'T'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export function test() {}
+                    `,
+                    v2: `export function test<T>() {}
+                    `,
+                    code: 'removed_function_generic',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('added_function_required_generic', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export function test() {}
+                    `,
+                    v2: `export function test<T>() {}
+                    `,
+                    code: 'added_function_required_generic',
+                } as ComparatorTestPayload).toFindChanges(`Generic type added: 'T'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export function test<T = any>() {}
+                    `,
+                    v2: `export function test<T>() {}
+                    `,
+                    code: 'added_function_required_generic',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('added_function_optional_generic', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export function test() {}
+                    `,
+                    v2: `export function test<T = string>() {}
+                    `,
+                    code: 'added_function_optional_generic',
+                } as ComparatorTestPayload).toFindChanges(`Generic type added: 'T'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export function test() {}
+                    `,
+                    v2: `export function test<T>() {}
+                    `,
+                    code: 'added_function_optional_generic',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('changed_function_generic_extends_type', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export function test<T>() {}
+                    `,
+                    v2: `export function test<T extends string>() {}
+                    `,
+                    code: 'changed_function_generic_extends_type',
+                } as ComparatorTestPayload).toFindChanges(`Generics changed type:
+    generic 'T' from 'any' to 'string'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export function test<T>() {}
+                    `,
+                    v2: `export function test<T = any>() {}
+                    `,
+                    code: 'changed_function_generic_extends_type',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('changed_function_generic_extends_type_to_less_strict', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export function test<T extends string>() {}
+                    `,
+                    v2: `export function test<T extends string | number>() {}
+                    `,
+                    code: 'changed_function_generic_extends_type_to_less_strict',
+                } as ComparatorTestPayload).toFindChanges(`Generics changed type:
+    generic 'T' from 'string' to 'string | number'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export function test<T extends any>() {}
+                    `,
+                    v2: `export function test<T extends string>() {}
+                    `,
+                    code: 'changed_function_generic_extends_type_to_less_strict',
                 } as ComparatorTestPayload).toFindNoChanges()
             })
         })

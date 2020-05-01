@@ -78,6 +78,12 @@ export namespace Comparator {
         | 'changed_function_parameter_required_count'
         | 'changed_function_parameter_type'
         | 'changed_function_parameter_type_to_less_strict'
+        // generic
+        | 'removed_function_generic'
+        | 'added_function_required_generic'
+        | 'added_function_optional_generic'
+        | 'changed_function_generic_extends_type'
+        | 'changed_function_generic_extends_type_to_less_strict'
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
         action: Action
@@ -358,9 +364,12 @@ export namespace Comparator {
                     return object[resolveKey(el)] != null
                 }
             }
-            export function isNotIn<T>(object: Record<string, T>, toKey: (el: T) => string) {
+            export function isNotIn<T extends WithName>(
+                object: Record<string, T>,
+                toKey?: (el: T) => string
+            ) {
                 return function _isNotIn(el: T): boolean {
-                    return object[toKey(el)] == null
+                    return object[toKey ? toKey(el) : Common.getName(el)] == null
                 }
             }
             export function surroundWithQuotes(s: string) {

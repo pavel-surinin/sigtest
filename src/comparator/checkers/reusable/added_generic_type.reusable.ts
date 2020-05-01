@@ -14,13 +14,13 @@ export function createAddedClassGenericTypeChecker(options: {
         typeof options.changeCode
     > {
         if (after && after.memberType === 'class' && before.memberType === 'class') {
-            function resolveKey(generic: Signatures.GenericDefinition) {
-                return generic.name
-            }
-            const beforeO = before.generics.reduce(Reducer.toObject(resolveKey), {})
+            const beforeO = before.generics.reduce(
+                Reducer.toObject(Comparator.Utils.Common.getName),
+                {}
+            )
             const changed = after.generics
                 .map(afterGeneric => ({
-                    beforeGeneric: beforeO[resolveKey(afterGeneric)],
+                    beforeGeneric: beforeO[Comparator.Utils.Common.getName(afterGeneric)],
                     afterGeneric,
                 }))
                 .filter(options.compare)

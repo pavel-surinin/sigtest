@@ -7,10 +7,10 @@ import {
 } from './checkers/reusable/changed_modifier.reusable'
 import {
     createChangeTypeChecker,
-    createClassGenericChangeTypeChecker,
     createConstantChangeTypeChecker,
     createFunctionReturnTypeChangeChecker,
     createFunctionParamsTypeChangeChecker,
+    createGenericTypeChecker,
 } from './checkers/reusable/changed_type.reusable'
 import { createChangeWriteChecker } from './checkers/reusable/changed_class_property_write.reusable'
 import { createAddedClassGenericTypeChecker } from './checkers/reusable/added_generic_type.reusable'
@@ -31,12 +31,14 @@ import { added_method } from './checkers/added_method'
 import { removed_method } from './checkers/removed_method'
 import { removed_class_property } from './checkers/removed_class_property'
 import { added_class_property } from './checkers/added_class_property'
-import { removed_generic } from './checkers/removed_generic'
-import { added_enum } from './checkers/added_enum'
-import { removed_enum } from './checkers/removed_enum'
 import { changed_enum_value } from './checkers/changed_enum_value'
 import { createOptReqModifierChangeComparator } from './checkers/reusable/opt_req_modifier.reusable'
 import { changed_function_parameter_required_count } from './checkers/changed_function_parameter_required_count'
+
+import {
+    createRemovedComparator,
+    createAddedComparator,
+} from './checkers/createSimpleAddRemoveProp'
 
 export type ComparatorRegistry = Record<
     Exclude<Comparator.ChangeCode, Comparator.NothingChangedCode>,
@@ -100,14 +102,23 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
         changeCode: 'added_required_generic',
         compare: Comparator.Utils.Generics.addedRequired,
     }),
-    removed_generic,
-    changed_generic_extends_type: createClassGenericChangeTypeChecker({
-        changeCode: 'changed_generic_extends_type',
-        compareTypes: Comparator.Utils.Types.areNotCompatible,
+    removed_generic: createRemovedComparator({
+        changeCode: 'removed_generic',
+        elementsName: 'Generic type',
+        memberType: 'class',
+        getElements: x => x.generics,
     }),
-    changed_generic_extends_type_to_less_strict: createClassGenericChangeTypeChecker({
+    changed_generic_extends_type: createGenericTypeChecker({
+        changeCode: 'changed_generic_extends_type',
+        memberType: 'class',
+        getGeneric: x => x.generics,
+        compare: Comparator.Utils.Types.areNotCompatible,
+    }),
+    changed_generic_extends_type_to_less_strict: createGenericTypeChecker({
         changeCode: 'changed_generic_extends_type_to_less_strict',
-        compareTypes: Comparator.Utils.Types.areMoreApplicable,
+        memberType: 'class',
+        getGeneric: x => x.generics,
+        compare: Comparator.Utils.Types.areMoreApplicable,
     }),
     changed_constant_type: createConstantChangeTypeChecker({
         changeCode: 'changed_constant_type',
@@ -117,8 +128,18 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
         changeCode: 'changed_constant_type_to_less_strict',
         compareTypes: Comparator.Utils.Types.areMoreApplicable,
     }),
-    added_enum,
-    removed_enum,
+    added_enum: createAddedComparator({
+        changeCode: 'added_enum',
+        elementsName: 'Enum value',
+        memberType: 'enum',
+        getElements: x => x.values,
+    }),
+    removed_enum: createRemovedComparator({
+        memberType: 'enum',
+        changeCode: 'removed_enum',
+        elementsName: 'Enum value',
+        getElements: x => x.values,
+    }),
     changed_enum_value,
     changed_function_return_type: createFunctionReturnTypeChangeChecker({
         changeCode: 'changed_function_return_type',
@@ -146,5 +167,51 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
     changed_function_parameter_type_to_less_strict: createFunctionParamsTypeChangeChecker({
         changeCode: 'changed_function_parameter_type_to_less_strict',
         compareTypes: Comparator.Utils.Types.areMoreApplicable,
+    }),
+    removed_function_generic: createRemovedComparator({
+        memberType: 'function',
+        changeCode: 'removed_function_generic',
+        elementsName: 'Generic types',
+        getElements: x => x.generics,
+    }),
+    added_function_optional_generic: createAddedComparator({
+        changeCode: 'added_function_optional_generic',
+        elementsName: 'Generic type',
+        memberType: 'function',
+        getElements: x => x.generics,
+        changeFilter: (
+            obj: Record<string, Signatures.GenericDefinition>,
+            el: Signatures.GenericDefinition
+        ) =>
+            Comparator.Utils.Generics.addedOptional({
+                afterGeneric: el,
+                beforeGeneric: obj[el.name],
+            }),
+    }),
+    added_function_required_generic: createAddedComparator({
+        changeCode: 'added_function_required_generic',
+        elementsName: 'Generic type',
+        memberType: 'function',
+        getElements: x => x.generics,
+        changeFilter: (
+            obj: Record<string, Signatures.GenericDefinition>,
+            el: Signatures.GenericDefinition
+        ) =>
+            Comparator.Utils.Generics.addedRequired({
+                afterGeneric: el,
+                beforeGeneric: obj[el.name],
+            }),
+    }),
+    changed_function_generic_extends_type: createGenericTypeChecker({
+        changeCode: 'changed_function_generic_extends_type',
+        memberType: 'function',
+        getGeneric: x => x.generics,
+        compare: Comparator.Utils.Types.areNotCompatible,
+    }),
+    changed_function_generic_extends_type_to_less_strict: createGenericTypeChecker({
+        changeCode: 'changed_function_generic_extends_type_to_less_strict',
+        memberType: 'function',
+        getGeneric: x => x.generics,
+        compare: Comparator.Utils.Types.areMoreApplicable,
     }),
 }

@@ -1,0 +1,7 @@
+[test]
+memberName = "test"
+memberType = "function"
+path = "test/src/__testFiles__/checkers/Comparator removed_function_generic should not find changes-V1.checker.data.ts"
+parameters = [ ]
+returnType = "void"
+generics = [ ]

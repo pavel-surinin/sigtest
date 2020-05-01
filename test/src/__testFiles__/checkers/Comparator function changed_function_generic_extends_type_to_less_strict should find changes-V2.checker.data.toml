@@ -1,0 +1,10 @@
+[test]
+memberName = "test"
+memberType = "function"
+path = "test/src/__testFiles__/checkers/Comparator function changed_function_generic_extends_type_to_less_strict should find changes-V2.checker.data.ts"
+parameters = [ ]
+returnType = "void"
+
+  [[test.generics]]
+  name = "T"
+  extends = "string | number"

@@ -38,6 +38,11 @@ describe('TypesVisitor', () => {
                 memberType: 'function',
                 memberName: 'namedFunction',
                 returnType: 'boolean',
+                generics: [
+                    {
+                        name: 'T',
+                    },
+                ],
                 parameters: [
                     {
                         name: 'param',
@@ -48,6 +53,11 @@ describe('TypesVisitor', () => {
                         name: 'b',
                         type: 'Blob',
                         isOptional: false,
+                    },
+                    {
+                        isOptional: false,
+                        name: 't',
+                        type: 'T',
                     },
                 ],
             } as Signatures.FunctionSignature)
