@@ -9,13 +9,13 @@ This repository is WIP
 
 |               | Introspection | Comparing | Reports |
 | ------------- | ------------- | --------- | ------- |
-| **function**  | ☀️            | ⛅        |         |
-| **constant**  | ☀️            | ☀️        |         |
-| **class**     | ☀️            | ☀️        |         |
-| **enum**      | ☀️            | ☀️        |         |
-| **interface** | ☀️            |           |         |
-| **type**      | ⛅            |           |         |
-| **namespace** | ☀️            |           |         |
+| **function**  | ☀️             | ☀️         |         |
+| **constant**  | ☀️             | ☀️         |         |
+| **class**     | ☀️             | ☀️         |         |
+| **enum**      | ☀️             | ☀️         |         |
+| **interface** | ☀️             |           |         |
+| **type**      | ⛅             | ⛅         |         |
+| **namespace** | ☀️             | ☀️         |         |
 
 # Docs
 
@@ -24,3 +24,6 @@ Introspection error code definitions: [link](./docs/error-code-table.md)
 Compatibility checkers definitions: [link](./docs/comparators-table.md)
 
 TS features support: [link](./docs/supported-features.md)
+
+## App flow diagram:
+![test](./docs/sigtest%20flow%20diagramm.svg)
