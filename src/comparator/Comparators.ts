@@ -57,7 +57,7 @@ export namespace Comparator {
         | 'changed_class_property_type_union'
         | 'changed_class_property_to_readonly'
         | 'changed_class_property_to_not_readonly'
-        //    generics
+        //    generic type
         | 'removed_generic'
         | 'added_required_generic'
         | 'added_optional_generic'
@@ -78,12 +78,33 @@ export namespace Comparator {
         | 'changed_function_parameter_required_count'
         | 'changed_function_parameter_type'
         | 'changed_function_parameter_type_to_less_strict'
-        // generic
+        //      generic type
         | 'removed_function_generic'
         | 'added_function_required_generic'
         | 'added_function_optional_generic'
         | 'changed_function_generic_extends_type'
         | 'changed_function_generic_extends_type_to_less_strict'
+        // interface
+        //    generic
+        | 'removed_interface_generic'
+        | 'added_interface_required_generic'
+        | 'added_interface_optional_generic'
+        | 'changed_interface_generic_extends_type'
+        | 'changed_interface_generic_extends_type_to_less_strict'
+    //    properties
+    // | 'added_interface_property'
+    // | 'removed_interface_property'
+    // | 'changed_interface_property_type'
+    // | 'changed_interface_property_type_less_strict'
+    //     callableType
+    //    | 'changed_callable_type_return_type'
+    //    | 'changed_callable_type_return_type_to_less_strict'
+    //    | 'changed_callable_type_parameter_modifier_to_optional'
+    //    | 'changed_callable_type_parameter_modifier_to_required'
+    //    | 'changed_callable_type_parameter_required_count'
+    //    | 'changed_callable_type_parameter_type'
+    //    | 'changed_callable_type_parameter_type_to_less_strict'
+
     export interface ChangeInfo<C extends ChangeCode> {
         status: Status
         action: Action

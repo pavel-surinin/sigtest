@@ -214,4 +214,50 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
         getGeneric: x => x.generics,
         compare: Comparator.Utils.Types.areMoreApplicable,
     }),
+    removed_interface_generic: createRemovedComparator({
+        changeCode: 'removed_interface_generic',
+        elementsName: 'Generic type',
+        getElements: x => x.generics,
+        memberType: 'interface',
+    }),
+    added_interface_required_generic: createAddedComparator({
+        changeCode: 'added_interface_required_generic',
+        elementsName: 'Generic type',
+        getElements: x => x.generics,
+        memberType: 'interface',
+        changeFilter: (
+            obj: Record<string, Signatures.GenericDefinition>,
+            el: Signatures.GenericDefinition
+        ) =>
+            Comparator.Utils.Generics.addedRequired({
+                afterGeneric: el,
+                beforeGeneric: obj[el.name],
+            }),
+    }),
+    added_interface_optional_generic: createAddedComparator({
+        changeCode: 'added_interface_optional_generic',
+        elementsName: 'Generic type',
+        getElements: x => x.generics,
+        memberType: 'interface',
+        changeFilter: (
+            obj: Record<string, Signatures.GenericDefinition>,
+            el: Signatures.GenericDefinition
+        ) =>
+            Comparator.Utils.Generics.addedOptional({
+                afterGeneric: el,
+                beforeGeneric: obj[el.name],
+            }),
+    }),
+    changed_interface_generic_extends_type: createGenericTypeChecker({
+        changeCode: 'changed_interface_generic_extends_type',
+        memberType: 'interface',
+        compare: Comparator.Utils.Types.areNotCompatible,
+        getGeneric: x => x.generics,
+    }),
+    changed_interface_generic_extends_type_to_less_strict: createGenericTypeChecker({
+        changeCode: 'changed_interface_generic_extends_type_to_less_strict',
+        memberType: 'interface',
+        compare: Comparator.Utils.Types.areMoreApplicable,
+        getGeneric: x => x.generics,
+    }),
 }

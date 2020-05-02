@@ -1,0 +1,18 @@
+[Test]
+callableTypes = [ ]
+constructorTypes = [ ]
+properties = { }
+memberType = "interface"
+memberName = "Test"
+path = "test/src/__testFiles__/checkers/Comparator interface added_interface_optional_generic should find changes-V2.checker.data.ts"
+
+  [[Test.generics]]
+  name = "T"
+
+  [[Test.generics]]
+  name = "E"
+  extends = "number"
+
+  [[Test.generics]]
+  name = "R"
+  default = "any"

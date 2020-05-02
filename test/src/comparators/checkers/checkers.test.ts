@@ -1495,4 +1495,109 @@ describe('Comparator', () => {
             })
         })
     })
+    describe('interface', () => {
+        describe('removed_interface_generic', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test<T> {}
+                    `,
+                    v2: `export interface Test {}
+                    `,
+                    code: 'removed_interface_generic',
+                } as ComparatorTestPayload).toFindChanges(`Generic type removed: 'T'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test<T> {}
+                    `,
+                    v2: `export interface Test<T = any> {}
+                    `,
+                    code: 'removed_interface_generic',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('added_interface_required_generic', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test {}
+                    `,
+                    v2: `export interface Test<T> {}
+                    `,
+                    code: 'added_interface_required_generic',
+                } as ComparatorTestPayload).toFindChanges(`Generic type added: 'T'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test<T = any> {}
+                    `,
+                    v2: `export interface Test<T> {}
+                    `,
+                    code: 'added_interface_required_generic',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('added_interface_optional_generic', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test<T> {}
+                    `,
+                    v2: `export interface Test<T, E extends number, R = any> {}
+                    `,
+                    code: 'added_interface_optional_generic',
+                } as ComparatorTestPayload).toFindChanges(`Generic type added: 'R'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test<T, E> {}
+                    `,
+                    v2: `export interface Test<T, E, R extends number> {}
+                    `,
+                    code: 'added_interface_optional_generic',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('changed_interface_generic_extends_type', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test<T extends string> {}
+                    `,
+                    v2: `export interface Test<T extends number> {}
+                    `,
+                    code: 'changed_interface_generic_extends_type',
+                } as ComparatorTestPayload).toFindChanges(`Generics changed type:
+    generic 'T' from 'string' to 'number'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test<T extends string> {}
+                    `,
+                    v2: `export interface Test<T extends any> {}
+                    `,
+                    code: 'changed_interface_generic_extends_type',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('changed_interface_generic_extends_type_to_less_strict', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test<T extends number, E extends number> {}
+                    `,
+                    v2: `export interface Test<T extends number | string, E extends any> {}
+                    `,
+                    code: 'changed_interface_generic_extends_type_to_less_strict',
+                } as ComparatorTestPayload).toFindChanges(`Generics changed type:
+    generic 'T' from 'number' to 'number | string'
+    generic 'E' from 'number' to 'any'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test<T extends any, E extends number | string> {}
+                    `,
+                    v2: `export interface Test<T extends number, E extends number> {}
+                    `,
+                    code: 'changed_interface_generic_extends_type_to_less_strict',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+    })
 })

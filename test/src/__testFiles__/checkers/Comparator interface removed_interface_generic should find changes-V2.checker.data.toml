@@ -1,0 +1,8 @@
+[Test]
+callableTypes = [ ]
+constructorTypes = [ ]
+generics = [ ]
+properties = { }
+memberType = "interface"
+memberName = "Test"
+path = "test/src/__testFiles__/checkers/Comparator interface removed_interface_generic should find changes-V2.checker.data.ts"

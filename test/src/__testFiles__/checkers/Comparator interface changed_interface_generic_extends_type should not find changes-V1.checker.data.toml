@@ -1,0 +1,11 @@
+[Test]
+callableTypes = [ ]
+constructorTypes = [ ]
+properties = { }
+memberType = "interface"
+memberName = "Test"
+path = "test/src/__testFiles__/checkers/Comparator interface changed_interface_generic_extends_type should not find changes-V1.checker.data.ts"
+
+  [[Test.generics]]
+  name = "T"
+  extends = "string"
