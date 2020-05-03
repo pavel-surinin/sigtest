@@ -1,0 +1,35 @@
+[Test]
+memberType = "class"
+memberName = "Test"
+generics = [ ]
+path = "test/src/__testFiles__/checkers/Comparator class changed_property_modifier_more_visible should find changes-V2.checker.data.ts"
+methods = [ ]
+
+  [[Test.constructors]]
+  generics = [ ]
+  parameters = [ ]
+  returnType = "typeof Test"
+
+  [[Test.properties]]
+  name = "a"
+  type = "boolean"
+
+    [Test.properties.modifiers]
+    access = "public"
+    usage = "instance"
+
+  [[Test.properties]]
+  name = "b"
+  type = "boolean"
+
+    [Test.properties.modifiers]
+    access = "public"
+    usage = "instance"
+
+  [[Test.properties]]
+  name = "c"
+  type = "boolean"
+
+    [Test.properties.modifiers]
+    access = "protected"
+    usage = "instance"

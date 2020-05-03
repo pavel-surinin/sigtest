@@ -1,0 +1,35 @@
+[Test]
+memberType = "class"
+memberName = "Test"
+generics = [ ]
+path = "test/src/__testFiles__/checkers/Comparator class changed_class_property_type should find changes-V2.checker.data.ts"
+methods = [ ]
+
+  [[Test.constructors]]
+  generics = [ ]
+  parameters = [ ]
+  returnType = "typeof Test"
+
+  [[Test.properties]]
+  name = "a"
+  type = "boolean"
+
+    [Test.properties.modifiers]
+    access = "private"
+    usage = "instance"
+
+  [[Test.properties]]
+  name = "b"
+  type = "boolean"
+
+    [Test.properties.modifiers]
+    access = "public"
+    usage = "instance"
+
+  [[Test.properties]]
+  name = "b"
+  type = "boolean"
+
+    [Test.properties.modifiers]
+    access = "public"
+    usage = "static"

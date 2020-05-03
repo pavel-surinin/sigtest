@@ -1,0 +1,73 @@
+[Test]
+memberType = "class"
+memberName = "Test"
+generics = [ ]
+path = "test/src/__testFiles__/checkers/Comparator class changed_method_modifier_less_visible should find changes-V1.checker.data.ts"
+properties = [ ]
+
+  [[Test.constructors]]
+  generics = [ ]
+  parameters = [ ]
+  returnType = "typeof Test"
+
+  [[Test.methods]]
+  returnType = "boolean"
+  name = "a"
+
+    [Test.methods.modifier]
+    access = "public"
+    usage = "instance"
+
+    [[Test.methods.parameters]]
+    name = "p1"
+    type = "string"
+    isOptional = false
+
+    [[Test.methods.parameters]]
+    name = "p2"
+    type = "any"
+    isOptional = false
+
+    [[Test.methods.parameters]]
+    name = "p3"
+    type = "any"
+    isOptional = true
+
+  [[Test.methods]]
+  returnType = "boolean"
+  name = "b"
+
+    [Test.methods.modifier]
+    access = "public"
+    usage = "instance"
+
+    [[Test.methods.parameters]]
+    name = "p1"
+    type = "any"
+    isOptional = false
+
+  [[Test.methods]]
+  returnType = "boolean"
+  name = "b"
+
+    [Test.methods.modifier]
+    access = "public"
+    usage = "static"
+
+    [[Test.methods.parameters]]
+    name = "p1"
+    type = "any"
+    isOptional = false
+
+  [[Test.methods]]
+  returnType = "boolean"
+  name = "c"
+
+    [Test.methods.modifier]
+    access = "protected"
+    usage = "instance"
+
+    [[Test.methods.parameters]]
+    name = "p1"
+    type = "any"
+    isOptional = false

@@ -1,10 +1,10 @@
 const changes = require('../out/src/comparator/ComparatorChangeRegistry').CHANGE_REGISTRY
 const fs = require('fs')
+const path = require('path')
 
 const djs = require('declarative-js')
 const groupBy = djs.Reducer.groupBy
 const Map = djs.Reducer.Map
-const flat = djs.Reducer.flat
 const by = djs.Sort.by
 
 // ## COMMON Comparators
@@ -48,6 +48,18 @@ for (const entry of grouped.entries()) {
         lines.push(h2(grEntry.key))
         for (const change of grEntry.value) {
             lines.push(li(formatChange(change)))
+
+            // examples
+            const vfileName = version =>
+                `Comparator ${entry.key} ${change.code} should find changes-V${version}.checker.data.ts`
+            const v1Path = path.join('test/src/__testFiles__/checkers/', vfileName(1))
+            if (fs.existsSync(v1Path)) {
+                const v2Path = path.join('test/src/__testFiles__/checkers/', vfileName(2))
+                const v1Example = fs.readFileSync(v1Path, { encoding: 'UTF-8' })
+                const v2Example = fs.readFileSync(v2Path, { encoding: 'UTF-8' })
+                lines.push('```typescript\n' + '// version 0.0.1\n' + v1Example + '```')
+                lines.push('```typescript\n' + '// version 0.0.2\n' + v2Example + '```')
+            }
         }
     }
 }

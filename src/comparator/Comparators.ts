@@ -97,7 +97,9 @@ export namespace Comparator {
         | 'removed_interface_property'
         | 'changed_interface_property_type'
         | 'changed_interface_property_type_less_strict'
-    //     callableType
+    //    callableType
+    // | 'added_interface_callable_type'
+    // | 'removed_interface_callable_type'
     //    | 'changed_callable_type_return_type'
     //    | 'changed_callable_type_return_type_to_less_strict'
     //    | 'changed_callable_type_parameter_modifier_to_optional'
