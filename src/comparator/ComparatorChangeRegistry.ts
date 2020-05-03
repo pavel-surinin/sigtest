@@ -403,4 +403,18 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'interface',
         status: 'compatible',
     },
+    added_interface_callable_type: {
+        action: 'added',
+        code: 'added_interface_callable_type',
+        description: 'Interface callable type was added',
+        memberType: 'interface',
+        status: 'breaking',
+    },
+    removed_interface_callable_type: {
+        action: 'removed',
+        code: 'removed_interface_callable_type',
+        description: 'Interface callable type was removed',
+        memberType: 'interface',
+        status: 'breaking',
+    },
 }

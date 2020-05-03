@@ -1,6 +1,0 @@
-[a]
-memberName = "a"
-memberType = "function"
-path = "test/src/__testFiles__/checkers/Comparator common changed_member_type changes from const to function-V2.checker.data.ts"
-parameters = [ ]
-returnType = "void"

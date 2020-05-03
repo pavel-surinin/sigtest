@@ -16,7 +16,7 @@ export function createOptReqModifierChangeComparator(
     return Common.comparatorFor.function(signatures => {
         const { after, before } = signatures
         const afterO = after.parameters.reduce(
-            Reducer.toObject<Signatures.Paramter>(Common.getName),
+            Reducer.toObject<Signatures.Parameter>(Common.getName),
             {}
         )
         const changed = before.parameters

@@ -1,0 +1,12 @@
+[Test]
+constructorTypes = [ ]
+generics = [ ]
+properties = { }
+memberType = "interface"
+memberName = "Test"
+path = "test/src/__testFiles__/checkers/Comparator interface added_interface_callable_type should find changes-V1.checker.data.ts"
+
+  [[Test.callableTypes]]
+  generics = [ ]
+  parameters = [ ]
+  returnType = "any"

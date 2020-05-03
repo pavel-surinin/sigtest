@@ -295,4 +295,24 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
         changeCode: 'changed_interface_property_type_less_strict',
         compareTypes: Comparator.Utils.Types.areMoreApplicable,
     }),
+    added_interface_callable_type: createAddedComparator({
+        changeCode: 'added_interface_callable_type',
+        elementsName: 'Interface callable type',
+        memberType: 'interface',
+        getElements: x =>
+            x.callableTypes.map(callable => ({
+                ...callable,
+                name: Comparator.Utils.Functions.ToString.toFullName(callable),
+            })),
+    }),
+    removed_interface_callable_type: createRemovedComparator({
+        changeCode: 'removed_interface_callable_type',
+        elementsName: 'Interface callable type',
+        memberType: 'interface',
+        getElements: x =>
+            x.callableTypes.map(callable => ({
+                ...callable,
+                name: Comparator.Utils.Functions.ToString.toFullName(callable),
+            })),
+    })
 }

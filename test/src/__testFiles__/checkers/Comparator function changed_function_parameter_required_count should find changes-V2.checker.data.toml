@@ -3,6 +3,7 @@ memberName = "test"
 memberType = "function"
 path = "test/src/__testFiles__/checkers/Comparator function changed_function_parameter_required_count should find changes-V2.checker.data.ts"
 returnType = "void"
+generics = [ ]
 
   [[test.parameters]]
   name = "b"

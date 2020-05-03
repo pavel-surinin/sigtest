@@ -4,3 +4,4 @@ memberType = "function"
 path = "test/src/__testFiles__/checkers/Comparator function changed_function_return_type should not find changes-V2.checker.data.ts"
 parameters = [ ]
 returnType = "any"
+generics = [ ]

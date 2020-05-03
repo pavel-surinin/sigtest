@@ -253,7 +253,7 @@ export class Serializer {
     }
 
     doArrowFxDeclarations(symbol: ts.Symbol, namespace: string | undefined): SerializationResult {
-        let parameters: Signatures.Paramter[] = []
+        let parameters: Signatures.Parameter[] = []
         const variableDeclaration = symbol.declarations[0]
         if (ts.isVariableDeclaration(variableDeclaration)) {
             if (
@@ -271,7 +271,7 @@ export class Serializer {
     doFxDeclarations(symbol: ts.Symbol, namespace: string | undefined): SerializationResult[] {
         return symbol.declarations
             .map(fxDeclaration => {
-                let parameters: Signatures.Paramter[] = []
+                let parameters: Signatures.Parameter[] = []
                 if (ts.isFunctionDeclaration(fxDeclaration)) {
                     parameters = fxDeclaration.parameters.map(this.serializeParameter)
                 }
@@ -388,7 +388,7 @@ export class Serializer {
     private serializeFunction(
         symbol: ts.Symbol,
         fxDeclaration: ts.Declaration,
-        parameters: Signatures.Paramter[],
+        parameters: Signatures.Parameter[],
         namespace: string | undefined
     ) {
         const generics =
@@ -412,7 +412,7 @@ export class Serializer {
         } as Signatures.FunctionSignature
     }
 
-    private serializeParameter(param: ts.ParameterDeclaration): Signatures.Paramter {
+    private serializeParameter(param: ts.ParameterDeclaration): Signatures.Parameter {
         const paramType = this.checker.getTypeAtLocation(param)
         const type = this.checker.typeToString(paramType)
         const name = param.name.getText()

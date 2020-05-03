@@ -1,0 +1,16 @@
+[Test]
+constructorTypes = [ ]
+generics = [ ]
+properties = { }
+memberType = "interface"
+memberName = "Test"
+path = "test/src/__testFiles__/checkers/Comparator interface removed_interface_callable_type should not find changes-V2.checker.data.ts"
+
+  [[Test.callableTypes]]
+  generics = [ ]
+  returnType = "Date"
+
+    [[Test.callableTypes.parameters]]
+    name = "a"
+    type = "any"
+    isOptional = false

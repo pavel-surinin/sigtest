@@ -1,0 +1,29 @@
+[Test]
+memberType = "class"
+memberName = "Test"
+generics = [ ]
+path = "test/src/__testFiles__/checkers/Comparator class changed_method_return_type_union should find changes-V1.checker.data.ts"
+properties = [ ]
+
+  [[Test.constructors]]
+  generics = [ ]
+  parameters = [ ]
+  returnType = "typeof Test"
+
+  [[Test.methods]]
+  returnType = "boolean"
+  name = "a"
+  parameters = [ ]
+
+    [Test.methods.modifier]
+    access = "public"
+    usage = "instance"
+
+  [[Test.methods]]
+  returnType = "number"
+  name = "c"
+  parameters = [ ]
+
+    [Test.methods.modifier]
+    access = "public"
+    usage = "instance"

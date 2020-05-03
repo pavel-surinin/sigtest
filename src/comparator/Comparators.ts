@@ -21,6 +21,13 @@ export namespace Comparator {
         versions: Compare<string>
         changes: Change<ChangeCode>[]
     }
+    export interface ChangeInfo<C extends ChangeCode> {
+        status: Status
+        action: Action
+        code: C
+        description: string
+        memberType: MemberType
+    }
     export type Comparator<C extends ChangeCode, T extends Signatures.MemberType> = (
         comparison: Compare<Signatures.SignatureType<T>>
     ) => Change<C>
@@ -97,22 +104,16 @@ export namespace Comparator {
         | 'removed_interface_property'
         | 'changed_interface_property_type'
         | 'changed_interface_property_type_less_strict'
-    //     callableType
-    //    | 'changed_callable_type_return_type'
+        //    callableType
+        | 'added_interface_callable_type'
+        | 'removed_interface_callable_type'
+    // | 'changed_callable_type_return_type'
     //    | 'changed_callable_type_return_type_to_less_strict'
     //    | 'changed_callable_type_parameter_modifier_to_optional'
     //    | 'changed_callable_type_parameter_modifier_to_required'
     //    | 'changed_callable_type_parameter_required_count'
     //    | 'changed_callable_type_parameter_type'
     //    | 'changed_callable_type_parameter_type_to_less_strict'
-
-    export interface ChangeInfo<C extends ChangeCode> {
-        status: Status
-        action: Action
-        code: C
-        description: string
-        memberType: MemberType
-    }
 
     export namespace Utils {
         export namespace Types {
@@ -170,8 +171,8 @@ export namespace Comparator {
                  */
                 export function getChangedRequired(
                     changed: {
-                        added: Signatures.Paramter[]
-                        removed: Signatures.Paramter[]
+                        added: Signatures.Parameter[]
+                        removed: Signatures.Parameter[]
                     },
                     indent: number = 4
                 ): string {
@@ -184,9 +185,9 @@ export namespace Comparator {
                 }
             }
             export function getChangedToOptional(
-                v0Params: Signatures.Paramter[],
-                v1Params: Signatures.Paramter[]
-            ): Signatures.Paramter[] {
+                v0Params: Signatures.Parameter[],
+                v1Params: Signatures.Parameter[]
+            ): Signatures.Parameter[] {
                 if (!v0Params.length || !v1Params.length) {
                     return []
                 }
@@ -201,9 +202,9 @@ export namespace Comparator {
                     .filter(p => Boolean(afterOptsObj[p.name]))
             }
             export function getChangedToRequired(
-                v0Params: Signatures.Paramter[],
-                v1Params: Signatures.Paramter[]
-            ): Signatures.Paramter[] {
+                v0Params: Signatures.Parameter[],
+                v1Params: Signatures.Parameter[]
+            ): Signatures.Parameter[] {
                 const afterOptsObj = v1Params
                     .filter(g => !g.isOptional)
                     .reduce(
@@ -216,9 +217,9 @@ export namespace Comparator {
              * Output can be stringified with {@link Comparator.Utils.Parameters.Message.getChangedRequired}
              */
             export function getChangedRequired(
-                v0Params: Signatures.Paramter[],
-                v1Params: Signatures.Paramter[]
-            ): { added: Signatures.Paramter[]; removed: Signatures.Paramter[] } {
+                v0Params: Signatures.Parameter[],
+                v1Params: Signatures.Parameter[]
+            ): { added: Signatures.Parameter[]; removed: Signatures.Parameter[] } {
                 const v0 = v0Params.filter(p => !p.isOptional)
                 const v0Names = v0.map(p => p.name)
                 const v1 = v1Params.filter(p => !p.isOptional)
@@ -443,6 +444,13 @@ export namespace Comparator {
             }
             export function addedOptional(g: AddedGenericPair): boolean {
                 return !g.beforeGeneric && g.afterGeneric.default != null
+            }
+        }
+        export namespace Functions {
+            export namespace ToString {
+                export function toFullName(fx: Signatures.FunctionDeclaration): string {
+                    return `(${fx.parameters.map(p => `${p.name}: ${p.type}`)}): ${fx.returnType}`
+                }
             }
         }
     }

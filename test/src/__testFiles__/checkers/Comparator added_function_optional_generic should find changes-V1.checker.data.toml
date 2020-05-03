@@ -1,7 +1,0 @@
-[test]
-memberName = "test"
-memberType = "function"
-path = "test/src/__testFiles__/checkers/Comparator added_function_optional_generic should find changes-V1.checker.data.ts"
-parameters = [ ]
-returnType = "void"
-generics = [ ]

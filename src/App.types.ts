@@ -1,7 +1,7 @@
 export namespace Signatures {
     export type MemberType = 'function' | 'class' | 'constant' | 'enum' | 'interface' | 'type'
 
-    export interface Paramter {
+    export interface Parameter {
         name: string
         type: string
         isOptional: boolean
@@ -28,7 +28,7 @@ export namespace Signatures {
 
     export interface FunctionDeclaration {
         generics: GenericDefinition[]
-        parameters: Paramter[]
+        parameters: Parameter[]
         returnType: string
     }
 
@@ -65,7 +65,7 @@ export namespace Signatures {
             access: AccessModifier
         }
         name: string
-        parameters: Paramter[]
+        parameters: Parameter[]
         returnType: string
     }
 

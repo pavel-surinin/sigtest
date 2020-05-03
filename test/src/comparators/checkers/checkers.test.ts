@@ -6,7 +6,7 @@ import { ComparatorTestPayload } from '../../../matchers/Comparator.matcher'
 describe('Comparator', () => {
     describe('common', () => {
         describe('changed_member_type', () => {
-            it('changes from const to function', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `export const a = 1`,
                     v2: `export function a() {}`,
@@ -29,7 +29,7 @@ describe('Comparator', () => {
             })
         })
         describe('member_removal', () => {
-            it('removal', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `export const a = 1`,
                     v2: ``,
@@ -60,7 +60,7 @@ describe('Comparator', () => {
     })
     describe('class', () => {
         describe('changed_required_constructor_parameters_count', () => {
-            it('different count', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                         export class Test {
@@ -117,7 +117,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_constructor_parameter_modifier_to_optional', () => {
-            it('changed to optional and default ', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                         export class Test {
@@ -153,7 +153,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_constructor_parameter_modifier_to_required', () => {
-            it('should find changes to required parameters', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                         export class Test {
@@ -189,7 +189,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_constructor_parameter_type', () => {
-            it('should find changes in parameter types', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                         export class Test {
@@ -229,7 +229,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_constructor_parameter_type_union', () => {
-            it('should find changes to union type', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                             export class Test {
@@ -267,7 +267,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_method_return_type', () => {
-            it('should find changed incompatible method return type', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                         export class Test {
@@ -308,7 +308,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_method_return_type_union', () => {
-            it('should find changed compatible method return type', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                         export class Test {
@@ -346,7 +346,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_method_parameter_modifier_to_optional', () => {
-            it('should find changed parameters', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                         export class Test {
@@ -387,7 +387,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_method_parameter_modifier_to_required', () => {
-            it('should find changed parameters', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                     export class Test {
@@ -428,7 +428,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_method_parameter_required_count', () => {
-            it('should find changed parameters count', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                     export class Test {
@@ -468,7 +468,7 @@ describe('Comparator', () => {
             })
         })
         describe('added_method', () => {
-            it('should find added methods count', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                     export class Test {
@@ -512,7 +512,7 @@ describe('Comparator', () => {
             })
         })
         describe('removed_method', () => {
-            it('should find removed methods count', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                     export class Test {
@@ -555,7 +555,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_method_modifier_more_visible', () => {
-            it('should find changed methods', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                     export class Test {
@@ -597,7 +597,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_method_modifier_less_visible', () => {
-            it('should find changed methods', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                         export class Test {
@@ -642,7 +642,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_property_modifier_more_visible', () => {
-            it('should find changed properties', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                     export class Test {
@@ -684,7 +684,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_property_modifier_less_visible', () => {
-            it('should find changed methods', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                     export class Test {
@@ -729,7 +729,7 @@ describe('Comparator', () => {
             })
         })
         describe('removed_class_property', () => {
-            it('should find property removal', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                     export class Test {
@@ -762,7 +762,7 @@ describe('Comparator', () => {
             })
         })
         describe('added_class_property', () => {
-            it('should find added property', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                     export class Test {
@@ -798,7 +798,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_class_property_type', () => {
-            it('should find changed type', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                     export class Test {
@@ -838,7 +838,7 @@ describe('Comparator', () => {
             })
         })
         describe('changed_class_property_type_union', () => {
-            it('should find changed type', () => {
+            it('should find changes', () => {
                 expect({
                     v1: `
                     export class Test {
@@ -1737,6 +1737,66 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_interface_property_type_less_strict',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('added_interface_callable_type', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        (): any
+                    }
+                    `,
+                    v2: `export interface Test {
+                        (): any
+                        (a: string): any
+                    }
+                    `,
+                    code: 'added_interface_callable_type',
+                } as ComparatorTestPayload).toFindChanges(
+                    `Interface callable type added: '(a: string): any'`
+                )
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        (): any
+                    }
+                    `,
+                    v2: `export interface Test {
+                    }
+                    `,
+                    code: 'added_interface_callable_type',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('removed_interface_callable_type', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        (): any
+                        (a: any): Date
+                    }
+                    `,
+                    v2: `export interface Test {
+                        (a: any): Date
+                    }
+                    `,
+                    code: 'removed_interface_callable_type',
+                } as ComparatorTestPayload).toFindChanges(
+                    `Interface callable type removed: '(): any'`
+                )
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                    }
+                    `,
+                    v2: `export interface Test {
+                        (a: any): Date
+                    }
+                    `,
+                    code: 'removed_interface_callable_type',
                 } as ComparatorTestPayload).toFindNoChanges()
             })
         })
