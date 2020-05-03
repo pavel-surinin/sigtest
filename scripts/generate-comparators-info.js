@@ -25,10 +25,10 @@ const capitalize = s => s[0].toUpperCase() + s.slice(1, s.length)
 const h1 = s => {
     s = capitalize(s)
     tocLines.push(` - [${s}](#${s})`)
-    return `# ${s}`
+    return `## ${s}`
 }
 const h2 = s => {
-    return `## ${capitalize(s)}`
+    return `### ${capitalize(s)}`
 }
 const li = s => `- ${s}`
 const formatChange = c => `**${c.code}**: ${c.description}`
@@ -52,4 +52,7 @@ for (const entry of grouped.entries()) {
     }
 }
 
-fs.writeFileSync('./docs/comparators-table.md', tocLines.join('\n') + '\n' + lines.join('\n\n'))
+fs.writeFileSync(
+    './docs/comparators-table.md',
+    ['# Change Comparators', tocLines.join('\n'), ...lines].join('\n\n')
+)

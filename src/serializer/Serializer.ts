@@ -68,6 +68,7 @@ export class Serializer {
             for (const member of interfaceDeclaration.members) {
                 if (member.name) {
                     properties[member.name.getText()] = {
+                        name: member.name.getText(),
                         isOptional: Boolean(member.questionToken),
                         type: this.checker.typeToString(this.checker.getTypeAtLocation(member)),
                         isReadonly: Boolean(

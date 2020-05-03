@@ -1,0 +1,13 @@
+[Test]
+callableTypes = [ ]
+constructorTypes = [ ]
+generics = [ ]
+memberType = "interface"
+memberName = "Test"
+path = "test/src/__testFiles__/checkers/Comparator interface changed_interface_property_type_less_strict should not find changes-V1.checker.data.ts"
+
+[Test.properties.a]
+name = "a"
+isOptional = false
+type = "any"
+isReadonly = false

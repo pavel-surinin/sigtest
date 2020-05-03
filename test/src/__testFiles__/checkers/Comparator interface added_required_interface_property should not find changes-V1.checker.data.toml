@@ -1,0 +1,8 @@
+[Test]
+callableTypes = [ ]
+constructorTypes = [ ]
+generics = [ ]
+properties = { }
+memberType = "interface"
+memberName = "Test"
+path = "test/src/__testFiles__/checkers/Comparator interface added_required_interface_property should not find changes-V1.checker.data.ts"

@@ -11,6 +11,7 @@ import {
     createFunctionReturnTypeChangeChecker,
     createFunctionParamsTypeChangeChecker,
     createGenericTypeChecker,
+    createInterfacePropsTypeChangeChecker,
 } from './checkers/reusable/changed_type.reusable'
 import { createChangeWriteChecker } from './checkers/reusable/changed_class_property_write.reusable'
 import { createAddedClassGenericTypeChecker } from './checkers/reusable/added_generic_type.reusable'
@@ -259,5 +260,39 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
         memberType: 'interface',
         compare: Comparator.Utils.Types.areMoreApplicable,
         getGeneric: x => x.generics,
+    }),
+    added_required_interface_property: createAddedComparator({
+        changeCode: 'added_required_interface_property',
+        elementsName: 'Interface property',
+        memberType: 'interface',
+        getElements: x => Object.values(x.properties),
+        changeFilter: (
+            obj: Record<string, Signatures.InterfaceProperty>,
+            el: Signatures.InterfaceProperty
+        ) => obj[el.name] == null && !el.isOptional,
+    }),
+    added_optional_interface_property: createAddedComparator({
+        changeCode: 'added_optional_interface_property',
+        memberType: 'interface',
+        elementsName: 'Interface property',
+        getElements: x => Object.values(x.properties),
+        changeFilter: (
+            obj: Record<string, Signatures.InterfaceProperty>,
+            el: Signatures.InterfaceProperty
+        ) => obj[el.name] == null && el.isOptional,
+    }),
+    removed_interface_property: createRemovedComparator({
+        changeCode: 'removed_interface_property',
+        elementsName: 'Interface property',
+        memberType: 'interface',
+        getElements: x => Object.values(x.properties),
+    }),
+    changed_interface_property_type: createInterfacePropsTypeChangeChecker({
+        changeCode: 'changed_interface_property_type',
+        compareTypes: Comparator.Utils.Types.areNotCompatible,
+    }),
+    changed_interface_property_type_less_strict: createInterfacePropsTypeChangeChecker({
+        changeCode: 'changed_interface_property_type_less_strict',
+        compareTypes: Comparator.Utils.Types.areMoreApplicable,
     }),
 }

@@ -1599,5 +1599,146 @@ describe('Comparator', () => {
                 } as ComparatorTestPayload).toFindNoChanges()
             })
         })
+        describe('added_required_interface_property', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                    }
+                    `,
+                    v2: `export interface Test {
+                        a: any
+                    }
+                    `,
+                    code: 'added_required_interface_property',
+                } as ComparatorTestPayload).toFindChanges(`Interface property added: 'a'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                    }
+                    `,
+                    v2: `export interface Test {
+                        a?: any
+                    }
+                    `,
+                    code: 'added_required_interface_property',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('added_optional_interface_property', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        a: any
+                    }
+                    `,
+                    v2: `export interface Test {
+                        b?: any
+                    }
+                    `,
+                    code: 'added_optional_interface_property',
+                } as ComparatorTestPayload).toFindChanges(`Interface property added: 'b'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        a: any
+                    }
+                    `,
+                    v2: `export interface Test {
+                        a?: any
+                    }
+                    `,
+                    code: 'added_optional_interface_property',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('removed_interface_property', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        a?: any
+                        b: any
+                    }
+                    `,
+                    v2: `export interface Test {
+                    }
+                    `,
+                    code: 'removed_interface_property',
+                } as ComparatorTestPayload).toFindChanges(`Interface property removed: 'a', 'b'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        a: any
+                    }
+                    `,
+                    v2: `export interface Test {
+                        a?: any
+                        b: any
+                    }
+                    `,
+                    code: 'removed_interface_property',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('changed_interface_property_type', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        a: string
+                    }
+                    `,
+                    v2: `export interface Test {
+                        a: number
+                    }
+                    `,
+                    code: 'changed_interface_property_type',
+                } as ComparatorTestPayload).toFindChanges(`Interface properties changed type:
+    'a' from 'string' to 'number'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        a: string
+                    }
+                    `,
+                    v2: `export interface Test {
+                        a: string | number
+                    }
+                    `,
+                    code: 'changed_interface_property_type',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('changed_interface_property_type_less_strict', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        a: string
+                    }
+                    `,
+                    v2: `export interface Test {
+                        a: any
+                    }
+                    `,
+                    code: 'changed_interface_property_type_less_strict',
+                } as ComparatorTestPayload).toFindChanges(`Interface properties changed type:
+    'a' from 'string' to 'any'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        a: any
+                    }
+                    `,
+                    v2: `export interface Test {
+                        a: string
+                    }
+                    `,
+                    code: 'changed_interface_property_type_less_strict',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
     })
 })

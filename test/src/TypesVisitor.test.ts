@@ -546,6 +546,7 @@ describe('TypesVisitor', () => {
                 generics: [],
                 properties: {
                     isArray: {
+                        name: 'isArray',
                         type: '(arg: any) => arg is any[]',
                         isOptional: false,
                         isReadonly: false,

@@ -61,6 +61,7 @@ export function createAddedComparator<
         const changed = findAdded(signatures, {
             getElements: options.getElements as any,
             changeFilter: options.changeFilter,
+            preFilter: options.preFilter,
         })
         if (changed.length) {
             const changedMessage = Common.formatSequenceMessage(changed)

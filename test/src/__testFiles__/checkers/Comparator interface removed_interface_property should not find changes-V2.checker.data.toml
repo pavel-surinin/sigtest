@@ -1,0 +1,19 @@
+[Test]
+callableTypes = [ ]
+constructorTypes = [ ]
+generics = [ ]
+memberType = "interface"
+memberName = "Test"
+path = "test/src/__testFiles__/checkers/Comparator interface removed_interface_property should not find changes-V2.checker.data.ts"
+
+[Test.properties.a]
+name = "a"
+isOptional = true
+type = "any"
+isReadonly = false
+
+[Test.properties.b]
+name = "b"
+isOptional = false
+type = "any"
+isReadonly = false

@@ -91,11 +91,12 @@ export namespace Comparator {
         | 'added_interface_optional_generic'
         | 'changed_interface_generic_extends_type'
         | 'changed_interface_generic_extends_type_to_less_strict'
-    //    properties
-    // | 'added_interface_property'
-    // | 'removed_interface_property'
-    // | 'changed_interface_property_type'
-    // | 'changed_interface_property_type_less_strict'
+        //    properties
+        | 'added_required_interface_property'
+        | 'added_optional_interface_property'
+        | 'removed_interface_property'
+        | 'changed_interface_property_type'
+        | 'changed_interface_property_type_less_strict'
     //     callableType
     //    | 'changed_callable_type_return_type'
     //    | 'changed_callable_type_return_type_to_less_strict'
@@ -206,7 +207,7 @@ export namespace Comparator {
                 const afterOptsObj = v1Params
                     .filter(g => !g.isOptional)
                     .reduce(
-                        Reducer.toObject(p => p.name),
+                        toObject(p => p.name),
                         {}
                     )
                 return v0Params.filter(g => g.isOptional).filter(p => Boolean(afterOptsObj[p.name]))

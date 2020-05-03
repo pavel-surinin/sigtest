@@ -1,0 +1,13 @@
+[Test]
+callableTypes = [ ]
+constructorTypes = [ ]
+generics = [ ]
+memberType = "interface"
+memberName = "Test"
+path = "test/src/__testFiles__/checkers/Comparator interface added_optional_interface_property should find changes-V1.checker.data.ts"
+
+[Test.properties.a]
+name = "a"
+isOptional = false
+type = "any"
+isReadonly = false

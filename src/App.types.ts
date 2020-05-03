@@ -87,6 +87,7 @@ export namespace Signatures {
     }
 
     export interface InterfaceProperty {
+        name: string
         type: string
         isOptional: boolean
         isReadonly: boolean

@@ -1,24 +1,27 @@
+# Change Comparators
+
  - [Common](#Common)
  - [Class](#Class)
  - [Constant](#Constant)
  - [Enum](#Enum)
  - [Function](#Function)
  - [Interface](#Interface)
-# Common
 
-## Breaking
+## Common
+
+### Breaking
 
 - **changed_member_type**: Signature member type changed
 
 - **member_removal**: Signature member removed from package
 
-## Compatible
+### Compatible
 
 - **no_change**: Nothing is changed
 
-# Class
+## Class
 
-## Breaking
+### Breaking
 
 - **changed_required_constructor_parameters_count**: Required parameters count in constructor has changed
 
@@ -50,7 +53,7 @@
 
 - **changed_generic_extends_type**: Class generic type constraint was changed
 
-## Compatible
+### Compatible
 
 - **changed_constructor_parameter_modifier_to_optional**: Constructor parameter became optional
 
@@ -76,31 +79,31 @@
 
 - **changed_generic_extends_type_to_less_strict**: Class generic constraint type was changed to less strict
 
-# Constant
+## Constant
 
-## Breaking
+### Breaking
 
 - **changed_constant_type**: Variable constraint type was changed
 
-## Compatible
+### Compatible
 
 - **changed_constant_type_to_less_strict**: Variable constraint type was changed to less strict
 
-# Enum
+## Enum
 
-## Breaking
+### Breaking
 
 - **removed_enum**: Enum value removed
 
 - **changed_enum_value**: Enum changed value, serialized to json values will be different
 
-## Compatible
+### Compatible
 
 - **added_enum**: Enum value added
 
-# Function
+## Function
 
-## Breaking
+### Breaking
 
 - **changed_function_return_type**: Function return type changed
 
@@ -116,7 +119,7 @@
 
 - **changed_function_generic_extends_type**: Changed function generic type constraint
 
-## Compatible
+### Compatible
 
 - **changed_function_return_type_to_less_strict**: Function return type changed to less strict
 
@@ -128,9 +131,9 @@
 
 - **changed_function_generic_extends_type_to_less_strict**: Changed function generic type constraint to be less restrictive
 
-# Interface
+## Interface
 
-## Breaking
+### Breaking
 
 - **removed_interface_generic**: Removed interface generic type
 
@@ -138,8 +141,18 @@
 
 - **changed_interface_generic_extends_type**: Changed interface generic type constraint
 
-## Compatible
+- **added_required_interface_property**: Added required interface property
+
+- **removed_interface_property**: Removed interface property
+
+- **changed_interface_property_type**: Changed interface property type
+
+### Compatible
 
 - **added_interface_optional_generic**: Added interface optional generic type
 
 - **changed_interface_generic_extends_type_to_less_strict**: Changed interface generic type constraint to be less strict
+
+- **added_optional_interface_property**: Added optional interface property
+
+- **changed_interface_property_type_less_strict**: Changed interface property type to be less strict
