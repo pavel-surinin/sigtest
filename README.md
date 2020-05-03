@@ -17,13 +17,13 @@ This repository is WIP
 | **type**      | ⛅             | ⛅         |         |
 | **namespace** | ☀️             | ☀️         |         |
 
-# Docs
+# Documentation
 
--[Error codes definitions](./docs/error-code-table.md)
+* [Error codes definitions](./docs/error-code-table.md)
 
--[Compatibility checkers definitions](./docs/comparators-table.md)
+* [Compatibility checkers definitions](./docs/comparators-table.md)
 
--[Supported TypeScript nodes](./docs/supported-features.md)
+* [Supported TypeScript nodes](./docs/supported-features.md)
 
 ## App flow diagram:
 ![test](./docs/sigtest%20flow%20diagramm.svg)
