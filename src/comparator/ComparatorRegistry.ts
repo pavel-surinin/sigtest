@@ -34,7 +34,10 @@ import { removed_method } from './checkers/removed_method'
 import { removed_class_property } from './checkers/removed_class_property'
 import { added_class_property } from './checkers/added_class_property'
 import { changed_enum_value } from './checkers/changed_enum_value'
-import { createOptReqModifierChangeComparator } from './checkers/reusable/opt_req_modifier.reusable'
+import {
+    createOptReqModifierChangeComparator,
+    createInterfaceCallbleOptReqModifierChangeComparator,
+} from './checkers/reusable/opt_req_modifier.reusable'
 import { changed_function_parameter_required_count } from './checkers/changed_function_parameter_required_count'
 
 import {
@@ -324,4 +327,18 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
         changeCode: 'changed_callable_type_return_type_to_less_strict',
         compareTypes: Comparator.Utils.Types.areMoreApplicable,
     }),
+    changed_callable_type_parameter_modifier_to_optional: createInterfaceCallbleOptReqModifierChangeComparator(
+        {
+            changeCode: 'changed_callable_type_parameter_modifier_to_optional',
+            compare: Comparator.Utils.Parameters.getChangedToOptional,
+            modifierName: 'optional',
+        }
+    ),
+    changed_callable_type_parameter_modifier_to_required: createInterfaceCallbleOptReqModifierChangeComparator(
+        {
+            changeCode: 'changed_callable_type_parameter_modifier_to_required',
+            compare: Comparator.Utils.Parameters.getChangedToRequired,
+            modifierName: 'required',
+        }
+    ),
 }

@@ -431,4 +431,18 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'interface',
         status: 'compatible',
     },
+    changed_callable_type_parameter_modifier_to_optional: {
+        action: 'changed',
+        code: 'changed_callable_type_parameter_modifier_to_optional',
+        description: 'Interface callable parameter type changed from required to optional',
+        memberType: 'interface',
+        status: 'compatible',
+    },
+    changed_callable_type_parameter_modifier_to_required: {
+        action: 'changed',
+        code: 'changed_callable_type_parameter_modifier_to_required',
+        description: 'Interface callable parameter type changed from optional to required',
+        memberType: 'interface',
+        status: 'breaking',
+    },
 }

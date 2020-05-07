@@ -1812,7 +1812,6 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_callable_type_return_type',
-                    update: true,
                 } as ComparatorTestPayload).toFindChanges(`Interface callable changed return type:
     '()' from 'any' to 'string'`)
             })
@@ -1827,7 +1826,6 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_callable_type_return_type',
-                    update: true,
                 } as ComparatorTestPayload).toFindNoChanges()
             })
         })
@@ -1858,6 +1856,64 @@ describe('Comparator', () => {
                     }
                     `,
                     code: 'changed_callable_type_return_type_to_less_strict',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('changed_callable_type_parameter_modifier_to_optional', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        (a: any): void
+                    }
+                    `,
+                    v2: `export interface Test {
+                        (a?: any): void
+                    }
+                    `,
+                    code: 'changed_callable_type_parameter_modifier_to_optional',
+                } as ComparatorTestPayload).toFindChanges(`Parameters changed to optional in:
+    callable (a: any) parameters: 'a'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        (a?: any): void
+                    }
+                    `,
+                    v2: `export interface Test {
+                        (a: any): void
+                    }
+                    `,
+                    code: 'changed_callable_type_parameter_modifier_to_optional',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('changed_callable_type_parameter_modifier_to_required', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        (a?: any): void
+                    }
+                    `,
+                    v2: `export interface Test {
+                        (a: any): void
+                    }
+                    `,
+                    code: 'changed_callable_type_parameter_modifier_to_required',
+                } as ComparatorTestPayload).toFindChanges(`Parameters changed to required in:
+    callable (a: any) parameters: 'a'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        (a: any): void
+                    }
+                    `,
+                    v2: `export interface Test {
+                        (a?: any): void
+                    }
+                    `,
+                    code: 'changed_callable_type_parameter_modifier_to_required',
                 } as ComparatorTestPayload).toFindNoChanges()
             })
         })

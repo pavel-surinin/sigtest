@@ -219,20 +219,14 @@ export function createInterfaceCallableTypeChangeChecker(options: {
 }) {
     return Common.comparatorFor.interface(signatures => {
         const { after, before } = signatures
+        const toNamed = Comparator.Utils.Interface.callableTypeToNamed(
+            Comparator.Utils.Functions.ToString.toParameters
+        )
         const obj = Object.values(after.callableTypes)
-            .map(callable => ({
-                name: Comparator.Utils.Functions.ToString.toParameters(callable),
-                ...callable,
-            }))
-            .reduce(
-                Reducer.toObject<Signatures.FunctionDeclaration & Common.WithName>(Common.getName),
-                {}
-            )
+            .map(toNamed)
+            .reduce(Reducer.toObject(Common.getName), {})
         const changed = Object.values(before.callableTypes)
-            .map(callable => ({
-                name: Comparator.Utils.Functions.ToString.toParameters(callable),
-                ...callable,
-            }))
+            .map(toNamed)
             .filter(Common.isIn(obj))
             .filter(b => options.compareTypes(b.returnType, obj[Common.getName(b)].returnType))
         if (changed.length) {

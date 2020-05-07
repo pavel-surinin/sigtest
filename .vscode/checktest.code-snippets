@@ -79,5 +79,19 @@
         "body": ["const afterO = after.$0.reduce(Reducer.toObject(Common.getName), {})"],
         "description": "Create object with after impl",
         "prefix": "afterO"
+    },
+    "Comparator chagne code": {
+        "description": "creta comparator change code object",
+        "body": [
+            "$1: {",
+            "\taction: '${2|changed,added,removed|}',",
+            "\tcode: '$1',",
+            "\tdescription: '$3',",
+            "\tmemberType: '${4|interface,function,class|}',",
+            "\tstatus: '${5|breaking,compatible|}',",
+            "}"
+        ],
+        "prefix": "code",
+        "scope": "typescript"
     }
 }

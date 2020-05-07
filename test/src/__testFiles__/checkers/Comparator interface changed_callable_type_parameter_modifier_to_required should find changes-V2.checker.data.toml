@@ -1,0 +1,16 @@
+[Test]
+constructorTypes = [ ]
+generics = [ ]
+properties = { }
+memberType = "interface"
+memberName = "Test"
+path = "test/src/__testFiles__/checkers/Comparator interface changed_callable_type_parameter_modifier_to_required should find changes-V2.checker.data.ts"
+
+  [[Test.callableTypes]]
+  generics = [ ]
+  returnType = "void"
+
+    [[Test.callableTypes.parameters]]
+    name = "a"
+    type = "any"
+    isOptional = false

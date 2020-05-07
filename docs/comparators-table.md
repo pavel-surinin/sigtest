@@ -1016,6 +1016,22 @@ export interface Test {
 }
 ```
 
+- **changed_callable_type_parameter_modifier_to_required**: Interface callable parameter type changed from optional to required
+
+```typescript
+// version 0.0.1
+export interface Test {
+  (a?: any): void;
+}
+```
+
+```typescript
+// version 0.0.2
+export interface Test {
+  (a: any): void;
+}
+```
+
 ### Compatible
 
 - **added_interface_optional_generic**: Added interface optional generic type
@@ -1087,5 +1103,21 @@ export interface Test {
 // version 0.0.2
 export interface Test {
   (a: Date): any;
+}
+```
+
+- **changed_callable_type_parameter_modifier_to_optional**: Interface callable parameter type changed from required to optional
+
+```typescript
+// version 0.0.1
+export interface Test {
+  (a: any): void;
+}
+```
+
+```typescript
+// version 0.0.2
+export interface Test {
+  (a?: any): void;
 }
 ```

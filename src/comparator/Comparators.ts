@@ -109,8 +109,8 @@ export namespace Comparator {
         | 'removed_interface_callable_type'
         | 'changed_callable_type_return_type'
         | 'changed_callable_type_return_type_to_less_strict'
-    //    | 'changed_callable_type_parameter_modifier_to_optional'
-    //    | 'changed_callable_type_parameter_modifier_to_required'
+        | 'changed_callable_type_parameter_modifier_to_optional'
+        | 'changed_callable_type_parameter_modifier_to_required'
     //    | 'changed_callable_type_parameter_required_count'
     //    | 'changed_callable_type_parameter_type'
     //    | 'changed_callable_type_parameter_type_to_less_strict'
@@ -453,6 +453,18 @@ export namespace Comparator {
                 }
                 export function toParameters(fx: Signatures.FunctionDeclaration): string {
                     return `(${fx.parameters.map(p => `${p.name}: ${p.type}`)})`
+                }
+            }
+        }
+        export namespace Interface {
+            export function callableTypeToNamed(
+                resolveName: (fx: Signatures.FunctionDeclaration) => string
+            ) {
+                // return function _callableTypeToNamed(
+                return function _callableTypeToNamed(
+                    fx: Signatures.FunctionDeclaration
+                ): Signatures.FunctionDeclaration & Common.WithName {
+                    return { name: resolveName(fx), ...fx }
                 }
             }
         }
