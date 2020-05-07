@@ -1,5 +1,17 @@
 # SigTest documentation plan
 
+  - [Overview aka What is it and what's it for](#overview-aka-what-is-it-and-whats-it-for)
+    - [Library features](#library-features)
+    - [You can need it when you](#you-can-need-it-when-you)
+    - [What it **doesn't** do (PR's are welcome)](#what-it-doesnt-do-prs-are-welcome)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [Reference aka How it works](#reference-aka-how-it-works)
+    - [Testing flow](#testing-flow)
+    - [Supported nodes](#supported-nodes)
+    - [Comparators](#comparators)
+    - [Error codes](#error-codes)
+
 ## Overview aka What is it and what's it for
 
 
@@ -7,18 +19,19 @@ This library can compare TypeScript npm package exported file members for backwa
 Also it can generate reports (changelogs) and generate migration scripts (not all cases)
 when code changes braked backwards compatibility.
 
-You can need it when you:
+### Library features
+ - check TypeScript code for backwards compatibility
+ - generate changelog
+ - provide migration scripts
+
+### You can need it when you
  - care about npm module backwards compatibility.
  - want to test your library and know what version to bump patch or minor.
  - want to have generated changelog in each version change.
 
-What it can do: overview of features (comparison, configuration, reports)
 
-Why you need it
-
-What problems it solves aka You didn't know you needed it but now you do
-
-What it **doesn't** do: when SigTest won't help you
+### What it **doesn't** do (PR's are welcome)
+ - does not fully support TypeScript `type` aliases comparison
 
 ## Configuration
 
