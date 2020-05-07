@@ -1,0 +1,12 @@
+[Test]
+constructorTypes = [ ]
+generics = [ ]
+properties = { }
+memberType = "interface"
+memberName = "Test"
+path = "test/src/__testFiles__/checkers/Comparator interface changed_callable_type_return_type should not find changes-V1.checker.data.ts"
+
+  [[Test.callableTypes]]
+  generics = [ ]
+  parameters = [ ]
+  returnType = "string"

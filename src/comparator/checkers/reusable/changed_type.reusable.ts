@@ -212,3 +212,43 @@ export function createInterfacePropsTypeChangeChecker(options: {
         }
     })
 }
+
+export function createInterfaceCallableTypeChangeChecker(options: {
+    compareTypes(tBefore: string, tAfter: string): boolean
+    changeCode: Comparator.ChangeCode
+}) {
+    return Common.comparatorFor.interface(signatures => {
+        const { after, before } = signatures
+        const obj = Object.values(after.callableTypes)
+            .map(callable => ({
+                name: Comparator.Utils.Functions.ToString.toParameters(callable),
+                ...callable,
+            }))
+            .reduce(
+                Reducer.toObject<Signatures.FunctionDeclaration & Common.WithName>(Common.getName),
+                {}
+            )
+        const changed = Object.values(before.callableTypes)
+            .map(callable => ({
+                name: Comparator.Utils.Functions.ToString.toParameters(callable),
+                ...callable,
+            }))
+            .filter(Common.isIn(obj))
+            .filter(b => options.compareTypes(b.returnType, obj[Common.getName(b)].returnType))
+        if (changed.length) {
+            const cm = changed
+                .map(
+                    p =>
+                        `'${p.name}' from '${p.returnType}' to '${
+                            obj[Common.getName(p)].returnType
+                        }'`
+                )
+                .join('\n    ')
+            return {
+                info: CHANGE_REGISTRY[options.changeCode],
+                signatures,
+                message: `Interface callable changed return type:\n    ${cm}`,
+            }
+        }
+    })
+}

@@ -12,6 +12,7 @@ import {
     createFunctionParamsTypeChangeChecker,
     createGenericTypeChecker,
     createInterfacePropsTypeChangeChecker,
+    createInterfaceCallableTypeChangeChecker,
 } from './checkers/reusable/changed_type.reusable'
 import { createChangeWriteChecker } from './checkers/reusable/changed_class_property_write.reusable'
 import { createAddedClassGenericTypeChecker } from './checkers/reusable/added_generic_type.reusable'
@@ -314,5 +315,13 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
                 ...callable,
                 name: Comparator.Utils.Functions.ToString.toFullName(callable),
             })),
-    })
+    }),
+    changed_callable_type_return_type: createInterfaceCallableTypeChangeChecker({
+        changeCode: 'changed_callable_type_return_type',
+        compareTypes: Comparator.Utils.Types.areNotCompatible,
+    }),
+    changed_callable_type_return_type_to_less_strict: createInterfaceCallableTypeChangeChecker({
+        changeCode: 'changed_callable_type_return_type_to_less_strict',
+        compareTypes: Comparator.Utils.Types.areMoreApplicable,
+    }),
 }

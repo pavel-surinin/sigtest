@@ -417,4 +417,18 @@ export const CHANGE_REGISTRY: Record<
         memberType: 'interface',
         status: 'breaking',
     },
+    changed_callable_type_return_type: {
+        action: 'changed',
+        code: 'changed_callable_type_return_type',
+        description: 'Interface callable type changed type',
+        memberType: 'interface',
+        status: 'breaking',
+    },
+    changed_callable_type_return_type_to_less_strict: {
+        action: 'changed',
+        code: 'changed_callable_type_return_type_to_less_strict',
+        description: 'Interface callable type changed type to less strict',
+        memberType: 'interface',
+        status: 'compatible',
+    },
 }

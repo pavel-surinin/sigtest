@@ -107,8 +107,8 @@ export namespace Comparator {
         //    callableType
         | 'added_interface_callable_type'
         | 'removed_interface_callable_type'
-    // | 'changed_callable_type_return_type'
-    //    | 'changed_callable_type_return_type_to_less_strict'
+        | 'changed_callable_type_return_type'
+        | 'changed_callable_type_return_type_to_less_strict'
     //    | 'changed_callable_type_parameter_modifier_to_optional'
     //    | 'changed_callable_type_parameter_modifier_to_required'
     //    | 'changed_callable_type_parameter_required_count'
@@ -450,6 +450,9 @@ export namespace Comparator {
             export namespace ToString {
                 export function toFullName(fx: Signatures.FunctionDeclaration): string {
                     return `(${fx.parameters.map(p => `${p.name}: ${p.type}`)}): ${fx.returnType}`
+                }
+                export function toParameters(fx: Signatures.FunctionDeclaration): string {
+                    return `(${fx.parameters.map(p => `${p.name}: ${p.type}`)})`
                 }
             }
         }

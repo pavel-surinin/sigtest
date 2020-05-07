@@ -1800,5 +1800,66 @@ describe('Comparator', () => {
                 } as ComparatorTestPayload).toFindNoChanges()
             })
         })
+        describe('changed_callable_type_return_type', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        (): any
+                    }
+                    `,
+                    v2: `export interface Test {
+                        (): string
+                    }
+                    `,
+                    code: 'changed_callable_type_return_type',
+                    update: true,
+                } as ComparatorTestPayload).toFindChanges(`Interface callable changed return type:
+    '()' from 'any' to 'string'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        (): string
+                    }
+                    `,
+                    v2: `export interface Test {
+                        (): any
+                    }
+                    `,
+                    code: 'changed_callable_type_return_type',
+                    update: true,
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
+        describe('changed_callable_type_return_type_to_less_strict', () => {
+            it('should find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        (a: Date): string
+                    }
+                    `,
+                    v2: `export interface Test {
+                        (a: Date): any
+                    }
+                    `,
+                    code: 'changed_callable_type_return_type_to_less_strict',
+                } as ComparatorTestPayload).toFindChanges(`Interface callable changed return type:
+    '(a: Date)' from 'string' to 'any'`)
+            })
+            it('should not find changes', () => {
+                expect({
+                    v1: `export interface Test {
+                        (a: Date): string | number
+                    }
+                    `,
+                    v2: `export interface Test {
+                        (a: Date): string
+                        (): any
+                    }
+                    `,
+                    code: 'changed_callable_type_return_type_to_less_strict',
+                } as ComparatorTestPayload).toFindNoChanges()
+            })
+        })
     })
 })

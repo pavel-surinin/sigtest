@@ -1000,6 +1000,22 @@ export interface Test {
 }
 ```
 
+- **changed_callable_type_return_type**: Interface callable type changed type
+
+```typescript
+// version 0.0.1
+export interface Test {
+  (): any;
+}
+```
+
+```typescript
+// version 0.0.2
+export interface Test {
+  (): string;
+}
+```
+
 ### Compatible
 
 - **added_interface_optional_generic**: Added interface optional generic type
@@ -1055,5 +1071,21 @@ export interface Test {
 // version 0.0.2
 export interface Test {
   a: any;
+}
+```
+
+- **changed_callable_type_return_type_to_less_strict**: Interface callable type changed type to less strict
+
+```typescript
+// version 0.0.1
+export interface Test {
+  (a: Date): string;
+}
+```
+
+```typescript
+// version 0.0.2
+export interface Test {
+  (a: Date): any;
 }
 ```
