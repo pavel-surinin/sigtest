@@ -1859,7 +1859,7 @@ describe('Comparator', () => {
                 } as ComparatorTestPayload).toFindNoChanges()
             })
         })
-        describe('changed_callable_type_parameter_modifier_to_optional', () => {
+        describe('changed_callable_parameter_modifier_to_optional', () => {
             it('should find changes', () => {
                 expect({
                     v1: `export interface Test {
@@ -1870,7 +1870,7 @@ describe('Comparator', () => {
                         (a?: any): void
                     }
                     `,
-                    code: 'changed_callable_type_parameter_modifier_to_optional',
+                    code: 'changed_callable_parameter_modifier_to_optional',
                 } as ComparatorTestPayload).toFindChanges(`Parameters changed to optional in:
     callable (a: any) parameters: 'a'`)
             })
@@ -1884,11 +1884,11 @@ describe('Comparator', () => {
                         (a: any): void
                     }
                     `,
-                    code: 'changed_callable_type_parameter_modifier_to_optional',
+                    code: 'changed_callable_parameter_modifier_to_optional',
                 } as ComparatorTestPayload).toFindNoChanges()
             })
         })
-        describe('changed_callable_type_parameter_modifier_to_required', () => {
+        describe('changed_callable_parameter_modifier_to_required', () => {
             it('should find changes', () => {
                 expect({
                     v1: `export interface Test {
@@ -1899,7 +1899,7 @@ describe('Comparator', () => {
                         (a: any): void
                     }
                     `,
-                    code: 'changed_callable_type_parameter_modifier_to_required',
+                    code: 'changed_callable_parameter_modifier_to_required',
                 } as ComparatorTestPayload).toFindChanges(`Parameters changed to required in:
     callable (a: any) parameters: 'a'`)
             })
@@ -1913,7 +1913,7 @@ describe('Comparator', () => {
                         (a?: any): void
                     }
                     `,
-                    code: 'changed_callable_type_parameter_modifier_to_required',
+                    code: 'changed_callable_parameter_modifier_to_required',
                 } as ComparatorTestPayload).toFindNoChanges()
             })
         })

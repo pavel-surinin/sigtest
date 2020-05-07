@@ -327,16 +327,16 @@ export const COMPARATOR_REGISTRY: ComparatorRegistry = {
         changeCode: 'changed_callable_type_return_type_to_less_strict',
         compareTypes: Comparator.Utils.Types.areMoreApplicable,
     }),
-    changed_callable_type_parameter_modifier_to_optional: createInterfaceCallbleOptReqModifierChangeComparator(
+    changed_callable_parameter_modifier_to_optional: createInterfaceCallbleOptReqModifierChangeComparator(
         {
-            changeCode: 'changed_callable_type_parameter_modifier_to_optional',
+            changeCode: 'changed_callable_parameter_modifier_to_optional',
             compare: Comparator.Utils.Parameters.getChangedToOptional,
             modifierName: 'optional',
         }
     ),
-    changed_callable_type_parameter_modifier_to_required: createInterfaceCallbleOptReqModifierChangeComparator(
+    changed_callable_parameter_modifier_to_required: createInterfaceCallbleOptReqModifierChangeComparator(
         {
-            changeCode: 'changed_callable_type_parameter_modifier_to_required',
+            changeCode: 'changed_callable_parameter_modifier_to_required',
             compare: Comparator.Utils.Parameters.getChangedToRequired,
             modifierName: 'required',
         }

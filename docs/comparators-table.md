@@ -1016,7 +1016,7 @@ export interface Test {
 }
 ```
 
-- **changed_callable_type_parameter_modifier_to_required**: Interface callable parameter type changed from optional to required
+- **changed_callable_parameter_modifier_to_required**: Interface callable parameter type changed from optional to required
 
 ```typescript
 // version 0.0.1
@@ -1106,7 +1106,7 @@ export interface Test {
 }
 ```
 
-- **changed_callable_type_parameter_modifier_to_optional**: Interface callable parameter type changed from required to optional
+- **changed_callable_parameter_modifier_to_optional**: Interface callable parameter type changed from required to optional
 
 ```typescript
 // version 0.0.1
