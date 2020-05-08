@@ -11,7 +11,7 @@
 
 ### Breaking
 
-- **changed_member_type**: Signature member type changed
+#### changed_member_type: Signature member type changed
 
 ```typescript
 // version 0.0.1
@@ -23,7 +23,7 @@ export const a = 1;
 export function a() {}
 ```
 
-- **member_removal**: Signature member removed from package
+#### member_removal: Signature member removed from package
 
 ```typescript
 // version 0.0.1
@@ -36,13 +36,13 @@ export const a = 1;
 
 ### Compatible
 
-- **no_change**: Nothing is changed
+#### no_change: Nothing is changed
 
 ## Class
 
 ### Breaking
 
-- **changed_required_constructor_parameters_count**: Required parameters count in constructor has changed
+#### changed_required_constructor_parameters_count: Required parameters count in constructor has changed
 
 ```typescript
 // version 0.0.1
@@ -58,7 +58,7 @@ export class Test {
 }
 ```
 
-- **changed_constructor_parameter_modifier_to_required**: Constructor paramter became required
+#### changed_constructor_parameter_modifier_to_required: Constructor paramter became required
 
 ```typescript
 // version 0.0.1
@@ -74,7 +74,7 @@ export class Test {
 }
 ```
 
-- **changed_constructor_parameter_type**: Constructor parameter type changed
+#### changed_constructor_parameter_type: Constructor parameter type changed
 
 ```typescript
 // version 0.0.1
@@ -100,7 +100,7 @@ export class Test {
 }
 ```
 
-- **changed_method_return_type**: Method return type changed
+#### changed_method_return_type: Method return type changed
 
 ```typescript
 // version 0.0.1
@@ -132,7 +132,7 @@ export class Test {
 }
 ```
 
-- **changed_method_parameter_modifier_to_required**: Method parameter changed from optional to required
+#### changed_method_parameter_modifier_to_required: Method parameter changed from optional to required
 
 ```typescript
 // version 0.0.1
@@ -164,7 +164,7 @@ export class Test {
 }
 ```
 
-- **changed_method_parameter_required_count**: Changed required parameters count in class method
+#### changed_method_parameter_required_count: Changed required parameters count in class method
 
 ```typescript
 // version 0.0.1
@@ -190,7 +190,7 @@ export class Test {
 }
 ```
 
-- **removed_method**: Method removed from class
+#### removed_method: Method removed from class
 
 ```typescript
 // version 0.0.1
@@ -226,7 +226,7 @@ export class Test {
 }
 ```
 
-- **changed_method_modifier_less_visible**: Method access modifier changed, to be more restrictive.
+#### changed_method_modifier_less_visible: Method access modifier changed, to be more restrictive.
 
 ```typescript
 // version 0.0.1
@@ -264,7 +264,7 @@ export class Test {
 }
 ```
 
-- **changed_property_modifier_less_visible**: Property access modifier changed, to be more restrictive.
+#### changed_property_modifier_less_visible: Property access modifier changed, to be more restrictive.
 
 ```typescript
 // version 0.0.1
@@ -286,7 +286,7 @@ export class Test {
 }
 ```
 
-- **removed_class_property**: Property was removed from class.
+#### removed_class_property: Property was removed from class.
 
 ```typescript
 // version 0.0.1
@@ -303,7 +303,7 @@ export class Test {
 export class Test {}
 ```
 
-- **changed_class_property_type**: Property type was changed
+#### changed_class_property_type: Property type was changed
 
 ```typescript
 // version 0.0.1
@@ -323,7 +323,7 @@ export class Test {
 }
 ```
 
-- **changed_class_property_to_readonly**: Property write access was changed to more strict
+#### changed_class_property_to_readonly: Property write access was changed to more strict
 
 ```typescript
 // version 0.0.1
@@ -343,7 +343,7 @@ export class Test {
 }
 ```
 
-- **removed_generic**: Class generic type was removed
+#### removed_generic: Class generic type was removed
 
 ```typescript
 // version 0.0.1
@@ -355,7 +355,7 @@ export class Test<T, E> {}
 export class Test<T> {}
 ```
 
-- **added_required_generic**: Class generic type was added
+#### added_required_generic: Class generic type was added
 
 ```typescript
 // version 0.0.1
@@ -367,7 +367,7 @@ export class Test<T> {}
 export class Test<T, E> {}
 ```
 
-- **changed_generic_extends_type**: Class generic type constraint was changed
+#### changed_generic_extends_type: Class generic type constraint was changed
 
 ```typescript
 // version 0.0.1
@@ -381,7 +381,7 @@ export class Test<E extends string, C extends Date> {}
 
 ### Compatible
 
-- **changed_constructor_parameter_modifier_to_optional**: Constructor parameter became optional
+#### changed_constructor_parameter_modifier_to_optional: Constructor parameter became optional
 
 ```typescript
 // version 0.0.1
@@ -397,7 +397,7 @@ export class Test {
 }
 ```
 
-- **changed_constructor_parameter_type_union**: Constructor parameter type changed to union type
+#### changed_constructor_parameter_type_union: Constructor parameter type changed to union type
 
 ```typescript
 // version 0.0.1
@@ -413,7 +413,7 @@ export class Test {
 }
 ```
 
-- **changed_method_return_type_union**: Method return type changed to union type
+#### changed_method_return_type_union: Method return type changed to union type
 
 ```typescript
 // version 0.0.1
@@ -439,7 +439,7 @@ export class Test {
 }
 ```
 
-- **changed_method_parameter_modifier_to_optional**: Method parameter changed from required to optional
+#### changed_method_parameter_modifier_to_optional: Method parameter changed from required to optional
 
 ```typescript
 // version 0.0.1
@@ -471,7 +471,7 @@ export class Test {
 }
 ```
 
-- **added_method**: Method added to class
+#### added_method: Method added to class
 
 ```typescript
 // version 0.0.1
@@ -508,7 +508,7 @@ export class Test {
 }
 ```
 
-- **changed_method_modifier_more_visible**: Method access modifier changed, to be less restrictive.
+#### changed_method_modifier_more_visible: Method access modifier changed, to be less restrictive.
 
 ```typescript
 // version 0.0.1
@@ -540,7 +540,7 @@ export class Test {
 }
 ```
 
-- **changed_property_modifier_more_visible**: Property access modifier changed, to be less restrictive.
+#### changed_property_modifier_more_visible: Property access modifier changed, to be less restrictive.
 
 ```typescript
 // version 0.0.1
@@ -560,7 +560,7 @@ export class Test {
 }
 ```
 
-- **added_class_property**: Property was added to class.
+#### added_class_property: Property was added to class.
 
 ```typescript
 // version 0.0.1
@@ -577,7 +577,7 @@ export class Test {
 }
 ```
 
-- **changed_class_property_type_union**: Property type was changed to less strict
+#### changed_class_property_type_union: Property type was changed to less strict
 
 ```typescript
 // version 0.0.1
@@ -599,7 +599,7 @@ export class Test {
 }
 ```
 
-- **changed_class_property_type_union**: Property write access was changed to less strict
+#### changed_class_property_type_union: Property write access was changed to less strict
 
 ```typescript
 // version 0.0.1
@@ -621,7 +621,7 @@ export class Test {
 }
 ```
 
-- **added_optional_generic**: Class optional generic type was added
+#### added_optional_generic: Class optional generic type was added
 
 ```typescript
 // version 0.0.1
@@ -633,7 +633,7 @@ export class Test<T> {}
 export class Test<T, E = any> {}
 ```
 
-- **changed_generic_extends_type_to_less_strict**: Class generic constraint type was changed to less strict
+#### changed_generic_extends_type_to_less_strict: Class generic constraint type was changed to less strict
 
 ```typescript
 // version 0.0.1
@@ -649,7 +649,7 @@ export class Test<E extends any> {}
 
 ### Breaking
 
-- **changed_constant_type**: Variable constraint type was changed
+#### changed_constant_type: Variable constraint type was changed
 
 ```typescript
 // version 0.0.1
@@ -663,7 +663,7 @@ export const a: number = 2;
 
 ### Compatible
 
-- **changed_constant_type_to_less_strict**: Variable constraint type was changed to less strict
+#### changed_constant_type_to_less_strict: Variable constraint type was changed to less strict
 
 ```typescript
 // version 0.0.1
@@ -679,7 +679,7 @@ export const a: any = "a";
 
 ### Breaking
 
-- **removed_enum**: Enum value removed
+#### removed_enum: Enum value removed
 
 ```typescript
 // version 0.0.1
@@ -699,11 +699,11 @@ export enum Direction {
 }
 ```
 
-- **changed_enum_value**: Enum changed value, serialized to json values will be different
+#### changed_enum_value: Enum changed value, serialized to json values will be different
 
 ### Compatible
 
-- **added_enum**: Enum value added
+#### added_enum: Enum value added
 
 ```typescript
 // version 0.0.1
@@ -727,7 +727,7 @@ export enum Direction {
 
 ### Breaking
 
-- **changed_function_return_type**: Function return type changed
+#### changed_function_return_type: Function return type changed
 
 ```typescript
 // version 0.0.1
@@ -743,7 +743,7 @@ export function is() {
 }
 ```
 
-- **changed_function_parameter_modifier_to_required**: Function parameter became required
+#### changed_function_parameter_modifier_to_required: Function parameter became required
 
 ```typescript
 // version 0.0.1
@@ -755,7 +755,7 @@ export function test(a?: string): void {}
 export function test(a: string): void {}
 ```
 
-- **changed_function_parameter_required_count**: Function required parameters count changed
+#### changed_function_parameter_required_count: Function required parameters count changed
 
 ```typescript
 // version 0.0.1
@@ -767,7 +767,7 @@ export function test(a: any, b: number = 1) {}
 export function test(b: number) {}
 ```
 
-- **changed_function_parameter_type**: Function paramter type changed
+#### changed_function_parameter_type: Function paramter type changed
 
 ```typescript
 // version 0.0.1
@@ -779,7 +779,7 @@ export function test(a: number | string, b: any): void {}
 export function test(a: number, b: Date): void {}
 ```
 
-- **removed_function_generic**: Function generic type is removed
+#### removed_function_generic: Function generic type is removed
 
 ```typescript
 // version 0.0.1
@@ -791,7 +791,7 @@ export function test<T>() {}
 export function test() {}
 ```
 
-- **added_function_required_generic**: Added required generic type to function
+#### added_function_required_generic: Added required generic type to function
 
 ```typescript
 // version 0.0.1
@@ -803,7 +803,7 @@ export function test() {}
 export function test<T>() {}
 ```
 
-- **changed_function_generic_extends_type**: Changed function generic type constraint
+#### changed_function_generic_extends_type: Changed function generic type constraint
 
 ```typescript
 // version 0.0.1
@@ -817,7 +817,7 @@ export function test<T extends string>() {}
 
 ### Compatible
 
-- **changed_function_return_type_to_less_strict**: Function return type changed to less strict
+#### changed_function_return_type_to_less_strict: Function return type changed to less strict
 
 ```typescript
 // version 0.0.1
@@ -833,7 +833,7 @@ export function is(): boolean | number {
 }
 ```
 
-- **changed_function_parameter_modifier_to_optional**: Function parameter became optional
+#### changed_function_parameter_modifier_to_optional: Function parameter became optional
 
 ```typescript
 // version 0.0.1
@@ -845,7 +845,7 @@ export function test(a: string): void {}
 export function test(a?: string): void {}
 ```
 
-- **changed_function_parameter_type_to_less_strict**: Function paramter type changed to less strict
+#### changed_function_parameter_type_to_less_strict: Function paramter type changed to less strict
 
 ```typescript
 // version 0.0.1
@@ -857,7 +857,7 @@ export function test(a: number) {}
 export function test(a: any) {}
 ```
 
-- **added_function_optional_generic**: Added optional generic type to function
+#### added_function_optional_generic: Added optional generic type to function
 
 ```typescript
 // version 0.0.1
@@ -869,7 +869,7 @@ export function test() {}
 export function test<T = string>() {}
 ```
 
-- **changed_function_generic_extends_type_to_less_strict**: Changed function generic type constraint to be less restrictive
+#### changed_function_generic_extends_type_to_less_strict: Changed function generic type constraint to be less restrictive
 
 ```typescript
 // version 0.0.1
@@ -885,7 +885,7 @@ export function test<T extends string | number>() {}
 
 ### Breaking
 
-- **removed_interface_generic**: Removed interface generic type
+#### removed_interface_generic: Removed interface generic type
 
 ```typescript
 // version 0.0.1
@@ -897,7 +897,7 @@ export interface Test<T> {}
 export interface Test {}
 ```
 
-- **added_interface_required_generic**: Added interface required generic type
+#### added_interface_required_generic: Added interface required generic type
 
 ```typescript
 // version 0.0.1
@@ -909,7 +909,7 @@ export interface Test {}
 export interface Test<T> {}
 ```
 
-- **changed_interface_generic_extends_type**: Changed interface generic type constraint
+#### changed_interface_generic_extends_type: Changed interface generic type constraint
 
 ```typescript
 // version 0.0.1
@@ -921,7 +921,7 @@ export interface Test<T extends string> {}
 export interface Test<T extends number> {}
 ```
 
-- **added_required_interface_property**: Added required interface property
+#### added_required_interface_property: Added required interface property
 
 ```typescript
 // version 0.0.1
@@ -935,7 +935,7 @@ export interface Test {
 }
 ```
 
-- **removed_interface_property**: Removed interface property
+#### removed_interface_property: Removed interface property
 
 ```typescript
 // version 0.0.1
@@ -950,7 +950,7 @@ export interface Test {
 export interface Test {}
 ```
 
-- **changed_interface_property_type**: Changed interface property type
+#### changed_interface_property_type: Changed interface property type
 
 ```typescript
 // version 0.0.1
@@ -966,7 +966,7 @@ export interface Test {
 }
 ```
 
-- **added_interface_callable_type**: Interface callable type was added
+#### added_interface_callable_type: Interface callable type was added
 
 ```typescript
 // version 0.0.1
@@ -983,7 +983,7 @@ export interface Test {
 }
 ```
 
-- **removed_interface_callable_type**: Interface callable type was removed
+#### removed_interface_callable_type: Interface callable type was removed
 
 ```typescript
 // version 0.0.1
@@ -1000,7 +1000,7 @@ export interface Test {
 }
 ```
 
-- **changed_callable_type_return_type**: Interface callable type changed type
+#### changed_callable_type_return_type: Interface callable type changed type
 
 ```typescript
 // version 0.0.1
@@ -1016,7 +1016,7 @@ export interface Test {
 }
 ```
 
-- **changed_callable_parameter_modifier_to_required**: Interface callable parameter type changed from optional to required
+#### changed_callable_parameter_modifier_to_required: Interface callable parameter type changed from optional to required
 
 ```typescript
 // version 0.0.1
@@ -1034,7 +1034,7 @@ export interface Test {
 
 ### Compatible
 
-- **added_interface_optional_generic**: Added interface optional generic type
+#### added_interface_optional_generic: Added interface optional generic type
 
 ```typescript
 // version 0.0.1
@@ -1046,7 +1046,7 @@ export interface Test<T> {}
 export interface Test<T, E extends number, R = any> {}
 ```
 
-- **changed_interface_generic_extends_type_to_less_strict**: Changed interface generic type constraint to be less strict
+#### changed_interface_generic_extends_type_to_less_strict: Changed interface generic type constraint to be less strict
 
 ```typescript
 // version 0.0.1
@@ -1058,7 +1058,7 @@ export interface Test<T extends number, E extends number> {}
 export interface Test<T extends number | string, E extends any> {}
 ```
 
-- **added_optional_interface_property**: Added optional interface property
+#### added_optional_interface_property: Added optional interface property
 
 ```typescript
 // version 0.0.1
@@ -1074,7 +1074,7 @@ export interface Test {
 }
 ```
 
-- **changed_interface_property_type_less_strict**: Changed interface property type to be less strict
+#### changed_interface_property_type_less_strict: Changed interface property type to be less strict
 
 ```typescript
 // version 0.0.1
@@ -1090,7 +1090,7 @@ export interface Test {
 }
 ```
 
-- **changed_callable_type_return_type_to_less_strict**: Interface callable type changed type to less strict
+#### changed_callable_type_return_type_to_less_strict: Interface callable type changed type to less strict
 
 ```typescript
 // version 0.0.1
@@ -1106,7 +1106,7 @@ export interface Test {
 }
 ```
 
-- **changed_callable_parameter_modifier_to_optional**: Interface callable parameter type changed from required to optional
+#### changed_callable_parameter_modifier_to_optional: Interface callable parameter type changed from required to optional
 
 ```typescript
 // version 0.0.1

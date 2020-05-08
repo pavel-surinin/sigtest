@@ -30,8 +30,8 @@ const h1 = s => {
 const h2 = s => {
     return `### ${capitalize(s)}`
 }
-const li = s => `- ${s}`
-const formatChange = c => `**${c.code}**: ${c.description}`
+const h4 = s => `#### ${s}`
+const formatChange = c => `${c.code}: ${c.description}`
 
 const toMemberType = c => c.memberType
 const grouped = Object.values(changes)
@@ -47,7 +47,7 @@ for (const entry of grouped.entries()) {
     for (const grEntry of groupedChanges.entries()) {
         lines.push(h2(grEntry.key))
         for (const change of grEntry.value) {
-            lines.push(li(formatChange(change)))
+            lines.push(h4(formatChange(change)))
 
             // examples
             const vfileName = version =>
