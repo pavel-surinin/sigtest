@@ -1,4 +1,4 @@
-import { Signatures } from '../App.types'
+import { Signatures } from '../Signatures'
 import { Comparator } from './Comparators'
 
 import {

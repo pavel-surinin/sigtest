@@ -2,7 +2,7 @@ import { Comparator } from '../Comparators'
 import { CHANGE_REGISTRY } from '../ComparatorChangeRegistry'
 import Common = Comparator.Utils.Common
 import { Reducer } from 'declarative-js'
-import { Signatures } from '../../App.types'
+import { Signatures } from '../../Signatures'
 
 export const changed_enum_value = Common.comparatorFor.enum(signatures => {
     const { after, before } = signatures

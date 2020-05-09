@@ -1,4 +1,4 @@
-import { Signatures } from '../../App.types'
+import { Signatures } from '../../Signatures'
 import { CHANGE_REGISTRY } from '../ComparatorChangeRegistry'
 import { Comparator } from '../Comparators'
 import { Reducer } from 'declarative-js'

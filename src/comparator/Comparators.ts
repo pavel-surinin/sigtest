@@ -1,4 +1,4 @@
-import { Signatures } from '../App.types'
+import { Signatures } from '../Signatures'
 import { Reducer } from 'declarative-js'
 import toObject = Reducer.toObject
 import { memoize } from 'auto-memoize'
@@ -11,7 +11,7 @@ export namespace Comparator {
     export type Compare<T> = { before: T; after: T }
     export type CompareOpt<T> = { before: T; after?: T }
 
-    export interface Change<C extends ChangeCode> {
+    export interface Change<C extends ChangeCode = ChangeCode> {
         signatures: CompareOpt<Signatures.SignatureType<Signatures.MemberType>>
         info: ChangeInfo<ChangeCode>
         message?: string

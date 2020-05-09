@@ -1,5 +1,5 @@
 import { Comparator } from '../../../src/comparator/Comparators'
-import { Signatures } from '../../../src/App.types'
+import { Signatures } from '../../../src/Signatures'
 import { Reducer } from 'declarative-js'
 
 describe('Comparator.Utils', () => {

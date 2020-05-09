@@ -4,445 +4,449 @@ export const CHANGE_REGISTRY: Record<
     Comparator.ChangeCode,
     Comparator.ChangeInfo<Comparator.ChangeCode>
 > = {
-    no_change: {
+    no_change: createInfo({
         code: 'no_change',
         description: 'Nothing is changed',
         action: 'none',
         status: 'compatible',
         memberType: 'common',
-    },
-    changed_member_type: {
+    }),
+    changed_member_type: createInfo({
         code: 'changed_member_type',
         description: 'Signature member type changed',
         action: 'changed',
         status: 'breaking',
         memberType: 'common',
-    },
-    member_removal: {
+    }),
+    member_removal: createInfo({
         action: 'removed',
         code: 'member_removal',
         description: 'Signature member removed from package',
         status: 'breaking',
         memberType: 'common',
-    },
-    changed_required_constructor_parameters_count: {
+    }),
+    changed_required_constructor_parameters_count: createInfo({
         action: 'changed',
         code: 'changed_required_constructor_parameters_count',
         description: 'Required parameters count in constructor has changed',
         memberType: 'class',
         status: 'breaking',
-    },
-    changed_constructor_parameter_modifier_to_optional: {
+    }),
+    changed_constructor_parameter_modifier_to_optional: createInfo({
         action: 'changed',
         code: 'changed_constructor_parameter_modifier_to_optional',
         description: 'Constructor parameter became optional',
         memberType: 'class',
         status: 'compatible',
-    },
-    changed_constructor_parameter_modifier_to_required: {
+    }),
+    changed_constructor_parameter_modifier_to_required: createInfo({
         action: 'changed',
         code: 'changed_constructor_parameter_modifier_to_required',
         description: 'Constructor paramter became required',
         memberType: 'class',
         status: 'breaking',
-    },
-    changed_constructor_parameter_type: {
+    }),
+    changed_constructor_parameter_type: createInfo({
         action: 'changed',
         code: 'changed_constructor_parameter_type',
         description: 'Constructor parameter type changed',
         memberType: 'class',
         status: 'breaking',
-    },
-    changed_constructor_parameter_type_union: {
+    }),
+    changed_constructor_parameter_type_union: createInfo({
         action: 'changed',
         code: 'changed_constructor_parameter_type_union',
         description: 'Constructor parameter type changed to union type',
         memberType: 'class',
         status: 'compatible',
-    },
-    changed_method_return_type: {
+    }),
+    changed_method_return_type: createInfo({
         action: 'changed',
         code: 'changed_method_return_type',
         description: 'Method return type changed',
         memberType: 'class',
         status: 'breaking',
-    },
-    changed_method_return_type_union: {
+    }),
+    changed_method_return_type_union: createInfo({
         action: 'changed',
         code: 'changed_method_return_type_union',
         description: 'Method return type changed to union type',
         memberType: 'class',
         status: 'compatible',
-    },
-    changed_method_parameter_modifier_to_optional: {
+    }),
+    changed_method_parameter_modifier_to_optional: createInfo({
         action: 'changed',
         code: 'changed_method_parameter_modifier_to_optional',
         description: 'Method parameter changed from required to optional',
         status: 'compatible',
         memberType: 'class',
-    },
-    changed_method_parameter_modifier_to_required: {
+    }),
+    changed_method_parameter_modifier_to_required: createInfo({
         code: 'changed_method_parameter_modifier_to_required',
         action: 'changed',
         description: 'Method parameter changed from optional to required',
         memberType: 'class',
         status: 'breaking',
-    },
-    changed_method_parameter_required_count: {
+    }),
+    changed_method_parameter_required_count: createInfo({
         code: 'changed_method_parameter_required_count',
         action: 'changed',
         description: 'Changed required parameters count in class method',
         memberType: 'class',
         status: 'breaking',
-    },
-    added_method: {
+    }),
+    added_method: createInfo({
         action: 'added',
         code: 'added_method',
         description: 'Method added to class',
         memberType: 'class',
         status: 'compatible',
-    },
-    removed_method: {
+    }),
+    removed_method: createInfo({
         action: 'removed',
         code: 'removed_method',
         description: 'Method removed from class',
         memberType: 'class',
         status: 'breaking',
-    },
-    changed_method_modifier_more_visible: {
+    }),
+    changed_method_modifier_more_visible: createInfo({
         action: 'changed',
         code: 'changed_method_modifier_more_visible',
         description: 'Method access modifier changed, to be less restrictive.',
         memberType: 'class',
         status: 'compatible',
-    },
-    changed_method_modifier_less_visible: {
+    }),
+    changed_method_modifier_less_visible: createInfo({
         action: 'changed',
         code: 'changed_method_modifier_less_visible',
         description: 'Method access modifier changed, to be more restrictive.',
         memberType: 'class',
         status: 'breaking',
-    },
-    changed_property_modifier_more_visible: {
+    }),
+    changed_property_modifier_more_visible: createInfo({
         action: 'changed',
         code: 'changed_property_modifier_more_visible',
         description: 'Property access modifier changed, to be less restrictive.',
         memberType: 'class',
         status: 'compatible',
-    },
-    changed_property_modifier_less_visible: {
+    }),
+    changed_property_modifier_less_visible: createInfo({
         action: 'changed',
         code: 'changed_property_modifier_less_visible',
         description: 'Property access modifier changed, to be more restrictive.',
         memberType: 'class',
         status: 'breaking',
-    },
-    removed_class_property: {
+    }),
+    removed_class_property: createInfo({
         action: 'changed',
         code: 'removed_class_property',
         description: 'Property was removed from class.',
         memberType: 'class',
         status: 'breaking',
-    },
-    added_class_property: {
+    }),
+    added_class_property: createInfo({
         action: 'added',
         code: 'added_class_property',
         description: 'Property was added to class.',
         memberType: 'class',
         status: 'compatible',
-    },
-    changed_class_property_type: {
+    }),
+    changed_class_property_type: createInfo({
         action: 'changed',
         code: 'changed_class_property_type',
         description: 'Property type was changed',
         memberType: 'class',
         status: 'breaking',
-    },
-    changed_class_property_type_union: {
+    }),
+    changed_class_property_type_union: createInfo({
         action: 'changed',
         code: 'changed_class_property_type_union',
         description: 'Property type was changed to less strict',
         memberType: 'class',
         status: 'compatible',
-    },
-    changed_class_property_to_readonly: {
+    }),
+    changed_class_property_to_readonly: createInfo({
         action: 'changed',
         code: 'changed_class_property_to_readonly',
         description: 'Property write access was changed to more strict',
         memberType: 'class',
         status: 'breaking',
-    },
-    changed_class_property_to_not_readonly: {
+    }),
+    changed_class_property_to_not_readonly: createInfo({
         action: 'changed',
         code: 'changed_class_property_type_union',
         description: 'Property write access was changed to less strict',
         memberType: 'class',
         status: 'compatible',
-    },
-    removed_generic: {
+    }),
+    removed_generic: createInfo({
         action: 'removed',
         code: 'removed_generic',
         description: 'Class generic type was removed',
         memberType: 'class',
         status: 'breaking',
-    },
-    added_required_generic: {
+    }),
+    added_required_generic: createInfo({
         action: 'added',
         code: 'added_required_generic',
         description: 'Class generic type was added',
         memberType: 'class',
         status: 'breaking',
-    },
-    added_optional_generic: {
+    }),
+    added_optional_generic: createInfo({
         action: 'added',
         code: 'added_optional_generic',
         description: 'Class optional generic type was added',
         memberType: 'class',
         status: 'compatible',
-    },
-    changed_generic_extends_type: {
+    }),
+    changed_generic_extends_type: createInfo({
         action: 'changed',
         code: 'changed_generic_extends_type',
         description: 'Class generic type constraint was changed',
         memberType: 'class',
         status: 'breaking',
-    },
-    changed_generic_extends_type_to_less_strict: {
+    }),
+    changed_generic_extends_type_to_less_strict: createInfo({
         action: 'changed',
         code: 'changed_generic_extends_type_to_less_strict',
         description: 'Class generic constraint type was changed to less strict',
         memberType: 'class',
         status: 'compatible',
-    },
-    changed_constant_type: {
+    }),
+    changed_constant_type: createInfo({
         action: 'changed',
         code: 'changed_constant_type',
         description: 'Variable constraint type was changed',
         memberType: 'constant',
         status: 'breaking',
-    },
-    changed_constant_type_to_less_strict: {
+    }),
+    changed_constant_type_to_less_strict: createInfo({
         action: 'changed',
         code: 'changed_constant_type_to_less_strict',
         description: 'Variable constraint type was changed to less strict',
         memberType: 'constant',
         status: 'compatible',
-    },
-    added_enum: {
+    }),
+    added_enum: createInfo({
         action: 'added',
         code: 'added_enum',
         description: 'Enum value added',
         memberType: 'enum',
         status: 'compatible',
-    },
-    removed_enum: {
+    }),
+    removed_enum: createInfo({
         action: 'removed',
         code: 'removed_enum',
         description: 'Enum value removed',
         memberType: 'enum',
         status: 'breaking',
-    },
-    changed_enum_value: {
+    }),
+    changed_enum_value: createInfo({
         action: 'changed',
         code: 'changed_enum_value',
         description: 'Enum changed value, serialized to json values will be different',
         memberType: 'enum',
         status: 'breaking',
-    },
-    changed_function_return_type: {
+    }),
+    changed_function_return_type: createInfo({
         action: 'changed',
         code: 'changed_function_return_type',
         description: 'Function return type changed',
         memberType: 'function',
         status: 'breaking',
-    },
-    changed_function_return_type_to_less_strict: {
+    }),
+    changed_function_return_type_to_less_strict: createInfo({
         action: 'changed',
         code: 'changed_function_return_type_to_less_strict',
         description: 'Function return type changed to less strict',
         memberType: 'function',
         status: 'compatible',
-    },
-    changed_function_parameter_modifier_to_optional: {
+    }),
+    changed_function_parameter_modifier_to_optional: createInfo({
         action: 'changed',
         code: 'changed_function_parameter_modifier_to_optional',
         description: 'Function parameter became optional',
         memberType: 'function',
         status: 'compatible',
-    },
-    changed_function_parameter_modifier_to_required: {
+    }),
+    changed_function_parameter_modifier_to_required: createInfo({
         action: 'changed',
         code: 'changed_function_parameter_modifier_to_required',
         description: 'Function parameter became required',
         memberType: 'function',
         status: 'breaking',
-    },
-    changed_function_parameter_required_count: {
+    }),
+    changed_function_parameter_required_count: createInfo({
         action: 'changed',
         code: 'changed_function_parameter_required_count',
         description: 'Function required parameters count changed',
         memberType: 'function',
         status: 'breaking',
-    },
-    changed_function_parameter_type: {
+    }),
+    changed_function_parameter_type: createInfo({
         action: 'changed',
         code: 'changed_function_parameter_type',
         description: 'Function paramter type changed',
         memberType: 'function',
         status: 'breaking',
-    },
-    changed_function_parameter_type_to_less_strict: {
+    }),
+    changed_function_parameter_type_to_less_strict: createInfo({
         action: 'changed',
         code: 'changed_function_parameter_type_to_less_strict',
         description: 'Function paramter type changed to less strict',
         memberType: 'function',
         status: 'compatible',
-    },
-    removed_function_generic: {
+    }),
+    removed_function_generic: createInfo({
         action: 'removed',
         code: 'removed_function_generic',
         description: 'Function generic type is removed',
         memberType: 'function',
         status: 'breaking',
-    },
-    added_function_required_generic: {
+    }),
+    added_function_required_generic: createInfo({
         action: 'added',
         code: 'added_function_required_generic',
         description: 'Added required generic type to function',
         memberType: 'function',
         status: 'breaking',
-    },
-    added_function_optional_generic: {
+    }),
+    added_function_optional_generic: createInfo({
         action: 'added',
         code: 'added_function_optional_generic',
         description: 'Added optional generic type to function',
         memberType: 'function',
         status: 'compatible',
-    },
-    changed_function_generic_extends_type: {
+    }),
+    changed_function_generic_extends_type: createInfo({
         action: 'changed',
         code: 'changed_function_generic_extends_type',
         description: 'Changed function generic type constraint',
         memberType: 'function',
         status: 'breaking',
-    },
-    changed_function_generic_extends_type_to_less_strict: {
+    }),
+    changed_function_generic_extends_type_to_less_strict: createInfo({
         action: 'changed',
         code: 'changed_function_generic_extends_type_to_less_strict',
         description: 'Changed function generic type constraint to be less restrictive',
         memberType: 'function',
         status: 'compatible',
-    },
-    removed_interface_generic: {
+    }),
+    removed_interface_generic: createInfo({
         action: 'removed',
         code: 'removed_interface_generic',
         description: 'Removed interface generic type',
         memberType: 'interface',
         status: 'breaking',
-    },
-    added_interface_required_generic: {
+    }),
+    added_interface_required_generic: createInfo({
         action: 'added',
         code: 'added_interface_required_generic',
         description: 'Added interface required generic type',
         memberType: 'interface',
         status: 'breaking',
-    },
-    added_interface_optional_generic: {
+    }),
+    added_interface_optional_generic: createInfo({
         action: 'added',
         code: 'added_interface_optional_generic',
         description: 'Added interface optional generic type',
         memberType: 'interface',
         status: 'compatible',
-    },
-    changed_interface_generic_extends_type: {
+    }),
+    changed_interface_generic_extends_type: createInfo({
         action: 'changed',
         code: 'changed_interface_generic_extends_type',
         description: 'Changed interface generic type constraint',
         memberType: 'interface',
         status: 'breaking',
-    },
-    changed_interface_generic_extends_type_to_less_strict: {
+    }),
+    changed_interface_generic_extends_type_to_less_strict: createInfo({
         action: 'changed',
         code: 'changed_interface_generic_extends_type_to_less_strict',
         description: 'Changed interface generic type constraint to be less strict',
         memberType: 'interface',
         status: 'compatible',
-    },
-    added_required_interface_property: {
+    }),
+    added_required_interface_property: createInfo({
         action: 'added',
         code: 'added_required_interface_property',
         description: 'Added required interface property',
         memberType: 'interface',
         status: 'breaking',
-    },
-    added_optional_interface_property: {
+    }),
+    added_optional_interface_property: createInfo({
         action: 'added',
         code: 'added_optional_interface_property',
         description: 'Added optional interface property',
         memberType: 'interface',
         status: 'compatible',
-    },
-    removed_interface_property: {
+    }),
+    removed_interface_property: createInfo({
         action: 'removed',
         code: 'removed_interface_property',
         description: 'Removed interface property',
         memberType: 'interface',
         status: 'breaking',
-    },
-    changed_interface_property_type: {
+    }),
+    changed_interface_property_type: createInfo({
         action: 'changed',
         code: 'changed_interface_property_type',
         description: 'Changed interface property type',
         memberType: 'interface',
         status: 'breaking',
-    },
-    changed_interface_property_type_less_strict: {
+    }),
+    changed_interface_property_type_less_strict: createInfo({
         action: 'changed',
         code: 'changed_interface_property_type_less_strict',
         description: 'Changed interface property type to be less strict',
         memberType: 'interface',
         status: 'compatible',
-    },
-    added_interface_callable_type: {
+    }),
+    added_interface_callable_type: createInfo({
         action: 'added',
         code: 'added_interface_callable_type',
         description: 'Interface callable type was added',
         memberType: 'interface',
         status: 'breaking',
-    },
-    removed_interface_callable_type: {
+    }),
+    removed_interface_callable_type: createInfo({
         action: 'removed',
         code: 'removed_interface_callable_type',
         description: 'Interface callable type was removed',
         memberType: 'interface',
         status: 'breaking',
-    },
-    changed_callable_type_return_type: {
+    }),
+    changed_callable_type_return_type: createInfo({
         action: 'changed',
         code: 'changed_callable_type_return_type',
         description: 'Interface callable type changed type',
         memberType: 'interface',
         status: 'breaking',
-    },
-    changed_callable_type_return_type_to_less_strict: {
+    }),
+    changed_callable_type_return_type_to_less_strict: createInfo({
         action: 'changed',
         code: 'changed_callable_type_return_type_to_less_strict',
         description: 'Interface callable type changed type to less strict',
         memberType: 'interface',
         status: 'compatible',
-    },
-    changed_callable_parameter_modifier_to_optional: {
+    }),
+    changed_callable_parameter_modifier_to_optional: createInfo({
         action: 'changed',
         code: 'changed_callable_parameter_modifier_to_optional',
         description: 'Interface callable parameter type changed from required to optional',
         memberType: 'interface',
         status: 'compatible',
-    },
-    changed_callable_parameter_modifier_to_required: {
+    }),
+    changed_callable_parameter_modifier_to_required: createInfo({
         action: 'changed',
         code: 'changed_callable_parameter_modifier_to_required',
         description: 'Interface callable parameter type changed from optional to required',
         memberType: 'interface',
         status: 'breaking',
-    },
+    }),
+}
+
+function createInfo<T>(info: T): T {
+    return Object.freeze(info)
 }

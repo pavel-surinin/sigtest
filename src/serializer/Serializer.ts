@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { Signatures } from '../App.types'
+import { Signatures } from '../Signatures'
 import { SerializationError } from './SerializerError'
 import { optional } from 'declarative-js'
 

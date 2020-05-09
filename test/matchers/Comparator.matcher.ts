@@ -1,5 +1,5 @@
 import { ScriptTarget, ModuleKind } from 'typescript'
-import { compareSnapshots } from '../../src/SnapshotComparator'
+import { SnapshotProcessor } from '../../src/SnapshotProcessor'
 import { generateSignatures } from '../../src/TypeVisitor'
 import {
     writeFileSync,
@@ -18,7 +18,7 @@ import { Comparator } from '../../src/comparator/Comparators'
 import { format } from 'prettier'
 import toml from '@iarna/toml'
 import { Reducer } from 'declarative-js'
-import { Signatures } from '../../src/App.types'
+import { Signatures } from '../../src/Signatures'
 
 const TEST_FILES_FOLDER = 'test/src/__testFiles__/'
 
@@ -95,13 +95,11 @@ class SignatureProvider {
         update?: boolean
     }): Comparator.ComparisonResult {
         const [v1meta, v2meta] = this.provide(options.v1, options.v2, !!options.update)
-        const result = compareSnapshots(
-            {
-                before: { version: '0.0.1', signatures: v1meta },
-                after: { version: '0.0.2', signatures: v2meta },
-            },
-            [COMPARATOR_REGISTRY[options.code]]
-        )
+        const comparator = new SnapshotProcessor([COMPARATOR_REGISTRY[options.code]])
+        const result = comparator.compare({
+            before: { version: '0.0.1', signatures: v1meta },
+            after: { version: '0.0.2', signatures: v2meta },
+        })
         return result
     }
 }
