@@ -7,15 +7,15 @@ This repository is WIP
 
 # Implementation status
 
-|               | Introspection | Comparing | Reports |
-| ------------- | ------------- | --------- | ------- |
-| **function**  | ☀️             | ☀️         |         |
-| **constant**  | ☀️             | ☀️         |         |
-| **class**     | ☀️             | ☀️         |         |
-| **enum**      | ☀️             | ☀️         |         |
-| **interface** | ☀️             |           |         |
-| **type**      | ⛅             | ⛅         |         |
-| **namespace** | ☀️             | ☀️         |         |
+|               | Introspection | Comparing |
+| ------------- | ------------- | --------- |
+| **function**  | ☀️             | ☀️         |
+| **constant**  | ☀️             | ☀️         |
+| **class**     | ☀️             | ☀️         |
+| **enum**      | ☀️             | ☀️         |
+| **interface** | ☀️             | ☀️         |
+| **type**      | ⛅             | ⛅         |
+| **namespace** | ☀️             | ☀️         |
 
 # Documentation
 
