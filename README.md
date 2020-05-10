@@ -5,6 +5,4 @@
 
 This repository is WIP
 
-# Documentation
-
--   [Error codes definitions](./docs/error-code-table.md)
+[Documentation plan](./docs/doc-plan.md)

@@ -1,27 +1,28 @@
 # SigTest Documentation plan
 
--   [Overview aka What is it and what's it for](#overview-aka-what-is-it-and-whats-it-for)
-    -   [Library features](#library-features)
-    -   [You can need it when you](#you-can-need-it-when-you)
-    -   [What it doesn't do (PR's are welcome)](#what-it-doesnt-do-prs-are-welcome)
--   [Configuration](#configuration)
-    -   [Configure Service Provided Interface (SPI) parameters](#configure-service-provided-interface-spi-parameters)
-    -   [Configure members to ignore](#configure-members-to-ignore)
-    -   [Global config](#global-config)
-        -   [comparators](#comparators)
-        -   [pathIgnorePatterns](#pathignorepatterns)
-        -   [reportOutputDir](#reportoutputdir)
-        -   [reportGenerator](#reportgenerator)
--   [Usage](#usage)
--   [Reference aka How it works](#reference-aka-how-it-works)
-    -   [Testing flow](#testing-flow)
-    -   [Supported nodes](#supported-nodes)
-    -   [Comparators](#comparators-1)
-    -   [Error codes](#error-codes)
+-   [SigTest Documentation plan](#sigtest-documentation-plan)
+    -   [Overview aka What is it and what's it for](#overview-aka-what-is-it-and-whats-it-for)
+        -   [Library features](#library-features)
+        -   [You can need it when you](#you-can-need-it-when-you)
+        -   [What it doesn't do](#what-it-doesnt-do)
+    -   [Configuration](#configuration)
+        -   [Configure Service Provided Interface (SPI) parameters](#configure-service-provided-interface-spi-parameters)
+        -   [Configure members to ignore](#configure-members-to-ignore)
+        -   [Global config](#global-config)
+            -   [comparators](#comparators)
+            -   [pathIgnorePatterns](#pathignorepatterns)
+            -   [reportOutputDir](#reportoutputdir)
+            -   [reportGenerator](#reportgenerator)
+    -   [Usage](#usage)
+    -   [Reference aka How it works](#reference-aka-how-it-works)
+        -   [Testing flow](#testing-flow)
+        -   [Supported members](#supported-members)
+        -   [Comparators](#comparators-1)
+        -   [Error codes](#error-codes)
 
 ## Overview aka What is it and what's it for
 
-This library can compare TypeScript npm package exported file members for backwards compatibility.
+This library can compare TypeScript npm package exported file members for broke backwards compatibility.
 Also it can generate reports (changelogs) and generate migration scripts (not all cases)
 when code changes braked backwards compatibility.
 
@@ -39,19 +40,19 @@ when code changes braked backwards compatibility.
 
 ### What it doesn't do
 
--   is is not test tool/framework
--   is is not documentation generation tool
+-   is not test tool/framework
+-   is not documentation generation tool
 
 ## Configuration
 
 ### Configure Service Provided Interface (SPI) parameters
 
-SPI parameters has different compatibility requirements, than other data.
+SPI parameters have different compatibility requirements, than other data.
 If SPI parameter has new property in it, this is not breaking change,
 because nobody was using this property before and user is not implementing the
-interface for an spi parameter.
+interface for the spi parameter.
 
-Behavior, when SPI parameter is ignoring add _comparators_ can be configured using JsDocs [@callback](https://jsdoc.app/tags-callback.html) annotation in documentation block. Putting this annotation on the callback function will mark all parameter types as an SPI parameters and will update _change_ from _breaking_ to _compatible_.
+Behavior, when SPI parameter is ignoring add _comparators_ can be configured using JsDocs [@callback](https://jsdoc.app/tags-callback.html) annotation in documentation block. Putting this annotation on the callback function will mark all parameter types as SPI parameters and will update _change_ from _breaking_ to _compatible_.
 
 _example_
 
@@ -100,7 +101,7 @@ Global configuration is defined in the root of the project in `.<name>config` fi
 
 #### comparators
 
-_Comparators_ compatibility status can be redefined, or _comparator_ can be ignored at all. If _comparator_ compatibility status is redefined, the report still will be generated, if it is ignored,it will not be included in application life cycle. Here is a full list of [comparators](./comparators-table.md).
+_Comparators_ compatibility status can be redefined, or _comparator_ can be ignored at all. If _comparator_ compatibility status is redefined, the report still will be generated, if it is ignored, it will not be included in application life cycle. Here is a full list of [comparators](./comparators-table.md).
 
 > type: `{ [comparator_name] : 'compatible'|'breaking'|'ignore' }`
 
