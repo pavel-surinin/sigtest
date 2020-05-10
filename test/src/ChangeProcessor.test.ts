@@ -1,123 +1,9 @@
 import { Comparator } from '../../src/comparator/Comparators'
-import Change = Comparator.Change
-import Compare = Comparator.Compare
-import ComparisonResult = Comparator.ComparisonResult
-import Status = Comparator.Status
-
-import { Signatures } from '../../src/Signatures'
 import { CHANGE_REGISTRY } from '../../src/comparator/ComparatorChangeRegistry'
-
-export namespace ChangeProcessor {
-    export interface WithUpdate extends WithUpdateFlag {
-        isUpdated: true
-        update: ChangeUpdate
-    }
-
-    export interface WithoutUpdate extends WithUpdateFlag {
-        isUpdated: false
-    }
-
-    export type MaybeUpdated = WithUpdate | WithoutUpdate
-
-    export interface WithVersions {
-        versions: Compare<string>
-    }
-
-    export interface WithUpdateFlag {
-        isUpdated: boolean
-    }
-
-    export type ProcessedChange = Change & WithVersions & MaybeUpdated
-    export type ChangeUpdaterInput = Change & WithVersions
-
-    export interface ChangeFilter {
-        isApplicable(change: ProcessedChange): boolean
-    }
-
-    export interface ChangeUpdater {
-        updaterName: string
-        isApplicable(change: ChangeUpdaterInput): boolean
-        update(change: ChangeUpdaterInput): ChangeUpdate
-    }
-
-    export interface ChangeUpdate {
-        status: Status
-        message?: string
-        updateReason: string
-    }
-
-    /**
-     * Processes {@link ComparisonResult} with provided {@link ChangeUpdater} and {@link ChangeFilter}
-     * First it will update {@link Change}s, then filter them.
-     *
-     * @see {@link ChangeUpdater}
-     * @see {@link ChangeFilter}
-     * @export
-     * @class ChangeProcessor
-     */
-    export class ChangeProcessor {
-        constructor(
-            private readonly changeFilters: ChangeFilter[],
-            private readonly changeUpdaters: ChangeUpdater[]
-        ) {}
-
-        processChanges(changes: ComparisonResult) {
-            // prepare changes
-            const versionedChanges: ProcessedChange[] = changes.changes.map(c => ({
-                ...c,
-                versions: changes.versions,
-                isUpdated: false,
-            }))
-
-            // update changes
-            const changeFilterInputs: ProcessedChange[] = []
-            for (const change of versionedChanges) {
-                const applicableUpdaters = this.changeUpdaters.filter(updater =>
-                    updater.isApplicable(change)
-                )
-                if (applicableUpdaters.length > 1) {
-                    const forSignature = change.signatures.after
-                        ? ` for ${Signatures.toFulName(
-                              change.signatures.after.namespace,
-                              change.signatures.after.memberName
-                          )} `
-                        : ''
-                    const inFile = change.signatures.after
-                        ? ` in file ${change.signatures.after.path} `
-                        : ''
-                    throw new Error(
-                        `Change '${
-                            change.info.code
-                        }'${forSignature}${inFile} tries to update changes with ${
-                            applicableUpdaters.length
-                        } updaters: ${applicableUpdaters
-                            .map(updater => updater.updaterName)
-                            .join(', ')}`
-                    )
-                } else if (applicableUpdaters.length == 1) {
-                    const updater = applicableUpdaters[0]
-                    const update = updater.update(change)
-                    const updatedChange: ProcessedChange = {
-                        ...change,
-                        update,
-                        isUpdated: true,
-                    }
-                    changeFilterInputs.push(updatedChange)
-                } else {
-                    changeFilterInputs.push(change)
-                }
-            }
-
-            // filter changes
-            return changeFilterInputs.filter(change =>
-                this.changeFilters.every(filter => filter.isApplicable(change))
-            )
-        }
-    }
-}
+import { ChangeProcessor } from '../../src/ChangeProcessor'
 
 describe('ChangeProcessor', () => {
-    const comparisonResult = {
+    const comparisonResult: Comparator.ComparisonResult = {
         versions: {
             after: '0.0.2',
             before: '0.0.1',
@@ -125,7 +11,13 @@ describe('ChangeProcessor', () => {
         changes: [
             {
                 info: CHANGE_REGISTRY.added_class_property,
-                signatures: {} as any,
+                signatures: {
+                    after: {
+                        path: '/home/file.ts',
+                        memberName: 'TEXT',
+                        namespace: 'Constants',
+                    },
+                } as any,
                 message: 'Message',
             },
         ],
@@ -171,7 +63,103 @@ describe('ChangeProcessor', () => {
 
         expect(processed).toHaveLength(comparisonResult.changes.length)
     })
-    it.todo('should update changes')
-    it.todo('should not update changes')
-    it.todo('should fail when more than one updater is applicable')
+    it('should update changes', () => {
+        const status = 'compatible'
+        const updateReason = 'Object is an spi parameter'
+        const updater: ChangeProcessor.ChangeUpdater = {
+            isApplicable: c => c.info.memberType == 'class',
+            updaterName: 'test',
+            update: () => ({
+                status,
+                updateReason,
+            }),
+        }
+        const changeProcessor = new ChangeProcessor.ChangeProcessor([], [updater])
+        const processed = changeProcessor.processChanges(comparisonResult)
+
+        expect(processed).toHaveLength(1)
+        expect(processed[0].isUpdated).toBeTruthy()
+        expect(processed[0].isUpdated && processed[0].update).toBeDefined()
+        expect(processed[0].isUpdated && processed[0].update.status).toBe(status)
+        expect(processed[0].isUpdated && processed[0].update.updateReason).toBe(updateReason)
+    })
+    it('should not update changes', () => {
+        const status = 'compatible'
+        const updateReason = 'Object is an spi parameter'
+        const updater: ChangeProcessor.ChangeUpdater = {
+            isApplicable: c => c.info.memberType != 'class',
+            updaterName: 'test',
+            update: () => ({
+                status,
+                updateReason,
+            }),
+        }
+        const changeProcessor = new ChangeProcessor.ChangeProcessor([], [updater])
+        const processed = changeProcessor.processChanges(comparisonResult)
+
+        expect(processed).toHaveLength(1)
+        expect(processed[0].isUpdated).toBeFalsy()
+    })
+    it('should fail when more than one updater is applicable', () => {
+        const status = 'compatible'
+        const updateReason = 'Object is an spi parameter'
+        const updater1: ChangeProcessor.ChangeUpdater = {
+            isApplicable: c => true,
+            updaterName: 'test1',
+            update: () => ({
+                status,
+                updateReason,
+            }),
+        }
+        const updater2: ChangeProcessor.ChangeUpdater = {
+            isApplicable: c => true,
+            updaterName: 'test2',
+            update: () => ({
+                status,
+                updateReason,
+            }),
+        }
+        const changeProcessor = new ChangeProcessor.ChangeProcessor([], [updater1, updater2])
+        expect(() =>
+            changeProcessor.processChanges(comparisonResult)
+        ).toThrowErrorMatchingInlineSnapshot(
+            `"2 updaters (test1, test2) are applicable for change 'added_class_property' for 'Constants.TEXT' in file '/home/file.ts'"`
+        )
+    })
+    it('should fail when more than one updater is applicable and no after signature is present', () => {
+        const status = 'compatible'
+        const updateReason = 'Object is an spi parameter'
+        const updater1: ChangeProcessor.ChangeUpdater = {
+            isApplicable: c => true,
+            updaterName: 'test1',
+            update: () => ({
+                status,
+                updateReason,
+            }),
+        }
+        const updater2: ChangeProcessor.ChangeUpdater = {
+            isApplicable: c => true,
+            updaterName: 'test2',
+            update: () => ({
+                status,
+                updateReason,
+            }),
+        }
+        const changeProcessor = new ChangeProcessor.ChangeProcessor([], [updater1, updater2])
+        expect(() =>
+            changeProcessor.processChanges({
+                ...comparisonResult,
+                changes: [
+                    {
+                        ...comparisonResult.changes[0],
+                        signatures: {
+                            after: undefined,
+                        } as any,
+                    },
+                ],
+            })
+        ).toThrowErrorMatchingInlineSnapshot(
+            `"2 updaters (test1, test2) are applicable for change 'added_class_property' "`
+        )
+    })
 })
