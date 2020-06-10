@@ -1,3 +1,24 @@
+# SigTest Documentation plan
+
+-   [SigTest Documentation plan](#sigtest-documentation-plan)
+    -   [Overview aka What this lib does](#overview-aka-what-this-lib-does)
+        -   [Why you need it](#why-you-need-it)
+        -   [What it doesn't do](#what-it-doesnt-do)
+    -   [Configuration](#configuration)
+        -   [Configure Service Provided Interface (SPI) parameters](#configure-service-provided-interface-spi-parameters)
+        -   [Configure members to ignore](#configure-members-to-ignore)
+        -   [Global config](#global-config)
+            -   [comparators](#comparators)
+            -   [pathIgnorePatterns](#pathignorepatterns)
+            -   [reportOutputDir](#reportoutputdir)
+            -   [reportGenerator](#reportgenerator)
+    -   [Usage](#usage)
+    -   [Reference aka How it works](#reference-aka-how-it-works)
+        -   [Testing flow](#testing-flow)
+        -   [Supported members](#supported-members)
+        -   [Comparators](#comparators-1)
+        -   [Error codes](#error-codes)
+
 ## Overview aka What this lib does
 
 This library is excellent for:
