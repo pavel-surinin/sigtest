@@ -1,9 +1,8 @@
 # SigTest Documentation plan
 
 -   [SigTest Documentation plan](#sigtest-documentation-plan)
-    -   [Overview aka What is it and what's it for](#overview-aka-what-is-it-and-whats-it-for)
-        -   [Library features](#library-features)
-        -   [You can need it when you](#you-can-need-it-when-you)
+    -   [Overview aka What this lib does](#overview-aka-what-this-lib-does)
+        -   [Why you need it](#why-you-need-it)
         -   [What it doesn't do](#what-it-doesnt-do)
     -   [Configuration](#configuration)
         -   [Configure Service Provided Interface (SPI) parameters](#configure-service-provided-interface-spi-parameters)
@@ -20,39 +19,31 @@
         -   [Comparators](#comparators-1)
         -   [Error codes](#error-codes)
 
-## Overview aka What is it and what's it for
+## Overview aka What this lib does
 
-This library can compare TypeScript npm package exported file members for broke backwards compatibility.
-Also it can generate reports (changelogs) and generate migration scripts (not all cases)
-when code changes braked backwards compatibility.
+This library is excellent for:
+comparing TypeScript npm package exported file members for broken backward compatibility.
+generating reports (changelogs)
+producing migration scripts (certain cases) for when the code changes break backward compatibility.
 
-### Library features
-
--   check TypeScript code for backwards compatibility
--   generate changelog
--   provide migration scripts
-
-### You can need it when you
-
--   care about npm module backwards compatibility.
--   want to test your library and know what version to bump patch or minor.
--   want to have generated changelog in each version change.
+### Why you need it
+This lib is useful if you:
+-   care about npm module backward compatibility.
+-   want to test your library and know what version to bump: patch or minor.
+-   keep an auto-generated changelog for each release.
 
 ### What it doesn't do
 
--   is not test tool/framework
--   is not documentation generation tool
+SigTest is not a test tool/framework, nor is it a documentation generation tool.
 
 ## Configuration
 
 ### Configure Service Provided Interface (SPI) parameters
 
-SPI parameters have different compatibility requirements, than other data.
-If SPI parameter has new property in it, this is not breaking change,
-because nobody was using this property before and user is not implementing the
-interface for the spi parameter.
+SPI parameters have compatibility requirements that are different from the other data.
+If the SPI parameter has a new property, this is not considered a breaking change, because nobody was using that property before, and the user is not implementing the interface for the SPI parameter.
 
-Behavior, when SPI parameter is ignoring add _comparators_ can be configured using JsDocs [@callback](https://jsdoc.app/tags-callback.html) annotation in documentation block. Putting this annotation on the callback function will mark all parameter types as SPI parameters and will update _change_ from _breaking_ to _compatible_.
+You can configure the SPI parameter behavior so that it ignores the add _comparators_. To set it like that, use the JsDocs [@callback](https://jsdoc.app/tags-callback.html) annotation in the documentation block. Put the @callback annotation on the callback function to mark all parameter types as SPI parameters and update the _change_ level from _breaking_ to _compatible_.
 
 _example_
 
@@ -71,7 +62,7 @@ interface ServiceProvidedInterface {
 
 ### Configure members to ignore
 
-_Members_ in codebase can be explicitly ignored. Ignored _members_ will be ignored for all application life cycle. _Snapshots_ will not contain info about ignored members. Ignore behavior is configured with JsDoc [@ignore](https://jsdoc.app/tags-ignore.html) annotation in documentation block on the _member_ or its property.
+You can configure SigTest to ignore _members_ in codebase explicitly. Ignored _members_ are ignored for the whole application lifecycle. _Snapshots_ won't contain info about the ignored members. Ignore behavior is configured with the JsDoc [@ignore](https://jsdoc.app/tags-ignore.html) annotation in the documentation block of the _member_ or its property.
 
 _example_
 
@@ -97,11 +88,11 @@ interface ServiceB {
 
 ### Global config
 
-Global configuration is defined in the root of the project in `.<name>config` file.
+Define the global configuration in the root of the project in the `.<name>config` file.
 
-#### comparators
+#### Comparators
 
-_Comparators_ compatibility status can be redefined, or _comparator_ can be ignored at all. If _comparator_ compatibility status is redefined, the report still will be generated, if it is ignored, it will not be included in application life cycle. Here is a full list of [comparators](./comparators-table.md).
+You can redefine the _comparators_ compatibility status, or ignore a _comparator_ can completely. If you redefine the _comparator_ compatibility status, the report is still generated; if you ignore the comparator, it is not included in the application lifecycle. See a full list of [comparators](./comparators-table.md) for more information.
 
 > type: `{ [comparator_name] : 'compatible'|'breaking'|'ignore' }`
 
@@ -118,8 +109,8 @@ module.exports = {
 
 #### pathIgnorePatterns
 
-Module path ignore patterns are defined under name `pathIgnorePatterns`.
-Default value is `['node_modules']`
+Define the module path ignore patterns under the `pathIgnorePatterns` name.
+The default value is `['node_modules']`
 
 > type: `array`
 
@@ -157,12 +148,12 @@ module.exports = {
 
 ## Usage
 
-## Reference aka How it works
+## SigTest workflow
 
-Application will evaluate the following steps:
+The application evaluates libraries with the following steps:
 
 -   Generate snapshot (introspection)
--   Load previous version snapshot
+-   Load the previous version snapshot
 -   Process snapshots
 -   Process changes
     -   update changes
@@ -220,11 +211,10 @@ The diagram goes here.
 
 ### Comparators
 
-Comparators will compare members from previous version against current version.
+Comparators compare the members from the previous version against the current version.
 The full list of comparators with description and examples
-can be found here: [comparators definitions](./comparators-table.md).
+is available here: [comparators definitions](./comparators-table.md).
 
 ### Error codes
 
-Errors can occur during code introspection.
-Error codes and definitions can be found [here](./error-code-table.md).
+Errors can happen during code introspection. See the full list of error codes and definitions [here](./error-code-table.md).
