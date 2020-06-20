@@ -1,7 +1,6 @@
 import * as ts from 'typescript'
 import { Signatures } from '../Signatures'
 import { SerializationError } from './SerializerError'
-import { optional } from 'declarative-js'
 
 const EMPTY_RESULT = {}
 
@@ -53,6 +52,39 @@ export class Serializer {
         return {}
     }
 
+    private serializeInterfaceProperty(
+        el: ts.TypeElement
+    ): Signatures.InterfacePropertyType | undefined {
+        if (ts.isMethodSignature(el)) {
+            return {
+                kind: 'function',
+                generics: el.typeParameters?.map(this.serializeTypeParameter) ?? [],
+                parameters: el.parameters.map(this.serializeParameter),
+                returnType: this.serializeType(el.type),
+            }
+        } else if (ts.isPropertySignature(el)) {
+            if (el.type && el.type.kind === ts.SyntaxKind.PropertySignature) {
+                return {
+                    kind: 'type',
+                    type: this.serializeType(el.type),
+                }
+            } else if (el.type && ts.isFunctionTypeNode(el.type)) {
+                el.type.parameters
+                return {
+                    kind: 'function',
+                    parameters: el.type.parameters?.map(this.serializeParameter) ?? [],
+                    generics: el.type.typeParameters?.map(this.serializeTypeParameter) ?? [],
+                    returnType: this.serializeType(el.type.type),
+                }
+            } else {
+                return {
+                    kind: 'type',
+                    type: this.serializeType(el.type),
+                }
+            }
+        }
+    }
+
     doInterface(
         symbol: ts.Symbol,
         namespace: string | undefined
@@ -70,7 +102,7 @@ export class Serializer {
                     properties[member.name.getText()] = {
                         name: member.name.getText(),
                         isOptional: Boolean(member.questionToken),
-                        type: this.checker.typeToString(this.checker.getTypeAtLocation(member)),
+                        type: this.serializeInterfaceProperty(member) || ({} as any),
                         isReadonly: Boolean(
                             ts.ModifierFlags.Readonly & ts.getCombinedModifierFlags(member)
                         ),

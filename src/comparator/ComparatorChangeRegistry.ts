@@ -72,7 +72,7 @@ export const CHANGE_REGISTRY: Record<
         code: 'changed_method_return_type_union',
         description: 'Method return type changed to union type',
         memberType: 'class',
-        status: 'compatible',
+        status: 'spi_compatible',
     }),
     changed_method_parameter_modifier_to_optional: createInfo({
         action: 'changed',
@@ -100,7 +100,7 @@ export const CHANGE_REGISTRY: Record<
         code: 'added_method',
         description: 'Method added to class',
         memberType: 'class',
-        status: 'compatible',
+        status: 'spi_compatible',
     }),
     removed_method: createInfo({
         action: 'removed',
@@ -114,7 +114,7 @@ export const CHANGE_REGISTRY: Record<
         code: 'changed_method_modifier_more_visible',
         description: 'Method access modifier changed, to be less restrictive.',
         memberType: 'class',
-        status: 'compatible',
+        status: 'spi_compatible',
     }),
     changed_method_modifier_less_visible: createInfo({
         action: 'changed',
@@ -128,7 +128,7 @@ export const CHANGE_REGISTRY: Record<
         code: 'changed_property_modifier_more_visible',
         description: 'Property access modifier changed, to be less restrictive.',
         memberType: 'class',
-        status: 'compatible',
+        status: 'spi_compatible',
     }),
     changed_property_modifier_less_visible: createInfo({
         action: 'changed',
@@ -149,7 +149,7 @@ export const CHANGE_REGISTRY: Record<
         code: 'added_class_property',
         description: 'Property was added to class.',
         memberType: 'class',
-        status: 'compatible',
+        status: 'spi_compatible',
     }),
     changed_class_property_type: createInfo({
         action: 'changed',
@@ -163,7 +163,7 @@ export const CHANGE_REGISTRY: Record<
         code: 'changed_class_property_type_union',
         description: 'Property type was changed to less strict',
         memberType: 'class',
-        status: 'compatible',
+        status: 'spi_compatible',
     }),
     changed_class_property_to_readonly: createInfo({
         action: 'changed',
@@ -177,7 +177,7 @@ export const CHANGE_REGISTRY: Record<
         code: 'changed_class_property_type_union',
         description: 'Property write access was changed to less strict',
         memberType: 'class',
-        status: 'compatible',
+        status: 'spi_compatible',
     }),
     removed_generic: createInfo({
         action: 'removed',
@@ -261,7 +261,7 @@ export const CHANGE_REGISTRY: Record<
         code: 'changed_function_return_type_to_less_strict',
         description: 'Function return type changed to less strict',
         memberType: 'function',
-        status: 'compatible',
+        status: 'spi_compatible',
     }),
     changed_function_parameter_modifier_to_optional: createInfo({
         action: 'changed',
@@ -401,7 +401,7 @@ export const CHANGE_REGISTRY: Record<
         code: 'changed_interface_property_type_less_strict',
         description: 'Changed interface property type to be less strict',
         memberType: 'interface',
-        status: 'compatible',
+        status: 'spi_compatible',
     }),
     added_interface_callable_type: createInfo({
         action: 'added',
@@ -429,7 +429,7 @@ export const CHANGE_REGISTRY: Record<
         code: 'changed_callable_type_return_type_to_less_strict',
         description: 'Interface callable type changed type to less strict',
         memberType: 'interface',
-        status: 'compatible',
+        status: 'spi_compatible',
     }),
     changed_callable_parameter_modifier_to_optional: createInfo({
         action: 'changed',
@@ -447,6 +447,8 @@ export const CHANGE_REGISTRY: Record<
     }),
 }
 
-function createInfo<T>(info: T): T {
+function createInfo(
+    info: Comparator.ChangeInfo<Comparator.ChangeCode>
+): Comparator.ChangeInfo<Comparator.ChangeCode> {
     return Object.freeze(info)
 }

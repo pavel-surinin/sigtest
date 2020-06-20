@@ -6,7 +6,14 @@ import { CHANGE_REGISTRY } from './ComparatorChangeRegistry'
 
 export namespace Comparator {
     export type Action = 'removed' | 'added' | 'changed' | 'none'
-    export type Status = 'compatible' | 'breaking'
+    /**
+     * compatible -     change is not breaking
+     * spi_compatible - change is not breaking, when object is not implemented in code base,
+     *                  but used as an SPI parameter or configuration property,
+     *                  otherwise change is breaking
+     * breaking -       change is breaking backwards compatibility
+     */
+    export type Status = 'compatible' | 'spi_compatible' | 'breaking'
     export type MemberType = Signatures.MemberType | 'common'
     export type Compare<T> = { before: T; after: T }
     export type CompareOpt<T> = { before: T; after?: T }

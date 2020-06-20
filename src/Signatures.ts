@@ -86,9 +86,28 @@ export namespace Signatures {
         values: EnumValueDefinition[]
     }
 
+    export type BaseInterfacePropertyTypeKind = 'function' | 'type'
+
+    export interface BaseInterfacePropertyType {
+        kind: BaseInterfacePropertyTypeKind
+    }
+
+    export interface FunctionInterfacePropertyType
+        extends BaseInterfacePropertyType,
+            FunctionDeclaration {
+        kind: 'function'
+    }
+
+    export interface TypeInterfacePropertyType extends BaseInterfacePropertyType {
+        kind: 'type'
+        type: string
+    }
+
+    export type InterfacePropertyType = TypeInterfacePropertyType | FunctionInterfacePropertyType
+
     export interface InterfaceProperty {
         name: string
-        type: string
+        type: InterfacePropertyType
         isOptional: boolean
         isReadonly: boolean
     }

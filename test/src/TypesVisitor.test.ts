@@ -469,22 +469,54 @@ describe('TypesVisitor', () => {
                     arrowFx: {
                         isOptional: false,
                         isReadonly: true,
-                        type: '() => string',
+                        type: {
+                            kind: 'function',
+                            generics: [],
+                            parameters: [],
+                            returnType: 'string',
+                        } as Signatures.FunctionInterfacePropertyType,
                     },
                     arrowFxWithParam: {
                         isOptional: false,
                         isReadonly: false,
-                        type: '(p: string) => string',
+                        type: {
+                            kind: 'function',
+                            generics: [],
+                            parameters: [
+                                {
+                                    isOptional: false,
+                                    name: 'p',
+                                    type: 'string',
+                                },
+                            ],
+                            returnType: 'string',
+                        } as Signatures.FunctionInterfacePropertyType,
                     },
                     fx: {
                         isOptional: false,
                         isReadonly: false,
-                        type: '() => string',
+                        type: {
+                            kind: 'function',
+                            generics: [],
+                            parameters: [],
+                            returnType: 'string',
+                        } as Signatures.FunctionInterfacePropertyType,
                     },
                     fxWithParam: {
                         isOptional: false,
                         isReadonly: false,
-                        type: '(p: string) => string',
+                        type: {
+                            kind: 'function',
+                            generics: [],
+                            parameters: [
+                                {
+                                    isOptional: false,
+                                    name: 'p',
+                                    type: 'string',
+                                },
+                            ],
+                            returnType: 'string',
+                        } as Signatures.FunctionInterfacePropertyType,
                     },
                 },
             })
@@ -513,23 +545,35 @@ describe('TypesVisitor', () => {
                     blob: {
                         isOptional: false,
                         isReadonly: false,
-                        type: 'Blob',
+                        type: {
+                            kind: 'type',
+                            type: 'Blob',
+                        },
                     },
                     opt: {
                         isOptional: true,
                         isReadonly: false,
-                        type: 'string',
+                        type: {
+                            kind: 'type',
+                            type: 'string',
+                        },
                     },
                     prop1: {
                         isOptional: false,
                         isReadonly: false,
-                        type: 'T1',
+                        type: {
+                            kind: 'type',
+                            type: 'T1',
+                        },
                     },
                     tBlob: {
                         isOptional: false,
                         isReadonly: false,
-                        type:
-                            '{ new (blobParts?: BlobPart[], options?: BlobPropertyBag): Blob; prototype: Blob; }',
+                        type: {
+                            kind: 'type',
+                            type:
+                                '{ new (blobParts?: BlobPart[], options?: BlobPropertyBag): Blob; prototype: Blob; }',
+                        },
                     },
                 },
             })
@@ -547,7 +591,18 @@ describe('TypesVisitor', () => {
                 properties: {
                     isArray: {
                         name: 'isArray',
-                        type: '(arg: any) => arg is any[]',
+                        type: {
+                            generics: [],
+                            kind: 'function',
+                            parameters: [
+                                {
+                                    name: 'arg',
+                                    isOptional: false,
+                                    type: 'any',
+                                },
+                            ],
+                            returnType: 'boolean',
+                        } as Signatures.FunctionInterfacePropertyType,
                         isOptional: false,
                         isReadonly: false,
                     },
@@ -600,7 +655,10 @@ describe('TypesVisitor', () => {
                     length: {
                         isOptional: true,
                         isReadonly: true,
-                        type: 'number',
+                        type: {
+                            kind: 'type',
+                            type: 'number',
+                        },
                     },
                 },
             })

@@ -1,5 +1,8 @@
 export interface FunctionHolder {
     readonly arrowFx: () => string
+    /**
+     * @callback
+     */
     arrowFxWithParam: (p: string) => string
     fx(): string
     fxWithParam(p: string): string
